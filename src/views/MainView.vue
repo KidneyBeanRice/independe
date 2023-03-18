@@ -101,6 +101,10 @@
                           <v-img style="float:left" :width="15" src="../img/viewIcon.png" class="my-1 mx-1"></v-img>
                           <p class="text-grey-darken-1 mx-1">{{ popularBoard.views }}</p>
                         </div>
+                        <div>
+                          <v-img style="float:left" :width="15" src="../img/viewIcon.png" class="my-1 mx-1"></v-img>
+                          <p class="text-grey-darken-1 mx-1">{{ popularBoard.views }}</p>
+                        </div>
                       </v-col>
                     </v-row>
                   </v-list>
