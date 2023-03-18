@@ -63,7 +63,7 @@
                       <p class="text-grey-darken-1">[{{ popularBoard.regionType }}·{{ popularBoard.regionPostType }}]</p>
                     </div>
                     <div v-else>
-                      <p class="text-grey-darken-1">[자취·{{ popularBoard.independentPostType }}]</p>
+                      <p class="text-grey-darken-1">[자취·asd{{ popularBoard.independentPostType }}]</p>
                     </div>
                   </v-list>
                 </v-col>
