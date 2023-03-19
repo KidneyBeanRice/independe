@@ -133,13 +133,36 @@
                       </v-list>
                     </v-col>
                     <v-col cols="auto">
-                      <v-list v-for="index in topSearch" :key="index"
+                      <v-list v-for="topSearch in topSearch" :key="topSearch"
                         style="background-color: #FAFAFA; text-emphasis-color: #FFFFFF;">
-                        <div v-if="index.length <= 10">
-                          <p class="text-subtitle-2">{{ index }}</p>
+                        <div v-if="topSearch.searchKeyword.length <= 10">
+                          <p class="text-subtitle-2">{{ topSearch.searchKeyword }}</p>
                         </div>
                         <div v-else>
-                          <p class="text-subtitle-2">{{ index.substr(0, 10) }}...</p>
+                          <p class="text-subtitle-2">{{ topSearch.searchKeyword.substr(0, 10) }}...</p>
+                        </div>
+                      </v-list>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-list v-for="(topSearch, index) in topSearch" :key="index" style="background-color: #FAFAFA;">
+                        <div>
+                          <div v-if="topSearch.searchKeywordCount >= 10000">
+                            <div v-if="index === 0">
+                              <p class="text-subtitle-2" style="color:#D50000;">{{
+                                topSearch.searchKeywordCount.toPrecision(3) / 1000 }}K</p>
+                            </div>
+                            <div v-else>
+                              <p class="text-subtitle-2">{{ topSearch.searchKeywordCount.toPrecision(3) / 1000 }}K</p>
+                            </div>
+                          </div>
+                          <div v-else>
+                            <div v-if="index === 0">
+                              <p class="text-subtitle-2" style="color:#D50000;">{{ topSearch.searchKeywordCount }}</p>
+                            </div>
+                            <div v-else>
+                              <p class="text-subtitle-2">{{ topSearch.searchKeywordCount }}</p>
+                            </div>
+                          </div>
                         </div>
                       </v-list>
                     </v-col>
@@ -338,7 +361,7 @@
               </v-col>
               <v-divider :thickness="2" class="border-opacity-25 mb-2 mx-3" length="560"></v-divider>
             </v-row>
-            <v-sheet :height="220" :width="580"> 
+            <v-sheet :height="220" :width="580">
               <v-row>
                 <v-col cols="auto">
                   <v-list v-for="regionBoard in regionBoard" :key="regionBoard">
@@ -381,18 +404,77 @@
             </v-sheet>
           </v-col>
         </v-row>
-        
+
         <!--자취 정보 영상-->
         <v-row class="my-15">
-          <h1 class="font-weight-bold my-5" style="color:#5E913B">자취 정보 영상</h1>  
-          
+          <v-row class="mx-1">
+            <v-col cols="10">
+              <p class="font-weight-bold text-h4" style="color:#5E913B">자취 정보 영상</p>
+            </v-col>
+            <v-col cols="2">
+              <div class="mt-5 text-subtitle-2 mr-4" align="end">더 많은 영상보기</div>
+            </v-col>
+          </v-row>
+          <v-row class="px-3">
+            <div v-for="video in video" :key="video" class="mx-1">
+              <v-col cols="auto">
+                <iframe width="360" height="195" :src="video.link" title="YouTube video player" frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
+                <div v-if="video.title.length <= 20">
+                  <p class="my-1 font-weight-bold" align="center">{{ video.title }}</p>
+                </div>
+                <div v-else>
+                  <p class="my-1 font-weight-bold" align="center">{{ video.title.substr(0, 20) }}...</p>
+                </div>
+              </v-col>
+            </div>
+          </v-row>
         </v-row>
       </v-container>
     </v-main>
   </v-app>
 
-  <v-footer>
-
+  <!--푸터-->
+  <v-footer border>
+    <v-container>
+      <v-row>
+        <v-col cols="3"></v-col>
+        <v-col cols="6">
+          <v-sheet height="80" width="650" align="center" justify="center">
+            <v-row justify="center" class="text-grey-lighten-1">
+              <v-col cols="auto">
+                <p>서비스 소개</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>개인정보 처리방침</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>이용약관</p>
+              </v-col>
+            </v-row>
+            <v-row class="text-grey-lighten-2" style="font-size:12px">
+              <v-col cols="auto">
+                <p>전자IT기계자동차공학부</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>정보통신공학과</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>캡스톤 디자인 프로젝트</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>지도교수: 이종협 교수님</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>[팀] 인디펜더</p>
+              </v-col>
+            </v-row>
+          </v-sheet>
+        </v-col>
+        <v-col cols="3"> </v-col>
+      </v-row>
+    </v-container>
   </v-footer>
 </template>
 
@@ -409,11 +491,12 @@ export default {
       allBoard: [],
       regionBoard: [],
       topSearch: [],
+      video: []
     }
   },
   methods: {
     read() {
-      this.$axios.get(/*'/posts/main'*/'https://8ec8c61d-a1b4-485e-b594-fa18587490a3.mock.pstmn.io/api/main')
+      this.$axios.get(/*'/posts/main'*/'https://a1cf9588-b512-411c-b4d8-9ae9d9cc7b5c.mock.pstmn.io/independe')
         .then((res) => {
           this.todayMent = res.data.data.todayMent
           this.popularBoard = res.data.data.popularPostDtos
@@ -421,6 +504,7 @@ export default {
           this.allBoard = res.data.data.regionAllPostDtos
           this.regionBoard = res.data.data.regionNotAllPostDtos
           this.topSearch = res.data.data.topSearch
+          this.video = res.data.data.video
         })
         .catch(err => console.error(err))
     }
