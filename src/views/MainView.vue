@@ -338,7 +338,7 @@
               </v-col>
               <v-divider :thickness="2" class="border-opacity-25 mb-2 mx-3" length="560"></v-divider>
             </v-row>
-            <v-sheet :height="220" :width="580">
+            <v-sheet :height="220" :width="580"> 
               <v-row>
                 <v-col cols="auto">
                   <v-list v-for="regionBoard in regionBoard" :key="regionBoard">
