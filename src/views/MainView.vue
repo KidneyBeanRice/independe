@@ -381,7 +381,12 @@
             </v-sheet>
           </v-col>
         </v-row>
-
+        
+        <!--자취 정보 영상-->
+        <v-row class="my-15">
+          <h1 class="font-weight-bold my-5" style="color:#5E913B">자취 정보 영상</h1>  
+          
+        </v-row>
       </v-container>
     </v-main>
   </v-app>
