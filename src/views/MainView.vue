@@ -61,7 +61,7 @@
               <v-col cols="auto">
                 <v-img :width="35" height="45" src="../img/main_hot_board.png"></v-img>
               </v-col>
-              <h2 class="font-weight-bold my-5" style="color:#5E913B">인기게시판</h2>
+              <h2 class="font-weight-bold my-5" style="color:#5E913B">HOT 게시판</h2>
             </v-row>
 
             <v-sheet :height="405" :width="850" class="my-2">
@@ -124,51 +124,50 @@
             <v-sheet :height="430" :width="290" color="grey-lighten-5" class="mt-13">
               <v-row>
                 <v-col cols="1"></v-col>
+                <p class="font-weight-black pt-2">실시간 인기 검색어</p>
+              </v-row>
+              <v-row class="mx-1">
                 <v-col cols="auto">
-                  <p class="font-weight-black py-2">실시간 인기 검색어</p>
-                  <v-row>
-                    <v-col cols="auto">
-                      <v-list v-for="(topSearch, index) in topSearch" :key="index" style="background-color: #FAFAFA;">
-                        <p class="text-subtitle-2">{{ index + 1 }}</p>
-                      </v-list>
-                    </v-col>
-                    <v-col cols="auto">
-                      <v-list v-for="topSearch in topSearch" :key="topSearch"
-                        style="background-color: #FAFAFA; text-emphasis-color: #FFFFFF;">
-                        <div v-if="topSearch.searchKeyword.length <= 10">
-                          <p class="text-subtitle-2">{{ topSearch.searchKeyword }}</p>
+                  <v-list v-for="(topSearch, index) in topSearch" :key="index" style="background-color: #FAFAFA;">
+                    <p class="text-subtitle-2">{{ index + 1 }}</p>
+                  </v-list>
+                </v-col>
+                <v-col cols="8">
+                  <v-list v-for="topSearch in topSearch" :key="topSearch"
+                    style="background-color: #FAFAFA; text-emphasis-color: #FFFFFF;">
+                    <div v-if="topSearch.keywordName.length <= 10">
+                      <p class="text-subtitle-2">{{ topSearch.keywordName }}</p>
+                    </div>
+                    <div v-else>
+                      <p class="text-subtitle-2">{{ topSearch.keywordName.substr(0, 10) }}...</p>
+                    </div>
+                  </v-list>
+                </v-col>
+                <v-col cols="2">
+                  <v-list v-for="(topSearch, index) in topSearch" :key="index" style="background-color: #FAFAFA;">
+                    <div>
+                      <div v-if="topSearch.keywordCount >= 10000">
+                        <div v-if="index === 0">
+                          <p class="text-subtitle-2" style="color:#D50000;">{{
+                            topSearch.keywordCount.toPrecision(3) / 1000 }}K</p>
                         </div>
                         <div v-else>
-                          <p class="text-subtitle-2">{{ topSearch.searchKeyword.substr(0, 10) }}...</p>
+                          <p class="text-subtitle-2">{{ topSearch.keywordCount.toPrecision(3) / 1000 }}K</p>
                         </div>
-                      </v-list>
-                    </v-col>
-                    <v-col cols="auto">
-                      <v-list v-for="(topSearch, index) in topSearch" :key="index" style="background-color: #FAFAFA;">
-                        <div>
-                          <div v-if="topSearch.searchKeywordCount >= 10000">
-                            <div v-if="index === 0">
-                              <p class="text-subtitle-2" style="color:#D50000;">{{
-                                topSearch.searchKeywordCount.toPrecision(3) / 1000 }}K</p>
-                            </div>
-                            <div v-else>
-                              <p class="text-subtitle-2">{{ topSearch.searchKeywordCount.toPrecision(3) / 1000 }}K</p>
-                            </div>
-                          </div>
-                          <div v-else>
-                            <div v-if="index === 0">
-                              <p class="text-subtitle-2" style="color:#D50000;">{{ topSearch.searchKeywordCount }}</p>
-                            </div>
-                            <div v-else>
-                              <p class="text-subtitle-2">{{ topSearch.searchKeywordCount }}</p>
-                            </div>
-                          </div>
+                      </div>
+                      <div v-else>
+                        <div v-if="index === 0">
+                          <p class="text-subtitle-2" style="color:#D50000;">{{ topSearch.keywordCount }}</p>
                         </div>
-                      </v-list>
-                    </v-col>
-                  </v-row>
+                        <div v-else>
+                          <p class="text-subtitle-2">{{ topSearch.keywordCount }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </v-list>
                 </v-col>
               </v-row>
+
             </v-sheet>
           </v-col>
         </v-row>
@@ -181,7 +180,7 @@
                 <v-col cols="auto">
                   <v-img :width="35" height="45" src="../img/main_independent_board.png"></v-img>
                 </v-col>
-                <h2 class="font-weight-bold my-5" style="color:#5E913B">실시간 자취 정보</h2>
+                <h2 class="font-weight-bold my-5" style="color:#5E913B">인기 자취 정보</h2>
               </v-row>
             </v-col>
             <v-col cols="1">
@@ -294,7 +293,7 @@
                   <v-col cols="auto">
                     <v-img :width="35" height="45" src="../img/main_all_board.png"></v-img>
                   </v-col>
-                  <h2 class="font-weight-bold my-5" style="color:#5E913B">실시간 전체 게시판</h2>
+                  <h2 class="font-weight-bold my-5" style="color:#5E913B">인기 전체 게시판</h2>
                 </v-row>
               </v-col>
               <v-col cols="2">
@@ -353,7 +352,7 @@
                   <v-col cols="auto">
                     <v-img :width="35" height="45" src="../img/main_region_board.png"></v-img>
                   </v-col>
-                  <h2 class="font-weight-bold my-5" style="color:#5E913B">실시간 지역 게시판</h2>
+                  <h2 class="font-weight-bold my-5" style="color:#5E913B">인기 지역 게시판</h2>
                 </v-row>
               </v-col>
               <v-col cols="2">
@@ -418,7 +417,7 @@
           <v-row class="px-3">
             <div v-for="video in video" :key="video" class="mx-1">
               <v-col cols="auto">
-                <iframe width="360" height="195" :src="video.link" title="YouTube video player" frameborder="0"
+                <iframe width="360" height="195" :src="video.videoUrl" title="YouTube video player" frameborder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowfullscreen></iframe>
                 <div v-if="video.title.length <= 20">
@@ -441,7 +440,7 @@
       <v-row>
         <v-col cols="3"></v-col>
         <v-col cols="6">
-          <v-sheet height="80" width="650" align="center" justify="center">
+          <v-sheet height="80" width="650" align="center">
             <v-row justify="center" class="text-grey-lighten-1">
               <v-col cols="auto">
                 <p>서비스 소개</p>
@@ -453,21 +452,15 @@
                 <p>이용약관</p>
               </v-col>
             </v-row>
-            <v-row class="text-grey-lighten-2" style="font-size:12px">
-              <v-col cols="auto">
-                <p>전자IT기계자동차공학부</p>
-              </v-col>
-              <v-col cols="auto">
-                <p>정보통신공학과</p>
-              </v-col>
-              <v-col cols="auto">
-                <p>캡스톤 디자인 프로젝트</p>
-              </v-col>
-              <v-col cols="auto">
-                <p>지도교수: 이종협 교수님</p>
-              </v-col>
+            <v-row class="text-grey-lighten-2" style="font-size:12px" justify="center">
               <v-col cols="auto">
                 <p>[팀] 인디펜더</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>최준혁</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>chlwnsgur1214@naver.com</p>
               </v-col>
             </v-row>
           </v-sheet>
@@ -496,15 +489,15 @@ export default {
   },
   methods: {
     read() {
-      this.$axios.get(/*'/posts/main'*/'https://a1cf9588-b512-411c-b4d8-9ae9d9cc7b5c.mock.pstmn.io/independe')
+      this.$axios.get('/posts/main'/*'https://a1cf9588-b512-411c-b4d8-9ae9d9cc7b5c.mock.pstmn.io/independe'*/)
         .then((res) => {
           this.todayMent = res.data.data.todayMent
           this.popularBoard = res.data.data.popularPostDtos
-          this.independentBoard = res.data.data.tipPostsDtos
+          this.independentBoard = res.data.data.popularIndependentPostsDtos
           this.allBoard = res.data.data.regionAllPostDtos
           this.regionBoard = res.data.data.regionNotAllPostDtos
-          this.topSearch = res.data.data.topSearch
-          this.video = res.data.data.video
+          this.topSearch = res.data.data.keywordDtos
+          this.video = res.data.data.videoMainDtos
         })
         .catch(err => console.error(err))
     }
