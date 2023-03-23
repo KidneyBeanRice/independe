@@ -12,10 +12,10 @@
                 <router-link to="/" style="text-decoration: none; color:black;"><p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p></router-link>
               </v-tab>
               <v-tab>
-                <p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p>
+                <router-link to="/board" style="text-decoration: none; color:black;"> <p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p></router-link>
               </v-tab>
               <v-tab>
-                <router-link to="/independent" style="text-decoration: none; color:black;"> <p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p></router-link>
+                <p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p>
               </v-tab>
             </v-tabs>
           </v-col>
@@ -38,36 +38,17 @@
         </v-row>
       </v-container>
     </v-app-bar>
-
-    <v-app>
-      <v-main>
-        <v-container>
-          
-          <div>
-            <v-btn>전체</v-btn>
-          </div>
-
-          <div>
-            <v-btn>지역</v-btn>
-          </div>
-
-        </v-container>
-      </v-main>
-    </v-app>
   </template>
   
   <script>
   export default {
-    name: 'BoardView',
+    name: 'IndependentView',
     data() {
       return {
-        active_tab: 1,
+        active_tab: 2,
 
         link: ['메인', '게시판', '자취생활'],
       }
     },
-    mounted() {
-
-    },
-  } 
+  }   
   </script>

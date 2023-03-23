@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '../views/MainView.vue'
 import BoardView from '../views/BoardView.vue'
+import IndependentView from '../views/IndependentView.vue'
 
 const routes = [
   {
@@ -9,9 +10,14 @@ const routes = [
     component: MainView
   },
   {
-    path: '/board',
+    path: '/board/:regionType/:region',
     name: 'BoardView',
     component: BoardView
+  },
+  {
+    path: '/independent',
+    name: 'IndependentView',
+    component: IndependentView
   }
 ]
 

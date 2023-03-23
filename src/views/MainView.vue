@@ -4,18 +4,18 @@
     <v-container>
       <v-row align="center">
         <v-col cols="auto">
-          <v-img :width="220" src="../img/logo.png"></v-img>
+          <router-link to="/"><v-img :width="220" src="../img/logo.png"></v-img></router-link>
         </v-col>
         <v-col cols="auto">
-          <v-tabs color="#5E913B">
+          <v-tabs color="#5E913B" v-model="active_tab">
             <v-tab>
               <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
             </v-tab>
             <v-tab>
-              <p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p>
+              <router-link to="/board/all/free" style="text-decoration: none; color:black;"><p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p></router-link>
             </v-tab>
-            <v-tab>
-              <p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p>
+            <v-tab >
+              <router-link to="/independent" style="text-decoration: none; color:black;"><p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p></router-link>
             </v-tab>
           </v-tabs>
         </v-col>
@@ -132,18 +132,18 @@
                     <p class="text-subtitle-2">{{ index + 1 }}</p>
                   </v-list>
                 </v-col>
-                <v-col cols="8">
+                <v-col cols="7">
                   <v-list v-for="topSearch in topSearch" :key="topSearch"
                     style="background-color: #FAFAFA; text-emphasis-color: #FFFFFF;">
-                    <div v-if="topSearch.keywordName.length <= 10">
+                    <div v-if="topSearch.keywordName.length <= 9">
                       <p class="text-subtitle-2">{{ topSearch.keywordName }}</p>
                     </div>
                     <div v-else>
-                      <p class="text-subtitle-2">{{ topSearch.keywordName.substr(0, 10) }}...</p>
+                      <p class="text-subtitle-2">{{ topSearch.keywordName.substr(0, 9) }}...</p>
                     </div>
                   </v-list>
                 </v-col>
-                <v-col cols="2">
+                <v-col cols="3">
                   <v-list v-for="(topSearch, index) in topSearch" :key="index" style="background-color: #FAFAFA;">
                     <div>
                       <div v-if="topSearch.keywordCount >= 10000">
@@ -473,9 +473,10 @@
 
 <script>
 export default {
-  name: 'BoardView',
+  name: 'MainView',
   data() {
     return {
+      active_tab: 0,
       link: ['메인', '게시판', '자취생활'],
 
       todayMent: [],
@@ -489,7 +490,7 @@ export default {
   },
   methods: {
     read() {
-      this.$axios.get('/posts/main'/*'https://a1cf9588-b512-411c-b4d8-9ae9d9cc7b5c.mock.pstmn.io/independe'*/)
+      this.$axios.get(/*'/posts/main'*/'https://a1cf9588-b512-411c-b4d8-9ae9d9cc7b5c.mock.pstmn.io/independe')
         .then((res) => {
           this.todayMent = res.data.data.todayMent
           this.popularBoard = res.data.data.popularPostDtos
@@ -503,7 +504,7 @@ export default {
     }
   },
   mounted() {
-    this.read();
+    this.read();    
   },
 }   
 </script>
