@@ -12,7 +12,7 @@
                 <router-link to="/" style="text-decoration: none; color:black;"><p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p></router-link>
               </v-tab>
               <v-tab>
-                <router-link to="/board" style="text-decoration: none; color:black;"> <p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p></router-link>
+                <router-link to="/board/all" style="text-decoration: none; color:black;"> <p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p></router-link>
               </v-tab>
               <v-tab>
                 <p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p>

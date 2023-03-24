@@ -10,7 +10,7 @@ const routes = [
     component: MainView
   },
   {
-    path: '/board/:regionType/:region',
+    path: '/board/:regionType/:regionPostType',
     name: 'BoardView',
     component: BoardView
   },

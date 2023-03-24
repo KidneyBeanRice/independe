@@ -12,7 +12,7 @@
               <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
             </v-tab>
             <v-tab>
-              <router-link to="/board/all/free" style="text-decoration: none; color:black;"><p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p></router-link>
+              <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;"><p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p></router-link>
             </v-tab>
             <v-tab >
               <router-link to="/independent" style="text-decoration: none; color:black;"><p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p></router-link>
