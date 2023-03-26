@@ -69,6 +69,24 @@
             </v-col>
           </v-row>
           <v-divider :thickness="2" class="border-opacity-25 mb-2" length="1160"></v-divider>
+          <v-row class="mx-1 my-10">
+            <v-sheet :height="1000" :width="1150" border>
+              <v-col cols="6">
+                <v-list v-for="Board in Board" :key="Board">
+                  <div v-if="Board.title.length <= 31">
+                    <v-img style="float:left" v-if="Board.picture === true" :width="15"
+                       src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                          {{ Board.title }}
+                  </div>
+                  <div v-else>
+                    <v-img style="float:left" v-if="Board.picture === true" :width="15"
+                      src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                    <p>{{ Board.title.substr(0, 31) }}...</p>
+                  </div>
+                </v-list>
+              </v-col>
+            </v-sheet>
+          </v-row>
         </div>
 
         <!--지역게시판-->
@@ -241,6 +259,12 @@
               </v-slide-group>
             </v-col>
           </v-row>
+                    
+          <v-row class="mx-1 my-10">
+            <v-sheet :height="1000" :width="1150" border>
+
+            </v-sheet>
+          </v-row>
         </div>
 
       </v-container>
@@ -311,7 +335,7 @@ export default {
 
       this.$axios.get(/*"/posts/region/"*/"https://a61c90ff-c4ab-4ccc-b870-c159697f7128.mock.pstmn.io/posts/region/ALL/FREE", { params: { regionType: "ALL", regionPostType: "FREE" } })
         .then(res => {
-          this.Board = res.data.data
+          this.Board = res.data.data.postsDtos
           console.log(res.data)
         })
         .catch(function (error) {
@@ -323,7 +347,7 @@ export default {
 
       this.$axios.get(/*"/posts/region/"*/"https://a61c90ff-c4ab-4ccc-b870-c159697f7128.mock.pstmn.io/posts/region/SEOUL/TALK", { params: { regionType: this.regionsAPI[this.regionCheck], regionPostType: this.regionCategoryAPI[this.regionCategoryCheck] } })
         .then(res => {
-          this.Board = res.data.data
+          this.Board = res.data.data.postsDtos
           console.log(res.data)
         })
         .catch(function (error) {
