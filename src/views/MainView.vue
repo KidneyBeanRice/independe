@@ -11,12 +11,16 @@
             <v-tab>
               <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
             </v-tab>
+            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;">
             <v-tab>
-              <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;"><p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p></router-link>
+              <p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p>
             </v-tab>
+          </router-link>
+          <router-link to="/independent" style="text-decoration: none; color:black;">
             <v-tab >
-              <router-link to="/independent" style="text-decoration: none; color:black;"><p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p></router-link>
+              <p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p>
             </v-tab>
+          </router-link>
           </v-tabs>
         </v-col>
         <v-col cols="3" class="ml-11">
@@ -457,7 +461,7 @@
                 <p>[팀] 인디펜더</p>
               </v-col>
               <v-col cols="auto">
-                <p>최준혁</p>
+                <p>최준혁 이용희 최성우</p>
               </v-col>
               <v-col cols="auto">
                 <p>chlwnsgur1214@naver.com</p>
@@ -490,7 +494,7 @@ export default {
   },
   methods: {
     read() {
-      this.$axios.get(/*'/posts/main'*/'https://a1cf9588-b512-411c-b4d8-9ae9d9cc7b5c.mock.pstmn.io/independe')
+      this.$axios.get(/*'/posts/main'*/'https://a61c90ff-c4ab-4ccc-b870-c159697f7128.mock.pstmn.io/posts/main')
         .then((res) => {
           this.todayMent = res.data.data.todayMent
           this.popularBoard = res.data.data.popularPostDtos
