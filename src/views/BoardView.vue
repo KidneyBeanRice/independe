@@ -69,22 +69,33 @@
             </v-col>
           </v-row>
           <v-divider :thickness="2" class="border-opacity-25 mb-2" length="1160"></v-divider>
+          <v-row>
+            
+          </v-row>
           <v-row class="mx-1 my-10">
-            <v-sheet :height="1000" :width="1150" border>
-              <v-col cols="6">
-                <v-list v-for="Board in Board" :key="Board">
-                  <div v-if="Board.title.length <= 31">
+            <v-sheet :height="1100" :width="1150">
+              <v-list v-for="Board in Board" :key="Board" style="overflow:hidden">
+                <v-row>
+              <v-col cols="7">                
+                  <div v-if="Board.title.length < 39">
                     <v-img style="float:left" v-if="Board.picture === true" :width="15"
-                       src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                       src="../img/imagePlaceHolder.png" class="mr-1 my-1"></v-img>
                           {{ Board.title }}
                   </div>
                   <div v-else>
                     <v-img style="float:left" v-if="Board.picture === true" :width="15"
-                      src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                    <p>{{ Board.title.substr(0, 31) }}...</p>
-                  </div>
-                </v-list>
-              </v-col>
+                      src="../img/imagePlaceHolder.png" class="mr-1 my-1"></v-img>
+                    <p>{{ Board.title.substr(0, 38) }}...</p>
+                  </div>                
+              </v-col>                             
+              <v-col cols=1></v-col>         
+              <v-col cols=1></v-col>         
+              <v-col cols=1></v-col>         
+              <v-col cols=1></v-col>         
+              <v-col cols=1></v-col>         
+            </v-row>  
+            <v-divider :thickness="1" class="border-opacity-25 mt-3" length="1160"></v-divider>  
+            </v-list>
             </v-sheet>
           </v-row>
         </div>
