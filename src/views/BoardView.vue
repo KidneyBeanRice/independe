@@ -613,7 +613,7 @@ export default {
           console.log(error);
         });
     },
-    regionCategory_play() {
+    regionCategory_play() { 
       this.regionCategoryCheck = 2
 
       this.$axios.get(/*"/posts/region/",*/ { params: { regionType: this.regionsAPI[this.regionCheck], regionPostType: this.regionCategoryAPI[2] } })
