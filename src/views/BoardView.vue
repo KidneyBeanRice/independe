@@ -623,7 +623,7 @@ export default {
         })
         .catch(function (error) {
           console.log(error);
-        });
+        }); 
     },
     regionCategory_meet() {
       this.regionCategoryCheck = 3
