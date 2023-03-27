@@ -494,7 +494,7 @@ export default {
   },
   methods: {
     read() {
-      this.$axios.get(/*'/posts/main'*/'https://a61c90ff-c4ab-4ccc-b870-c159697f7128.mock.pstmn.io/posts/main')
+      this.$axios.get(/*'/posts/main'*/'https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/posts/main')
         .then((res) => {
           this.todayMent = res.data.data.todayMent
           this.popularBoard = res.data.data.popularPostDtos

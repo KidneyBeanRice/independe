@@ -69,33 +69,103 @@
             </v-col>
           </v-row>
           <v-divider :thickness="2" class="border-opacity-25 mb-2" length="1160"></v-divider>
-          <v-row>
-            
-          </v-row>
-          <v-row class="mx-1 my-10">
-            <v-sheet :height="1100" :width="1150">
-              <v-list v-for="Board in Board" :key="Board" style="overflow:hidden">
+
+          <v-row class="mx-1 mt-6">
+            <v-sheet :height="40" :width="1150" class="mb-2 font-weight-bold" align="center" justify="center">
+              <v-row>
+                <v-col cols="1">시각</v-col>
+                <v-col cols="6">제목</v-col>
+                <v-col cols="2">작성자</v-col>
+                <v-col cols="3">
+                  <v-row>
+                    <v-col cols="4">댓글수</v-col>
+                    <v-col cols="4">추천수</v-col>
+                    <v-col cols="4">조회수</v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+            </v-sheet>
+            <v-divider :thickness="1" class="border-opacity-25 mb-3" length="1160"></v-divider>
+            <v-sheet :width="1150">
+              <v-list v-for="(Board, index) in Board.slice((currentPage - 1) * 20, (currentPage * 20))" :key="index"
+                style="overflow:hidden; font-size:14px">
                 <v-row>
-              <v-col cols="7">                
-                  <div v-if="Board.title.length < 39">
-                    <v-img style="float:left" v-if="Board.picture === true" :width="15"
-                       src="../img/imagePlaceHolder.png" class="mr-1 my-1"></v-img>
-                          {{ Board.title }}
+                  <v-col cols="1">
+                    <div v-if="$filter.formatDate(Board.createdDate) === today" align="center" justify="center">
+                      {{ $filter.formatTime(Board.createdDate) }}
+                    </div>
+                    <div v-else align="center" justify="center">
+                      {{ $filter.formatDate(Board.createdDate) }}
+                    </div>
+                  </v-col>
+                  <v-col cols="6">
+                    <div v-if="Board.title.length < 37">
+                      <v-img style="float:left" v-if="Board.picture === true" :width="15"
+                        src="../img/imagePlaceHolder.png" class="mr-1 pt-1"></v-img>
+                      {{ Board.title }}
+                    </div>
+                    <div v-else>
+                      <v-img style="float:left" v-if="Board.picture === true" :width="15"
+                        src="../img/imagePlaceHolder.png" class="mr-1 pt-1"></v-img>
+                      <p>{{ Board.title.substr(0, 37) }}...</p>
+                    </div>
+                  </v-col>
+                  <v-col cols="2">
+                    {{ Board.nickName }}
+                  </v-col>
+                  <v-col cols="3">
+                    <v-row>
+                      <v-col cols="4">
+                        <div>
+                          <v-img style="float:left;" :width="15" src="../img/commentIcon.png" class="my-1 mx-1"></v-img>
+                          <div v-if="Board.commentCount < 100000">
+                            <p class="text-grey-darken-1 mx-1">{{ Board.commentCount }}</p>
+                          </div>
+                          <div v-else>
+                            <p class="text-grey-darken-1">99999+</p>
+                          </div>
+                        </div>
+                      </v-col>
+                      <v-col cols="4">
+                        <div>
+                          <v-img style="float:left" :width="15" src="../img/recommendIcon.png" class="my-1 mx-1"></v-img>
+                          <div v-if="Board.recommendCount < 100000">
+                            <p class="text-grey-darken-1 mx-1">{{ Board.recommendCount }}</p>
+                          </div>
+                          <div v-else>
+                            <p class="text-grey-darken-1">99999+</p>
+                          </div>
+                        </div>
+                      </v-col>
+                      <v-col cols="4">
+                        <div>
+                          <v-img style="float:left" :width="15" src="../img/viewIcon.png" class="my-1 mx-1"></v-img>
+                          <div v-if="Board.views < 100000">
+                            <p class="text-grey-darken-1 mx-1">{{ Board.views }}</p>
+                          </div>
+                          <div v-else>
+                            <p class="text-grey-darken-1">99999+</p>
+                          </div>
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <v-divider :thickness="1" class="border-opacity-25 mt-3" length="1160"></v-divider>
+              </v-list>
+
+              <v-row class="my-5" justify="center">
+                <div @click="page_all">
+                  <div v-if="totalPage % 20 === 0">
+                    <v-pagination v-model="currentPage" :length=totalPage/20 prev-icon="mdi-menu-left"
+                      next-icon="mdi-menu-right" :total-visible="10"></v-pagination>
                   </div>
                   <div v-else>
-                    <v-img style="float:left" v-if="Board.picture === true" :width="15"
-                      src="../img/imagePlaceHolder.png" class="mr-1 my-1"></v-img>
-                    <p>{{ Board.title.substr(0, 38) }}...</p>
-                  </div>                
-              </v-col>                             
-              <v-col cols=1></v-col>         
-              <v-col cols=1></v-col>         
-              <v-col cols=1></v-col>         
-              <v-col cols=1></v-col>         
-              <v-col cols=1></v-col>         
-            </v-row>  
-            <v-divider :thickness="1" class="border-opacity-25 mt-3" length="1160"></v-divider>  
-            </v-list>
+                    <v-pagination v-model="currentPage" :length=totalPage/20+1 prev-icon="mdi-menu-left"
+                      next-icon="mdi-menu-right" :total-visible="10"></v-pagination>
+                  </div>
+                </div>
+              </v-row>
             </v-sheet>
           </v-row>
         </div>
@@ -125,7 +195,7 @@
 
           <v-divider :thickness="2" class="border-opacity-25 mb-2" length="1160"></v-divider>
 
-          <v-row>
+          <v-row class="my-5">
             <v-col cols="2" class="py-5">
               <v-menu>
                 <template v-slot:activator="{ props }">
@@ -270,14 +340,110 @@
               </v-slide-group>
             </v-col>
           </v-row>
-                    
-          <v-row class="mx-1 my-10">
-            <v-sheet :height="1000" :width="1150" border>
+          <v-divider :thickness="1" class="border-opacity-25 mb-2" length="1160"></v-divider>
+          <v-row class="mx-1 mt-1">
+            <v-sheet  :width="1150">
+              <v-row class="mx-1 mt-6">
+            <v-sheet :height="40" :width="1150" class="mb-2 font-weight-bold" align="center" justify="center">
+              <v-row>
+                <v-col cols="1">시각</v-col>
+                <v-col cols="6">제목</v-col>
+                <v-col cols="2">작성자</v-col>
+                <v-col cols="3">
+                  <v-row>
+                    <v-col cols="4">댓글수</v-col>
+                    <v-col cols="4">추천수</v-col>
+                    <v-col cols="4">조회수</v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+            </v-sheet>
+            <v-divider :thickness="1" class="border-opacity-25 mb-3" length="1160"></v-divider>
+            <v-sheet :width="1150">
+              <v-list v-for="(Board, index) in Board.slice((currentPage - 1) * 20, (currentPage * 20))" :key="index"
+                style="overflow:hidden; font-size:14px">
+                <v-row>
+                  <v-col cols="1">
+                    <div v-if="$filter.formatDate(Board.createdDate) === today" align="center" justify="center">
+                      {{ $filter.formatTime(Board.createdDate) }}
+                    </div>
+                    <div v-else align="center" justify="center">
+                      {{ $filter.formatDate(Board.createdDate) }}
+                    </div>
+                  </v-col>
+                  <v-col cols="6">
+                    <div v-if="Board.title.length < 37">
+                      <v-img style="float:left" v-if="Board.picture === true" :width="15"
+                        src="../img/imagePlaceHolder.png" class="mr-1 pt-1"></v-img>
+                      {{ Board.title }}
+                    </div>
+                    <div v-else>
+                      <v-img style="float:left" v-if="Board.picture === true" :width="15"
+                        src="../img/imagePlaceHolder.png" class="mr-1 pt-1"></v-img>
+                      <p>{{ Board.title.substr(0, 37) }}...</p>
+                    </div>
+                  </v-col>
+                  <v-col cols="2">
+                    {{ Board.nickName }}
+                  </v-col>
+                  <v-col cols="3">
+                    <v-row>
+                      <v-col cols="4">
+                        <div>
+                          <v-img style="float:left;" :width="15" src="../img/commentIcon.png" class="my-1 mx-1"></v-img>
+                          <div v-if="Board.commentCount < 100000">
+                            <p class="text-grey-darken-1 mx-1">{{ Board.commentCount }}</p>
+                          </div>
+                          <div v-else>
+                            <p class="text-grey-darken-1">99999+</p>
+                          </div>
+                        </div>
+                      </v-col>
+                      <v-col cols="4">
+                        <div>
+                          <v-img style="float:left" :width="15" src="../img/recommendIcon.png" class="my-1 mx-1"></v-img>
+                          <div v-if="Board.recommendCount < 100000">
+                            <p class="text-grey-darken-1 mx-1">{{ Board.recommendCount }}</p>
+                          </div>
+                          <div v-else>
+                            <p class="text-grey-darken-1">99999+</p>
+                          </div>
+                        </div>
+                      </v-col>
+                      <v-col cols="4">
+                        <div>
+                          <v-img style="float:left" :width="15" src="../img/viewIcon.png" class="my-1 mx-1"></v-img>
+                          <div v-if="Board.views < 100000">
+                            <p class="text-grey-darken-1 mx-1">{{ Board.views }}</p>
+                          </div>
+                          <div v-else>
+                            <p class="text-grey-darken-1">99999+</p>
+                          </div>
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <v-divider :thickness="1" class="border-opacity-25 mt-3" length="1160"></v-divider>
+              </v-list>
 
+              <v-row class="my-5" justify="center">
+                <div @click="page_region">
+                  <div v-if="totalPage % 20 === 0">
+                    <v-pagination v-model="currentPage" :length=totalPage/20 prev-icon="mdi-menu-left"
+                      next-icon="mdi-menu-right" :total-visible="10"></v-pagination>
+                  </div>
+                  <div v-else>
+                    <v-pagination v-model="currentPage" :length=totalPage/20+1 prev-icon="mdi-menu-left"
+                      next-icon="mdi-menu-right" :total-visible="10"></v-pagination>
+                  </div>
+                </div>
+              </v-row>
+            </v-sheet>
+          </v-row>
             </v-sheet>
           </v-row>
         </div>
-
       </v-container>
     </v-main>
   </v-app>
@@ -326,7 +492,15 @@ export default {
     return {
       active_tab: 1,
 
+      now: "",
+      month: "",
+      day: "",
+      today: "",
+
       Board: [],
+
+      currentPage: 1,
+      totalPage: 1,
 
       areaCheck: 0,
       regionCheck: 0,
@@ -344,7 +518,7 @@ export default {
     all() {
       this.areaCheck = 0
 
-      this.$axios.get(/*"/posts/region/"*/"https://a61c90ff-c4ab-4ccc-b870-c159697f7128.mock.pstmn.io/posts/region/ALL/FREE", { params: { regionType: "ALL", regionPostType: "FREE" } })
+      this.$axios.get(/*"/posts/region/"*/"https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/region/ALL/FREE", { params: { regionType: "ALL", regionPostType: "FREE" } })
         .then(res => {
           this.Board = res.data.data.postsDtos
           console.log(res.data)
@@ -356,7 +530,7 @@ export default {
     region() {
       this.areaCheck = 1
 
-      this.$axios.get(/*"/posts/region/"*/"https://a61c90ff-c4ab-4ccc-b870-c159697f7128.mock.pstmn.io/posts/region/SEOUL/TALK", { params: { regionType: this.regionsAPI[this.regionCheck], regionPostType: this.regionCategoryAPI[this.regionCategoryCheck] } })
+      this.$axios.get(/*"/posts/region/"*/"https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/region/SEOUL/TALK", { params: { regionType: this.regionsAPI[this.regionCheck], regionPostType: this.regionCategoryAPI[this.regionCategoryCheck] } })
         .then(res => {
           this.Board = res.data.data.postsDtos
           console.log(res.data)
@@ -474,10 +648,46 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+    },
+    page_all() {
+      this.$router.replace({ params: { regionType: "ALL", regionPostType: "FREE" }, query: { page: this.currentPage } })
+
+      this.$axios.get(/*"/posts/region/"*/"https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/region/ALL/FREE", { params: { regionType: "ALL", regionPostType: "FREE" }, query: { page: this.currentPage } })
+        .then(res => {
+          this.totalPage = res.data.data.count
+
+          console.log(res.data)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    page_region() {
+      this.$router.replace({ params: { regionType: this.regionsAPI[this.regionCheck], regionPostType:  this.regionCategoryAPI[this.regionCategoryCheck]}, query: { page: this.currentPage } })
+
+      this.$axios.get(/*"/posts/region/"*/"https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/region/SEOUL/TALK", { params: { regionType: this.regionsAPI[this.regionCheck], regionPostType: this.regionCategoryAPI[this.regionCategoryCheck] }, query: { page: this.currentPage }})
+        .then(res => {
+          this.totalPage = res.data.data.count
+
+          console.log(res.data)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    date() {
+      this.now = new Date()
+      this.month = this.now.getMonth() + 1
+      this.month = this.month > 9 ? this.month : `0${this.month}`;
+      this.day = this.now.getDate()
+
+      this.today = this.month + '-' + this.day
     }
   },
   mounted() {
-    this.all();
+    this.all(),
+    this.date(),
+    this.page_all()
   },
 } 
 </script>
