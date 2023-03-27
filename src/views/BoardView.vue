@@ -555,7 +555,7 @@ export default {
     region_busan() {
       this.regionCheck = 1
 
-      this.$axios.get(/*"/posts/region/",*/ { params: { regionType: this.regionsAPI[1], regionPostType: this.regionCategoryAPI[this.regionCategoryCheck] } })
+      //this.$axios.get(/*"/posts/region/",*/ { params: { regionType: this.regionsAPI[1], regionPostType: this.regionCategoryAPI[this.regionCategoryCheck] } })
         .then(res => {
           this.Board = res.data.data
           console.log(res.data)
