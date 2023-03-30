@@ -10,12 +10,12 @@
           <v-tabs color="#5E913B" v-model="active_tab">
             <v-tab>
               <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
-            </v-tab>
-            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;">
-            <v-tab>
-              <p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p>
-            </v-tab>
-          </router-link>
+            </v-tab>                      
+              <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;">                   
+                <v-tab>                          
+                  <p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p>                
+                </v-tab>             
+            </router-link>
           <router-link to="/independent" style="text-decoration: none; color:black;">
             <v-tab >
               <p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p>
