@@ -333,57 +333,85 @@
             </v-list>
 
             <v-row class="my-5" justify="center">
-
               <div v-if="totalPage <= 10">
-                <v-row>
-                <div :key="totalPage" v-for="totalPage in totalPage" @click="currentPage = totalPage - 1, page()">
-                  <router-link
-                    :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: totalPage } }"  style="text-decoration: none;">
-                    <div v-if="currentPage === totalPage -1">
-                      <v-btn variant="text" size="x-small" style="font-size: 14px; color:black;">{{ totalPage }}</v-btn>
-                    </div>
-                    <div v-else>
-                      <v-btn variant="text" size="x-small" style="font-size: 14px;">{{ totalPage }}</v-btn>
-                    </div>
-                  </router-link>
-                </div>
-              </v-row>
-              </div>
-              <div v-else>
-                <v-row>
-                  <router-link
-                    :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
-                    @click="page()"  style="text-decoration: none;">
-                    <v-btn @click="currentPage = Math.max(currentPage - 10, 0)" :disabled="currentPage <= 1" variant="text" size="x-small"  :style="{color: currentPage <= 1 ? 'black' : ''}">&lt;</v-btn>
-                  </router-link>
-
-                  <div v-for="pageNumber in displayPageNumbers" :key="pageNumber"
-                    :class="{ active: pageNumber === currentPage, 'last-page': pageNumber === displayPageNumbers[displayPageNumbers.length - 1]  }" @click="currentPage = pageNumber - 1, page()">
+                <v-row class="my-5">
+                  <div :key="totalPage" v-for="totalPage in totalPage" @click="currentPage = totalPage - 1, page()">
                     <router-link
-                      :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: pageNumber } }"  style="text-decoration: none;">
-                      <div v-if="currentPage === pageNumber -1">
-                        <v-btn @click="currentPage = pageNumber" variant="text" size="x-small" style="font-size: 14px; color:black">{{ pageNumber }}</v-btn>
-                      </div>
-                      <div v-else-if="currentPage >= totalPage">
-                        <v-btn @click="currentPage = pageNumber" variant="text" size="x-small" style="font-size: 14px;" :style="{ color: pageNumber === displayPageNumbers[displayPageNumbers.length - 1] ? 'black' : '' }">{{ pageNumber }}</v-btn>
-
+                      :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: totalPage } }"
+                      style="text-decoration: none;">
+                      <div v-if="currentPage === totalPage - 1">
+                        <v-btn variant="text" size="x-small" class="font-weight-bold"
+                          style="font-size: 16px; color:#5E913B;">{{ totalPage }}</v-btn>
                       </div>
                       <div v-else>
-                        <v-btn @click="currentPage = pageNumber" variant="text" size="x-small" style="font-size: 14px;">{{ pageNumber }}</v-btn>
+                        <v-btn variant="text" size="x-small" style="font-size: 14px; color:#A9A9A9">{{ totalPage
+                        }}</v-btn>
                       </div>
-                      
+                    </router-link>
+                  </div>
+                </v-row>
+              </div>
+              <div v-else>
+                <v-row class="my-5">
+                  <router-link
+                    :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
+                    @click="page()" style="text-decoration: none;">
+                    <v-btn @click="currentPage = 0" :disabled="currentPage < 1" variant="text" size="x-small"
+                      :style="{ color: currentPage <= 1 ? '#5E913B' : '' }">
+                      <div style="color:#A9A9A9; font-size:16px">&lt;&lt;</div>
+                    </v-btn>
+                  </router-link>
+                  <router-link
+                    :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
+                    @click="page()" style="text-decoration: none;">
+                    <v-btn @click="currentPage = Math.max(currentPage - 10, 0)" :disabled="currentPage < 1" variant="text"
+                      size="x-small" :style="{ color: currentPage <= 1 ? '#5E913B' : '' }">
+                      <div style="color:#A9A9A9; font-size:16px">&lt;</div>
+                    </v-btn>
+                  </router-link>
+                  <div v-for="pageNumber in displayPageNumbers" :key="pageNumber"
+                    :class="{ active: pageNumber === currentPage, 'last-page': pageNumber === displayPageNumbers[displayPageNumbers.length - 1] }"
+                    @click="currentPage = pageNumber - 1, page()">
+                    <router-link
+                      :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: pageNumber } }"
+                      style="text-decoration: none;">
+                      <div v-if="currentPage === pageNumber - 1">
+                        <v-btn @click="currentPage = pageNumber" variant="text" size="x-small" class="font-weight-bold"
+                          style="font-size: 16px; color:#5E913B">{{ pageNumber }}</v-btn>
+                      </div>
+                      <div v-else-if="currentPage >= totalPage">
+                        <v-btn @click="currentPage = pageNumber" variant="text" size="x-small"
+                          :style="{ fontSize: pageNumber === displayPageNumbers[displayPageNumbers.length - 1] ? '16px' : '14px', fontWeight: pageNumber === displayPageNumbers[displayPageNumbers.length - 1] && 'bold', color: pageNumber === displayPageNumbers[displayPageNumbers.length - 1] ? '#5E913B' : '#A9A9A9' }">{{
+                            pageNumber }}</v-btn>
+                      </div>
+                      <div v-else>
+                        <v-btn @click="currentPage = pageNumber" variant="text" size="x-small"
+                          style="font-size: 14px; color:#A9A9A9">{{ pageNumber }}</v-btn>
+                      </div>
                     </router-link>
                   </div>
                   <router-link
-                    :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }" 
-                    @click="page()"  style="text-decoration: none;" :style="{color: currentPage >= totalPage ? 'black' : ''}">
+                    :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
+                    @click="page()" style="text-decoration: none;"
+                    :style="{ color: currentPage >= totalPage ? '#5E913B' : '' }">
                     <v-btn @click="currentPage = Math.min(currentPage + 10, totalPage)"
-                      :disabled="currentPage >= totalPage-1" variant="text" size="x-small" style="font-size: 14px;">&gt;</v-btn>
-                  </router-link>                  
+                      :disabled="currentPage >= totalPage - 1" variant="text" size="x-small" style="font-size: 14px;">
+                      <div style="color:#A9A9A9; font-size:16px">&gt;</div>
+                    </v-btn>
+                  </router-link>
+                  <router-link
+                    :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
+                    @click="page()" style="text-decoration: none;"
+                    :style="{ color: currentPage >= totalPage ? '#5E913B' : '' }">
+                    <v-btn @click="currentPage = totalPage" :disabled="currentPage >= totalPage - 1" variant="text"
+                      size="x-small" style="font-size: 14px;">
+                      <div style="color:#A9A9A9; font-size:16px">&gt;&gt;</div>
+                    </v-btn>
+                  </router-link>
                 </v-row>
               </div>
             </v-row>
-          </v-sheet>          
+          </v-sheet>
         </v-row>
       </v-container>
     </v-main>
@@ -487,15 +515,13 @@ export default {
       this.areaCheck = 0
       this.regionCheck = 0
       this.regionCategoryCheck = 0
-      //const url = `/posts/region/${this.regionsAPI[0]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+      const url = `/posts/region/${this.regionsAPI[0]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
 
-      //this.$axios.get(url, { params: { page: this.currentPage } })
-      this.$axios.get('https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/region/ALL/FREE', { params: { page: this.currentPage } })
+      //this.$axios.get('https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/region/ALL/FREE', { params: { page: this.currentPage } })
+      this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
-
-          this.totalPage = 200
 
           if (this.totalPage < 10)
             this.totalPage = 1
@@ -527,7 +553,6 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
-
           console.log(res.data)
         })
         .catch(function (error) {
@@ -551,7 +576,6 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
-
           console.log(res.data)
         })
         .catch(function (error) {
@@ -574,7 +598,6 @@ export default {
             this.totalPage = parseInt(this.totalPage / 10)
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
-
 
           console.log(res.data)
         })
@@ -641,7 +664,6 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
-
           console.log(res.data)
         })
         .catch(function (error) {
@@ -663,7 +685,6 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
-
           console.log(res.data)
         })
         .catch(function (error) {
@@ -684,7 +705,6 @@ export default {
             this.totalPage = parseInt(this.totalPage / 10)
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
-
 
           console.log(res.data)
         })
