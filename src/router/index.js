@@ -15,7 +15,7 @@ const routes = [
     component: BoardView
   },
   {
-    path: '/independent',
+    path: '/independent/:independentType',
     name: 'IndependentView',
     component: IndependentView
   }

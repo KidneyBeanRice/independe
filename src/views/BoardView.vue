@@ -9,17 +9,73 @@
         <v-col cols="auto">
           <v-tabs color="#5E913B" v-model="active_tab">
             <router-link to="/" style="text-decoration: none; color:black;">
-              <v-tab>
+              <v-tab @click="$store.state.myGlobalVariable = 0">
                 <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
               </v-tab>
             </router-link>
-            <v-tab>
-              <p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p>
-            </v-tab>
-            <router-link to="/independent" style="text-decoration: none; color:black;">
-              <v-tab>
-                <p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p>
-              </v-tab>
+            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;">
+              <v-menu open-on-hover>
+                <template v-slot:activator="{ props }">
+                  <v-tab v-bind="props">
+                    <p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p>
+                  </v-tab>
+                </template>
+                <v-list>
+                  <v-list-item align="center">
+                    <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="region_all">
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 0 ">자유</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/board/SEOUL/TALK" style="text-decoration: none; color:black;" @click="region_seoul">
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 1">서울</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/board/PUSAN/TALK" style="text-decoration: none; color:black;" @click="region_busan">
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 2">부산</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/board/ULSAN/TALK" style="text-decoration: none; color:black;" @click="region_ulsan">
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 3">울산</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/board/KEYNONGNAM/TALK" style="text-decoration: none; color:black;" @click="region_kyeongnam">
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 4">경남</v-list-item-title>
+                    </router-link>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </router-link>
+            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;">
+              <v-menu open-on-hover>
+                <template v-slot:activator="{ props }">
+                  <v-tab v-bind="props">
+                    <p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p>
+                  </v-tab>
+                </template>
+                <v-list>
+                  <v-list-item align="center">
+                    <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="independent_clean">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 0 ">청소</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/independent/WASH" style="text-decoration: none; color:black;" @click="independent_wash">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 1">세탁</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/independent/COOK" style="text-decoration: none; color:black;" @click="independent_cook">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 2">요리</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/independent/HEALTH" style="text-decoration: none; color:black;" @click="independent_health">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 3">건강</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/independent/ETC" style="text-decoration: none; color:black;" @click="independent_etc">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 4">기타</v-list-item-title>
+                    </router-link>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
             </router-link>
           </v-tabs>
         </v-col>
@@ -43,15 +99,19 @@
     </v-container>
   </v-app-bar>
 
-  <!--전체게시판-->
   <v-app>
     <v-main>
       <v-container>
         <v-row>
           <v-col cols="auto">
-            <h1 class="font-weight-bold">{{ regions[regionCheck] }}게시판</h1>
+            <div v-if="areaCheck === 0">
+              <h1 class="font-weight-bold">자유게시판</h1>
+            </div>
+            <div v-else>
+              <h1 class="font-weight-bold">{{ regions[regionCheck] }} 이야기</h1>
+            </div>
           </v-col>
-          <v-row align="center" class="mx-5">
+          <v-row class="mx-5 mt-2">
             <div v-if="regionCheck === 0">
               <router-link :to="{ params: { regionType: regionsAPI[0], regionPostType: 'FREE' } }"
                 style="text-decoration: none; color:#5E913B;">
@@ -470,12 +530,11 @@ export default {
 
       currentPage: 0,
       totalPage: [],
-      count: 1,
 
       areaCheck: 0,
       regionCheck: 0,
       regionCategoryCheck: 1,
-      regions: ['전체', '서울', '부산', '울산', '경남'],
+      regions: ['자유', '서울', '부산', '울산', '경남'],
       regionCategory: ['자유', '잡담', '식당', '오락', '만남', '장터'],
 
       regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
@@ -754,8 +813,18 @@ export default {
     }
   },
   mounted() {
-    this.region_all(),
-      this.date()
+    if (this.$store.state.boardCheck === 0)
+      this.region_all()
+    else if (this.$store.state.boardCheck === 1)
+      this.region_seoul()
+    else if (this.$store.state.boardCheck === 2)
+      this.region_busan()
+    else if (this.$store.state.boardCheck === 3)
+      this.region_ulsan()
+    else if (this.$store.state.boardCheck === 4)
+      this.region_kyeongnam()
+
+    this.date()
   },
 } 
 </script>
