@@ -1,5 +1,4 @@
 <template>
-    <!--시스템 바-->
     <v-app-bar height="80" :elevation="1">
       <v-container>
         <v-row align="center">
