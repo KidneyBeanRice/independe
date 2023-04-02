@@ -401,7 +401,7 @@
             <v-row class="mt-3" align=center>
                 <v-col cols="5">
                   <v-row align=center>
-                  <v-menu open-on-hover>
+                  <v-menu>
                 <template v-slot:activator="{ props }">
                   <v-btn v-bind="props" style="width:130px; height:40px; border-color:#A9A9A9" variant="outlined" >
                     <p >{{ search[searchKeyword] }} ▼</p>
