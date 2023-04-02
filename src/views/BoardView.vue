@@ -23,7 +23,7 @@
                 <v-list>
                   <v-list-item align="center">
                     <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="region_all">
-                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 0 ">자유</v-list-item-title>
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 0">자유</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
                     <router-link to="/board/SEOUL/TALK" style="text-decoration: none; color:black;" @click="region_seoul">
@@ -38,7 +38,8 @@
                       <v-list-item-title class="my-2" @click="$store.state.boardCheck = 3">울산</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/board/KEYNONGNAM/TALK" style="text-decoration: none; color:black;" @click="region_kyeongnam">
+                    <router-link to="/board/KEYNONGNAM/TALK" style="text-decoration: none; color:black;"
+                      @click="region_kyeongnam">
                       <v-list-item-title class="my-2" @click="$store.state.boardCheck = 4">경남</v-list-item-title>
                     </router-link>
                   </v-list-item>
@@ -54,23 +55,28 @@
                 </template>
                 <v-list>
                   <v-list-item align="center">
-                    <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="independent_clean">
-                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 0 ">청소</v-list-item-title>
+                    <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;"
+                      @click="independent_clean">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 0">청소</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/WASH" style="text-decoration: none; color:black;" @click="independent_wash">
+                    <router-link to="/independent/WASH" style="text-decoration: none; color:black;"
+                      @click="independent_wash">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 1">세탁</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/COOK" style="text-decoration: none; color:black;" @click="independent_cook">
+                    <router-link to="/independent/COOK" style="text-decoration: none; color:black;"
+                      @click="independent_cook">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 2">요리</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/HEALTH" style="text-decoration: none; color:black;" @click="independent_health">
+                    <router-link to="/independent/HEALTH" style="text-decoration: none; color:black;"
+                      @click="independent_health">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 3">건강</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/ETC" style="text-decoration: none; color:black;" @click="independent_etc">
+                    <router-link to="/independent/ETC" style="text-decoration: none; color:black;"
+                      @click="independent_etc">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 4">기타</v-list-item-title>
                     </router-link>
                   </v-list-item>
@@ -392,85 +398,123 @@
               <v-divider :thickness="1" class="border-opacity-25 mt-3" length="1160"></v-divider>
             </v-list>
 
-            <v-row class="my-5" justify="center">
-              <div v-if="totalPage <= 10">
-                <v-row class="my-5">
-                  <div :key="totalPage" v-for="totalPage in totalPage" @click="currentPage = totalPage - 1, page()">
-                    <router-link
-                      :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: totalPage } }"
-                      style="text-decoration: none;">
-                      <div v-if="currentPage === totalPage - 1">
-                        <v-btn variant="text" size="x-small" class="font-weight-bold"
-                          style="font-size: 16px; color:#5E913B;">{{ totalPage }}</v-btn>
-                      </div>
-                      <div v-else>
-                        <v-btn variant="text" size="x-small" style="font-size: 14px; color:#A9A9A9">{{ totalPage
-                        }}</v-btn>
-                      </div>
-                    </router-link>
-                  </div>
+            <v-row class="mt-3" align=center>
+                <v-col cols="5">
+                  <v-row align=center>
+                  <v-menu open-on-hover>
+                <template v-slot:activator="{ props }">
+                  <v-btn v-bind="props" style="width:130px; height:40px; border-color:#A9A9A9" variant="outlined" >
+                    <p >{{ search[searchKeyword] }} ▼</p>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item style="text-align: center;">
+                      <v-list-item-title @click="searchKeyword = 0" class="my-2">제목 + 내용</v-list-item-title>
+                      <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                      <v-list-item-title @click="searchKeyword = 1" class="my-2">제목</v-list-item-title>
+                      <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                      <v-list-item-title @click="searchKeyword = 2" class="my-2">내용</v-list-item-title>
+                      <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                      <v-list-item-title @click="searchKeyword = 3" class="my-2">작성자</v-list-item-title>                      
+                  </v-list-item>
+                </v-list>
+                </v-menu>
+                  <v-card-text>
+                    <v-text-field :loading="error" density="compact" variant="outlined"
+                      append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="onClick">                      
+                    </v-text-field>
+                  </v-card-text>
                 </v-row>
-              </div>
-              <div v-else>
-                <v-row class="my-5">
-                  <router-link
-                    :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
-                    @click="page()" style="text-decoration: none;">
-                    <v-btn @click="currentPage = 0" :disabled="currentPage < 1" variant="text" size="x-small"
-                      :style="{ color: currentPage <= 1 ? '#5E913B' : '' }">
-                      <div style="color:#A9A9A9; font-size:16px">&lt;&lt;</div>
-                    </v-btn>
-                  </router-link>
-                  <router-link
-                    :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
-                    @click="page()" style="text-decoration: none;">
-                    <v-btn @click="currentPage = Math.max(currentPage - 10, 0)" :disabled="currentPage < 1" variant="text"
-                      size="x-small" :style="{ color: currentPage <= 1 ? '#5E913B' : '' }">
-                      <div style="color:#A9A9A9; font-size:16px">&lt;</div>
-                    </v-btn>
-                  </router-link>
-                  <div v-for="pageNumber in displayPageNumbers" :key="pageNumber"
-                    :class="{ active: pageNumber === currentPage, 'last-page': pageNumber === displayPageNumbers[displayPageNumbers.length - 1] }"
-                    @click="currentPage = pageNumber - 1, page()">
+                </v-col>
+                <v-col>
+                  <v-row justify="end">
+                <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
+                  <div class="text-white">글쓰기</div>
+                </v-btn>              
+              </v-row>
+              </v-col>
+              </v-row>
+
+            <v-row justify="center">                    
+                <div v-if="totalPage <= 10">
+                  <v-row class="my-3" justify="center">
+                    <div :key="totalPage" v-for="totalPage in totalPage" @click="currentPage = totalPage - 1, page()">
+                      <router-link
+                        :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: totalPage } }"
+                        style="text-decoration: none;">
+                        <div v-if="currentPage === totalPage - 1">
+                          <v-btn variant="text" size="x-small" class="font-weight-bold"
+                            style="font-size: 16px; color:#5E913B;">{{ totalPage }}</v-btn>
+                        </div>
+                        <div v-else>
+                          <v-btn variant="text" size="x-small" style="font-size: 14px; color:#A9A9A9">{{ totalPage }}</v-btn>
+                        </div>
+                      </router-link>
+                    </div>
+                  </v-row>
+                </div>
+                <div v-else>
+                  <v-row class="my-3">
                     <router-link
-                      :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: pageNumber } }"
-                      style="text-decoration: none;">
-                      <div v-if="currentPage === pageNumber - 1">
-                        <v-btn @click="currentPage = pageNumber" variant="text" size="x-small" class="font-weight-bold"
-                          style="font-size: 16px; color:#5E913B">{{ pageNumber }}</v-btn>
-                      </div>
-                      <div v-else-if="currentPage >= totalPage">
-                        <v-btn @click="currentPage = pageNumber" variant="text" size="x-small"
-                          :style="{ fontSize: pageNumber === displayPageNumbers[displayPageNumbers.length - 1] ? '16px' : '14px', fontWeight: pageNumber === displayPageNumbers[displayPageNumbers.length - 1] && 'bold', color: pageNumber === displayPageNumbers[displayPageNumbers.length - 1] ? '#5E913B' : '#A9A9A9' }">{{
-                            pageNumber }}</v-btn>
-                      </div>
-                      <div v-else>
-                        <v-btn @click="currentPage = pageNumber" variant="text" size="x-small"
-                          style="font-size: 14px; color:#A9A9A9">{{ pageNumber }}</v-btn>
-                      </div>
+                      :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
+                      @click="page()" style="text-decoration: none;">
+                      <v-btn @click="currentPage = 0" :disabled="currentPage < 1" variant="text" size="x-small"
+                        :style="{ color: currentPage <= 1 ? '#5E913B' : '' }">
+                        <div style="color:#A9A9A9; font-size:16px">&lt;&lt;</div>
+                      </v-btn>
                     </router-link>
-                  </div>
-                  <router-link
-                    :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
-                    @click="page()" style="text-decoration: none;"
-                    :style="{ color: currentPage >= totalPage ? '#5E913B' : '' }">
-                    <v-btn @click="currentPage = Math.min(currentPage + 10, totalPage)"
-                      :disabled="currentPage >= totalPage - 1" variant="text" size="x-small" style="font-size: 14px;">
-                      <div style="color:#A9A9A9; font-size:16px">&gt;</div>
-                    </v-btn>
-                  </router-link>
-                  <router-link
-                    :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
-                    @click="page()" style="text-decoration: none;"
-                    :style="{ color: currentPage >= totalPage ? '#5E913B' : '' }">
-                    <v-btn @click="currentPage = totalPage" :disabled="currentPage >= totalPage - 1" variant="text"
-                      size="x-small" style="font-size: 14px;">
-                      <div style="color:#A9A9A9; font-size:16px">&gt;&gt;</div>
-                    </v-btn>
-                  </router-link>
-                </v-row>
-              </div>
+                    <router-link
+                      :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
+                      @click="page()" style="text-decoration: none;">
+                      <v-btn @click="currentPage = Math.max(currentPage - 10, 0)" :disabled="currentPage < 1"
+                        variant="text" size="x-small" :style="{ color: currentPage <= 1 ? '#5E913B' : '' }">
+                        <div style="color:#A9A9A9; font-size:16px">&lt;</div>
+                      </v-btn>
+                    </router-link>
+                    <div v-for="pageNumber in displayPageNumbers" :key="pageNumber"
+                      :class="{ active: pageNumber === currentPage, 'last-page': pageNumber === displayPageNumbers[displayPageNumbers.length - 1] }"
+                      @click="currentPage = pageNumber - 1, page()">
+                      <router-link
+                        :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: pageNumber } }"
+                        style="text-decoration: none;">
+                        <div v-if="currentPage === pageNumber - 1">
+                          <v-btn @click="currentPage = pageNumber" variant="text" size="x-small" class="font-weight-bold"
+                            style="font-size: 16px; color:#5E913B">{{ pageNumber }}</v-btn>
+                        </div>
+                        <div v-else-if="currentPage >= totalPage">
+                          <v-btn @click="currentPage = pageNumber" variant="text" size="x-small"
+                            :style="{ fontSize: pageNumber === displayPageNumbers[displayPageNumbers.length - 1] ? '16px' : '14px', fontWeight: pageNumber === displayPageNumbers[displayPageNumbers.length - 1] && 'bold', color: pageNumber === displayPageNumbers[displayPageNumbers.length - 1] ? '#5E913B' : '#A9A9A9' }">{{
+                              pageNumber }}</v-btn>
+                        </div>
+                        <div v-else>
+                          <v-btn @click="currentPage = pageNumber" variant="text" size="x-small"
+                            style="font-size: 14px; color:#A9A9A9">{{ pageNumber }}</v-btn>
+                        </div>
+                      </router-link>
+                    </div>
+                    <router-link
+                      :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
+                      @click="page()" style="text-decoration: none;"
+                      :style="{ color: currentPage >= totalPage ? '#5E913B' : '' }">
+                      <v-btn @click="currentPage = Math.min(currentPage + 10, totalPage)"
+                        :disabled="currentPage >= totalPage - 1" variant="text" size="x-small" style="font-size: 14px;">
+                        <div style="color:#A9A9A9; font-size:16px">&gt;</div>
+                      </v-btn>
+                    </router-link>
+                    <router-link
+                      :to="{ params: { regionType: regionsAPI[regionCheck], regionPostType: regionCategoryAPI[regionCategoryCheck] }, query: { page: currentPage } }"
+                      @click="page()" style="text-decoration: none;"
+                      :style="{ color: currentPage >= totalPage ? '#5E913B' : '' }">
+                      <v-btn @click="currentPage = totalPage" :disabled="currentPage >= totalPage - 1" variant="text"
+                        size="x-small" style="font-size: 14px;">
+                        <div style="color:#A9A9A9; font-size:16px">&gt;&gt;</div>
+                      </v-btn>
+                    </router-link>
+                  </v-row>
+                </div>
             </v-row>
+
+
           </v-sheet>
         </v-row>
       </v-container>
@@ -478,7 +522,7 @@
   </v-app>
 
   <!--푸터-->
-  <v-footer border>
+  <v-footer border class="mt-16">
     <v-container>
       <v-row>
         <v-col cols="3"></v-col>
@@ -541,6 +585,8 @@ export default {
       regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
 
       link: ['메인', '게시판', '자취생활'],
+      search: ['제목 + 내용', '제목', '내용', '작성자'],
+      searchKeyword: 0
     }
   },
   computed: {
@@ -575,13 +621,13 @@ export default {
       this.regionCheck = 0
       this.regionCategoryCheck = 0
       const url = `/posts/region/${this.regionsAPI[0]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
-
+      
       //this.$axios.get('https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/region/ALL/FREE', { params: { page: this.currentPage } })
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
-
+          this.totalPage = 101
           if (this.totalPage < 10)
             this.totalPage = 1
           else if (this.totalPage % 10 === 0)

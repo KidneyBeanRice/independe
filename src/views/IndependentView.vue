@@ -276,7 +276,44 @@
               <v-divider :thickness="1" class="border-opacity-25 mt-3" length="1160"></v-divider>
             </v-list>
 
-            <v-row class="my-5" justify="center">
+            <v-row class="mt-3" align=center>
+                <v-col cols="5">
+                  <v-row align=center>
+                  <v-menu open-on-hover>
+                <template v-slot:activator="{ props }">
+                  <v-btn v-bind="props" style="width:130px; height:40px; border-color:#A9A9A9" variant="outlined" >
+                    <p >{{ search[searchKeyword] }} ▼</p>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item style="text-align: center;">
+                      <v-list-item-title @click="searchKeyword = 0" class="my-2">제목 + 내용</v-list-item-title>
+                      <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                      <v-list-item-title @click="searchKeyword = 1" class="my-2">제목</v-list-item-title>
+                      <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                      <v-list-item-title @click="searchKeyword = 2" class="my-2">내용</v-list-item-title>
+                      <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                      <v-list-item-title @click="searchKeyword = 3" class="my-2">작성자</v-list-item-title>                      
+                  </v-list-item>
+                </v-list>
+                </v-menu>
+                  <v-card-text>
+                    <v-text-field :loading="error" density="compact" variant="outlined"
+                      append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="onClick">                      
+                    </v-text-field>
+                  </v-card-text>
+                </v-row>
+                </v-col>
+                <v-col>
+                  <v-row justify="end">
+                <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
+                  <div class="text-white">글쓰기</div>
+                </v-btn>              
+              </v-row>
+              </v-col>
+              </v-row>
+
+            <v-row class="my-3" justify="center">
               <div v-if="totalPage <= 10">
                 <v-row class="my-5">
                   <div :key="totalPage" v-for="totalPage in totalPage" @click="currentPage = totalPage - 1, page()">
@@ -296,7 +333,7 @@
                 </v-row>
               </div>
               <div v-else>
-                <v-row class="my-5">
+                <v-row class="my-3">
                   <router-link
                     :to="{ params: { independentType: independents[independentCheck] }, query: { page: currentPage } }"
                     @click="page()" style="text-decoration: none;">
@@ -446,6 +483,9 @@ export default {
       independentCheck: 0,
       independents: ['청소', '세탁', '요리', '건강', '기타'],
       independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
+
+      search: ['제목 + 내용', '제목', '내용', '작성자'],
+      searchKeyword: 0
     }
   },
   computed: {
@@ -483,7 +523,7 @@ export default {
         .then(res => {
           this.Board = res.data.data.postsResponses
           this.totalPage = res.data.count
-          this.video = res.data.data.independentPostVideoDtos
+          this.video = res.data.data.independentPostVideoDtos          
 
           if (this.totalPage < 10)
             this.totalPage = 1

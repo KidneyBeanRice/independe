@@ -538,7 +538,6 @@ export default {
     return {
       active_tab: 0,
       link: ['메인', '게시판', '자취생활'],
-      a: 0,
 
       todayMent: [],
       popularBoard: [],
