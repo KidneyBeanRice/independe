@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '../views/MainView.vue'
 import BoardView from '../views/BoardView.vue'
 import IndependentView from '../views/IndependentView.vue'
+import PostWriteView from '../views/PostWriteView.vue'
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: '/independent/:independentType',
     name: 'IndependentView',
     component: IndependentView
+  },
+  {
+    path: '/PostWrite',
+    name: 'PostWriteView',
+    component: PostWriteView
   }
 ]
 

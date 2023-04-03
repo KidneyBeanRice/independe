@@ -13,7 +13,7 @@
                 <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
               </v-tab>
             </router-link>
-            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;">
+            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="$store.state.boardCheck = 0 ">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                   <v-tab v-bind="props">
@@ -45,7 +45,7 @@
                 </v-list>
               </v-menu>
             </router-link>
-            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;">
+            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="$store.state.independentCheck = 0">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                   <v-tab v-bind="props">

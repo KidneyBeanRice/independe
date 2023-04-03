@@ -13,7 +13,7 @@
                 <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
               </v-tab>
             </router-link>
-            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;">
+            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="$store.state.boardCheck = 0">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                   <v-tab v-bind="props">
@@ -46,7 +46,7 @@
                 </v-list>
               </v-menu>
             </router-link>
-            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;">
+            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="$store.state.independentCheck = 0">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                   <v-tab v-bind="props">
@@ -427,11 +427,11 @@
                 </v-row>
                 </v-col>
                 <v-col>
-                  <v-row justify="end">
-                <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
-                  <div class="text-white">글쓰기</div>
-                </v-btn>              
-              </v-row>
+                <v-row justify="end">                  
+                    <v-btn variant="flat" color="#5E913B" class="font-weight-bold" to="/PostWrite">
+                      <div class="text-white">글쓰기</div>
+                    </v-btn>                       
+                </v-row>
               </v-col>
               </v-row>
 
@@ -620,6 +620,7 @@ export default {
       this.areaCheck = 0
       this.regionCheck = 0
       this.regionCategoryCheck = 0
+      this.$store.state.boardCheck = 0
       const url = `/posts/region/${this.regionsAPI[0]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
       
       //this.$axios.get('https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/region/ALL/FREE', { params: { page: this.currentPage } })
@@ -645,6 +646,7 @@ export default {
       this.areaCheck = 1
       this.regionCheck = 1
       this.regionCategoryCheck = 1
+      this.$store.state.boardCheck = 1
       const url = `/posts/region/${this.regionsAPI[1]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
@@ -668,6 +670,7 @@ export default {
       this.areaCheck = 1
       this.regionCheck = 2
       this.regionCategoryCheck = 1
+      this.$store.state.boardCheck = 2
       const url = `/posts/region/${this.regionsAPI[2]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
@@ -691,6 +694,7 @@ export default {
       this.areaCheck = 1
       this.regionCheck = 3
       this.regionCategoryCheck = 1
+      this.$store.state.boardCheck = 3
       const url = `/posts/region/${this.regionsAPI[3]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
@@ -714,6 +718,7 @@ export default {
       this.areaCheck = 1
       this.regionCheck = 4
       this.regionCategoryCheck = 1
+      this.$store.state.boardCheck = 4
       const url = `/posts/region/${this.regionsAPI[4]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
@@ -859,6 +864,8 @@ export default {
     }
   },
   mounted() {
+    this.$store.state.independentCheck = 5
+
     if (this.$store.state.boardCheck === 0)
       this.region_all()
     else if (this.$store.state.boardCheck === 1)

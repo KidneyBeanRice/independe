@@ -13,7 +13,7 @@
                 <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
               </v-tab>
             </router-link>
-            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;">
+            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="$store.state.boardCheck = 0 ">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                   <v-tab v-bind="props">
@@ -45,7 +45,7 @@
                 </v-list>
               </v-menu>
             </router-link>
-            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;">
+            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="$store.state.independentCheck = 0 ">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                   <v-tab v-bind="props">
@@ -306,9 +306,9 @@
                 </v-col>
                 <v-col>
                   <v-row justify="end">
-                <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
-                  <div class="text-white">글쓰기</div>
-                </v-btn>              
+                    <v-btn variant="flat" color="#5E913B" class="font-weight-bold" to="/PostWrite">
+                      <div class="text-white">글쓰기</div>
+                    </v-btn>         
               </v-row>
               </v-col>
               </v-row>
@@ -517,6 +517,7 @@ export default {
   methods: {
     independent_clean() {
       this.independentCheck = 0
+      this.$store.state.independentCheck = 0
       const url = `/posts/independent/${this.independentsAPI[0]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -540,6 +541,7 @@ export default {
     },
     independent_wash() {
       this.independentCheck = 1
+      this.$store.state.independentCheck = 1
       const url = `/posts/independent/${this.independentsAPI[1]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -563,6 +565,7 @@ export default {
     },
     independent_cook() {
       this.independentCheck = 2
+      this.$store.state.independentCheck = 2
       const url = `/posts/independent/${this.independentsAPI[2]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -586,6 +589,7 @@ export default {
     },
     independent_health() {
       this.independentCheck = 3
+      this.$store.state.independentCheck = 3
       const url = `/posts/independent/${this.independentsAPI[3]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -609,6 +613,7 @@ export default {
     },
     independent_etc() {
       this.independentCheck = 4
+      this.$store.state.independentCheck = 4
       const url = `/posts/independent/${this.independentsAPI[4]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -651,6 +656,8 @@ export default {
     }
   },
   mounted() {
+    this.$store.state.boardCheck = 5
+
     if (this.$store.state.independentCheck === 0)
       this.independent_clean()
     else if (this.$store.state.independentCheck === 1)
