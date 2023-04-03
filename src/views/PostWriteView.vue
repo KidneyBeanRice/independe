@@ -13,7 +13,8 @@
                 <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
               </v-tab>
             </router-link>
-            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="$store.state.boardCheck = 0 ">
+            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;"
+              @click="$store.state.boardCheck = 0">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                   <v-tab v-bind="props">
@@ -23,7 +24,7 @@
                 <v-list>
                   <v-list-item align="center">
                     <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="region_all">
-                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 0 ">자유</v-list-item-title>
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 0">자유</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
                     <router-link to="/board/SEOUL/TALK" style="text-decoration: none; color:black;" @click="region_seoul">
@@ -38,14 +39,16 @@
                       <v-list-item-title class="my-2" @click="$store.state.boardCheck = 3">울산</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/board/KEYNONGNAM/TALK" style="text-decoration: none; color:black;" @click="region_kyeongnam">
+                    <router-link to="/board/KEYNONGNAM/TALK" style="text-decoration: none; color:black;"
+                      @click="region_kyeongnam">
                       <v-list-item-title class="my-2" @click="$store.state.boardCheck = 4">경남</v-list-item-title>
                     </router-link>
                   </v-list-item>
                 </v-list>
               </v-menu>
             </router-link>
-            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="$store.state.independentCheck = 0">
+            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;"
+              @click="$store.state.independentCheck = 0">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                   <v-tab v-bind="props">
@@ -54,23 +57,28 @@
                 </template>
                 <v-list>
                   <v-list-item align="center">
-                    <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="independent_clean">
-                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 0 ">청소</v-list-item-title>
+                    <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;"
+                      @click="independent_clean">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 0">청소</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/WASH" style="text-decoration: none; color:black;" @click="independent_wash">
+                    <router-link to="/independent/WASH" style="text-decoration: none; color:black;"
+                      @click="independent_wash">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 1">세탁</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/COOK" style="text-decoration: none; color:black;" @click="independent_cook">
+                    <router-link to="/independent/COOK" style="text-decoration: none; color:black;"
+                      @click="independent_cook">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 2">요리</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/HEALTH" style="text-decoration: none; color:black;" @click="independent_health">
+                    <router-link to="/independent/HEALTH" style="text-decoration: none; color:black;"
+                      @click="independent_health">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 3">건강</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/ETC" style="text-decoration: none; color:black;" @click="independent_etc">
+                    <router-link to="/independent/ETC" style="text-decoration: none; color:black;"
+                      @click="independent_etc">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 4">기타</v-list-item-title>
                     </router-link>
                   </v-list-item>
@@ -99,45 +107,49 @@
     </v-container>
   </v-app-bar>
 
+  <div>
+    <div v-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 0">
+      {{ setBoardCheck(0) }} {{ setCategoryCheck(0) }}
+    </div>
+    <div v-else-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 1">
+      {{ setBoardCheck(0) }} {{ setCategoryCheck(1) }}
+    </div>
+    <div v-else-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 2">
+      {{ setBoardCheck(0) }} {{ setCategoryCheck(2) }}
+    </div>
+    <div v-else-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 3">
+      {{ setBoardCheck(0) }} {{ setCategoryCheck(3) }}
+    </div>
+    <div v-else-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 4">
+      {{ setBoardCheck(0) }} {{ setCategoryCheck(4) }}
+    </div>
+    <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 0">
+      {{ setBoardCheck(1) }} {{ setCategoryCheck(5) }}
+    </div>
+    <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 1">
+      {{ setBoardCheck(1) }} {{ setCategoryCheck(6) }}
+    </div>
+    <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 2">
+      {{ setBoardCheck(1) }} {{ setCategoryCheck(7) }}
+    </div>
+    <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 3">
+      {{ setBoardCheck(1) }} {{ setCategoryCheck(8) }}
+    </div>
+    <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 4">
+      {{ setBoardCheck(1) }} {{ setCategoryCheck(9) }}
+    </div>
+  </div>
+
   <v-app>
     <v-main>
       <v-container>
         <v-row>
-          <div v-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 0">
-            자유
-          </div>
-          <div v-else-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 1">
-            서울
-          </div>
-          <div v-else-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 2">
-            부산
-          </div>
-          <div v-else-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 3">
-            울산
-          </div>
-          <div v-else-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 4">
-            경남
-          </div>
-          <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 0">
-            청소
-          </div>
-          <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 1">
-            세탁
-          </div>
-          <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 2">
-            요리
-          </div>
-          <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 3">
-            건강
-          </div>
-          <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 4">
-            기타
-          </div>
+          
         </v-row>
       </v-container>
     </v-main>
   </v-app>
-  
+
   <!--푸터-->
   <v-footer border>
     <v-container>
@@ -182,10 +194,21 @@ export default {
     return {
       active_tab: 0,
       link: ['메인', '게시판', '자취생활'],
+
+      boards: ['region', 'independent'],
+      categorys: [],
+
+      boardCheck: 0,
+      categoryCheck: 0
     }
   },
   methods: {
-
+    setBoardCheck(value) {
+      this.boardCheck = value;
+    },
+    setCategoryCheck(value) {
+      this.categoryCheck = value;
+    }
   },
   mounted() {
 
