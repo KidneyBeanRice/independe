@@ -124,19 +124,19 @@
       {{ setBoardCheck(0) }} {{ setTypeCheck(4) }} {{ setBoardNameCheck(4) }}
     </div>
     <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 0">
-      {{ setBoardCheck(1) }} {{ setTypeCheck(5) }} {{ setBoardNameCheck(5) }}
+      {{ setBoardCheck(1) }} {{ setTypeCheck(0) }} {{ setBoardNameCheck(5) }}
     </div>
     <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 1">
-      {{ setBoardCheck(1) }} {{ setTypeCheck(6) }} {{ setBoardNameCheck(6) }}
+      {{ setBoardCheck(1) }} {{ setTypeCheck(1) }} {{ setBoardNameCheck(6) }}
     </div>
     <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 2">
-      {{ setBoardCheck(1) }} {{ setTypeCheck(7) }} {{ setBoardNameCheck(7) }}
+      {{ setBoardCheck(1) }} {{ setTypeCheck(2) }} {{ setBoardNameCheck(7) }}
     </div>
     <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 3">
-      {{ setBoardCheck(1) }} {{ setTypeCheck(8) }} {{ setBoardNameCheck(8) }}
+      {{ setBoardCheck(1) }} {{ setTypeCheck(3) }} {{ setBoardNameCheck(8) }}
     </div>
     <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 4">
-      {{ setBoardCheck(1) }} {{ setTypeCheck(9) }} {{ setBoardNameCheck(9) }}
+      {{ setBoardCheck(1) }} {{ setTypeCheck(4) }} {{ setBoardNameCheck(9) }}
     </div>
   </div>
 
@@ -159,7 +159,7 @@
                   <v-menu>
                     <template v-slot:activator="{ props }">
                       <v-btn style="height: 55px; color:#A9A9A9" v-bind="props" variant="outlined">
-                        <p style="font-size:16px; color:black">{{ category[categoryCheck] }}</p>
+                        <p style="font-size:16px; color:black">{{ category[categoryCheck] }} ▽</p>
                       </v-btn>
                     </template>
                     <v-list>
@@ -179,18 +179,48 @@
                 </v-col>
               </div>
               <v-col>
-                <v-text-field variant="outlined" placeholder="제목을 입력해주세요"></v-text-field>
-              </v-col>              
+                <v-text-field v-model="title" variant="outlined" placeholder="제목을 입력해주세요"></v-text-field>
+              </v-col>
             </v-row>
-              <v-textarea class="no-resize" rows="20" variant="outlined" 
-              placeholder=
-            "- 게시판 카테고리에 맞지 않는 글은 숨김 처리 될수도 있음을 알려드립니다.
+            <v-textarea class="no-resize" rows="20" variant="outlined" v-model="content" placeholder="- 게시판 카테고리에 맞지 않는 글은 숨김 처리 될수도 있음을 알려드립니다.
 - 다른 유저로 부터 일정 수 이상의 신고를 받으면 글은 숨김 처리 될수도 있음을 알려드립니다.
 - 욕설이나 시비, 분쟁과 관련된 글과 불쾌감을 주는 글은 규칙 위반입니다.
 - 범죄, 불법 행위의 글과 음란물과 관련한 글은 규칙 위반입니다.
 - 매너있는 게시판 이용 부탁드립니다.">
             </v-textarea>
-            <v-file-input clearable></v-file-input>
+
+            <div>
+              <!--<input type="file" ref="fileInput" v-on:change="previewImage">-->
+              <v-row>
+                <v-col cols="7">
+                  <v-file-input multiple variant="outlined" prepend-icon="mdi-camera" ref="fileInput"
+                    v-on:change="previewImage" label="이미지를 첨부하세요"></v-file-input>
+                </v-col>
+                <v-col align="end">
+                  <v-btn style="height:55px; width: 100px;" class="mr-5" @click="cancle">
+                    <div style="font-size:16px">취소</div>
+                  </v-btn>
+                  <v-btn @click="write" style="height:55px; width: 100px;" variant="flat" color="#5E913B"
+                    class="font-weight-bold">
+                    <div class="text-white" style="font-size:16px">글 등록</div>
+                  </v-btn>
+                </v-col>
+              </v-row>
+
+              <v-sheet v-if="imageCheck !== 0" border width="900" style="border-color:#B0B0B0; border-radius: 5px;">                
+                <v-row>
+                  <v-col v-for="(url, index) in imageUrl" :key="index" cols="auto" align="center">
+                    <v-col justify="center">
+                      <v-sheet border width="136" style="border-color:#B0B0B0; border-radius: 5px;">
+                        <v-img :src="url" height="100" width="100" class="mt-1"></v-img>
+                        <v-btn @click="deleteImage(index)" class="my-1" variant="text">이미지 삭제</v-btn>
+                      </v-sheet>
+                    </v-col>
+                  </v-col>
+                </v-row>
+                <p align="center" class="my-1" style="color:#A9A9A9">이미지는 최대 20개 까지 업로드 할 수 있습니다.</p>
+              </v-sheet>
+            </div>
           </v-sheet>
         </v-row>
       </v-container>
@@ -198,7 +228,7 @@
   </v-app>
 
   <!--푸터-->
-  <v-footer border>
+  <v-footer border class="mt-5">
     <v-container>
       <v-row>
         <v-col cols="3"></v-col>
@@ -244,16 +274,29 @@ export default {
 
       boards: ['region', 'independent'],
       regions: ['ALL', 'SEOUL', 'ULSAN', 'PUSAN', 'KEYONGNAM'],
-      regionsPost: ['FREE', 'TALK', 'RESTAURANT', 'PLAY', 'MARKET'],
+      regionsPost: ['FREE', 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
       independents: ['CLEAN', 'WASH', 'COOK', 'HEALTH', 'ETC'],
 
       boardName: ['자유게시판', '서울 이야기', '부산 이야기', '울산 이야기', '경남 이야기', '청소 정보', '세탁 정보', '요리 정보', '건강 정보', '기타 정보'],
-      category: ['잡담 ▽', '식당 ▽', '오락 ▽', '만남 ▽', '거래 ▽'],
+      category: ['잡담', '식당', '오락', '만남', '거래'],
+
+      memberId: "",
+      title: '',
+      content: '',
+      regionType: '',
+      regionPostType: '',
+      independentPostType: '',
+      image: '',
 
       boardCheck: 0,
       categoryCheck: 0,
       boardNameCheck: 0,
-      typeCheck: 0
+      typeCheck: 0,
+      imageCheck: 0,
+
+      imageUrl: [],
+      imageFiles: [],
+      limit: 19
     }
   },
   methods: {
@@ -265,6 +308,69 @@ export default {
     },
     setBoardNameCheck(value) {
       this.boardNameCheck = value;
+    },
+    previewImage() {
+      const files = this.$refs.fileInput.files
+      this.imageCheck++
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        if (file && file.type.startsWith('image/')) {
+          if (this.imageFiles.length < this.limit) { // 이미지 파일 제한 개수 체크
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => {
+              this.imageUrl.push(reader.result)
+              this.imageFiles.push(file)
+            }
+          }
+        }
+      }
+    },
+    write() {
+      const formData = new FormData()
+
+      formData.append('memberId', this.memberId)
+      formData.append('title', this.title)
+      formData.append('content', this.content)
+
+      if (this.boardCheck === 0) {
+        formData.append('regionType', this.regions[this.typeCheck])
+        formData.append('regionPostType', this.regionsPost[this.typeCheck])
+      }
+      else if (this.boardCheck === 1)
+        formData.append('independentPostType', this.independents[this.typeCheck])
+
+      if (this.imageCheck !== 0)
+        for (let i = 0; i < this.imageFiles.length; i++) 
+          formData.append('images[]', this.imageFiles[i])
+        
+
+      if (this.boardCheck === 0)
+        this.$axios.post("https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/writePost" /*'/api/posts/region/new'*/, formData, { headers: {'Content-Type': 'multipart/form-data'}})
+          .then(res => {
+            console.log(res.data);
+            this.$router.go(-1)
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      else if (this.boardCheck === 1)
+        this.$axios.post('/posts/independent/new', formData, { headers: {'Content-Type': 'multipart/form-data'}})
+          .then(res => {
+            console.log(res.data);
+            this.$router.go(-1)
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    },
+    deleteImage(index) {
+      this.imageUrl.splice(index, 1)
+      this.imageFile.splice(index, 1)
+      this.imageCheck--
+    },
+    cancle() {
+      this.$router.go(-1)
     }
   },
   mounted() {
@@ -278,7 +384,7 @@ export default {
 
 <style>
 .no-resize ::-webkit-resizer {
-    display: none;
-    resize: none;
+  display: none;
+  resize: none;
 }
 </style>
