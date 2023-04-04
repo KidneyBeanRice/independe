@@ -109,42 +109,89 @@
 
   <div>
     <div v-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 0">
-      {{ setBoardCheck(0) }} {{ setCategoryCheck(0) }}
+      {{ setBoardCheck(0) }} {{ setTypeCheck(0) }} {{ setBoardNameCheck(0) }}
     </div>
     <div v-else-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 1">
-      {{ setBoardCheck(0) }} {{ setCategoryCheck(1) }}
+      {{ setBoardCheck(0) }} {{ setTypeCheck(1) }} {{ setBoardNameCheck(1) }}
     </div>
     <div v-else-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 2">
-      {{ setBoardCheck(0) }} {{ setCategoryCheck(2) }}
+      {{ setBoardCheck(0) }} {{ setTypeCheck(2) }} {{ setBoardNameCheck(2) }}
     </div>
     <div v-else-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 3">
-      {{ setBoardCheck(0) }} {{ setCategoryCheck(3) }}
+      {{ setBoardCheck(0) }} {{ setTypeCheck(3) }} {{ setBoardNameCheck(3) }}
     </div>
     <div v-else-if="$store.state.independentCheck === 5 && $store.state.boardCheck === 4">
-      {{ setBoardCheck(0) }} {{ setCategoryCheck(4) }}
+      {{ setBoardCheck(0) }} {{ setTypeCheck(4) }} {{ setBoardNameCheck(4) }}
     </div>
     <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 0">
-      {{ setBoardCheck(1) }} {{ setCategoryCheck(5) }}
+      {{ setBoardCheck(1) }} {{ setTypeCheck(5) }} {{ setBoardNameCheck(5) }}
     </div>
     <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 1">
-      {{ setBoardCheck(1) }} {{ setCategoryCheck(6) }}
+      {{ setBoardCheck(1) }} {{ setTypeCheck(6) }} {{ setBoardNameCheck(6) }}
     </div>
     <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 2">
-      {{ setBoardCheck(1) }} {{ setCategoryCheck(7) }}
+      {{ setBoardCheck(1) }} {{ setTypeCheck(7) }} {{ setBoardNameCheck(7) }}
     </div>
     <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 3">
-      {{ setBoardCheck(1) }} {{ setCategoryCheck(8) }}
+      {{ setBoardCheck(1) }} {{ setTypeCheck(8) }} {{ setBoardNameCheck(8) }}
     </div>
     <div v-else-if="$store.state.boardCheck === 5 && $store.state.independentCheck === 4">
-      {{ setBoardCheck(1) }} {{ setCategoryCheck(9) }}
+      {{ setBoardCheck(1) }} {{ setTypeCheck(9) }} {{ setBoardNameCheck(9) }}
     </div>
   </div>
 
   <v-app>
     <v-main>
       <v-container>
-        <v-row>
-          
+        <v-row justify="center" class="mt-2">
+          <v-sheet :width="900">
+            <v-row>
+              <v-col cols="auto" class="mt-1">
+                <v-img :width="30" height="30" src="../img/board_write.png"></v-img>
+              </v-col>
+              <v-col cols="2" class="mt-1">
+                <p class="font-weight-bold text-h5"> {{ boardName[boardNameCheck] }}</p>
+              </v-col>
+            </v-row>
+            <v-row>
+              <div v-if="boardCheck === 0 && typeCheck !== 0">
+                <v-col cols="auto">
+                  <v-menu>
+                    <template v-slot:activator="{ props }">
+                      <v-btn style="height: 55px; color:#A9A9A9" v-bind="props" variant="outlined">
+                        <p style="font-size:16px; color:black">{{ category[categoryCheck] }}</p>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item style="text-align: center;">
+                        <v-list-item-title @click="categoryCheck = 0" class="my-2">잡담</v-list-item-title>
+                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                        <v-list-item-title @click="categoryCheck = 1" class="my-2">식당</v-list-item-title>
+                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                        <v-list-item-title @click="categoryCheck = 2" class="my-2">오락</v-list-item-title>
+                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                        <v-list-item-title @click="categoryCheck = 3" class="my-2">만남</v-list-item-title>
+                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                        <v-list-item-title @click="categoryCheck = 4" class="my-2">거래</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-col>
+              </div>
+              <v-col>
+                <v-text-field variant="outlined" placeholder="제목을 입력해주세요"></v-text-field>
+              </v-col>              
+            </v-row>
+              <v-textarea class="no-resize" rows="20" variant="outlined" 
+              placeholder=
+            "- 게시판 카테고리에 맞지 않는 글은 숨김 처리 될수도 있음을 알려드립니다.
+- 다른 유저로 부터 일정 수 이상의 신고를 받으면 글은 숨김 처리 될수도 있음을 알려드립니다.
+- 욕설이나 시비, 분쟁과 관련된 글과 불쾌감을 주는 글은 규칙 위반입니다.
+- 범죄, 불법 행위의 글과 음란물과 관련한 글은 규칙 위반입니다.
+- 매너있는 게시판 이용 부탁드립니다.">
+            </v-textarea>
+            <v-file-input clearable></v-file-input>
+          </v-sheet>
         </v-row>
       </v-container>
     </v-main>
@@ -196,22 +243,42 @@ export default {
       link: ['메인', '게시판', '자취생활'],
 
       boards: ['region', 'independent'],
-      categorys: [],
+      regions: ['ALL', 'SEOUL', 'ULSAN', 'PUSAN', 'KEYONGNAM'],
+      regionsPost: ['FREE', 'TALK', 'RESTAURANT', 'PLAY', 'MARKET'],
+      independents: ['CLEAN', 'WASH', 'COOK', 'HEALTH', 'ETC'],
+
+      boardName: ['자유게시판', '서울 이야기', '부산 이야기', '울산 이야기', '경남 이야기', '청소 정보', '세탁 정보', '요리 정보', '건강 정보', '기타 정보'],
+      category: ['잡담 ▽', '식당 ▽', '오락 ▽', '만남 ▽', '거래 ▽'],
 
       boardCheck: 0,
-      categoryCheck: 0
+      categoryCheck: 0,
+      boardNameCheck: 0,
+      typeCheck: 0
     }
   },
   methods: {
     setBoardCheck(value) {
       this.boardCheck = value;
     },
-    setCategoryCheck(value) {
-      this.categoryCheck = value;
+    setTypeCheck(value) {
+      this.typeCheck = value;
+    },
+    setBoardNameCheck(value) {
+      this.boardNameCheck = value;
     }
   },
   mounted() {
-
+    if (this.boardCheck === 0)
+      this.active_tab = 1
+    else if (this.boardCheck === 1)
+      this.active_tab = 2
   },
 }   
 </script>
+
+<style>
+.no-resize ::-webkit-resizer {
+    display: none;
+    resize: none;
+}
+</style>
