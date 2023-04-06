@@ -191,7 +191,6 @@
         </v-row>
 
         <v-divider :thickness="1" class="border-opacity-25 my-3" length="1160"></v-divider>
-
        
         <v-row class="mx-1 mt-3">
           <v-sheet :height="30" :width="1150" class="mb-2 font-weight-bold" align="center" justify="center">
@@ -488,6 +487,29 @@ export default {
       searchKeyword: 0
     }
   },
+  created() {
+  window.addEventListener('popstate', () => {        
+    const url = window.location.href;
+    const segments = url.split('/');
+    const value = segments[segments.length - 1]; 
+    const arr = ["CLEAN", "WASH", "COOK", "HEALTH", "ETC"];
+    const index = arr.indexOf(value);
+
+    this.independentCheck = index
+    this.$store.state.independentCheck = index
+
+    if (this.$store.state.independentCheck === 0)
+      this.independent_clean()
+    else if (this.$store.state.independentCheck === 1)
+      this.independent_wash()
+    else if (this.$store.state.independentCheck === 2)
+      this.independent_cook()
+    else if (this.$store.state.independentCheck === 3)
+      this.independent_health()
+    else if (this.$store.state.independentCheck === 4)
+      this.independent_etc()
+  });
+},
   computed: {
     displayPageNumbers() {
       const currentPage = this.currentPage;
@@ -515,9 +537,13 @@ export default {
     }
   },
   methods: {
+    updateIndependentCheck(newValue) {
+      this.$store.dispatch('updateIndependentCheck', newValue);
+    },
     independent_clean() {
       this.independentCheck = 0
       this.$store.state.independentCheck = 0
+      this.updateIndependentCheck(0)
       const url = `/posts/independent/${this.independentsAPI[0]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -542,6 +568,7 @@ export default {
     independent_wash() {
       this.independentCheck = 1
       this.$store.state.independentCheck = 1
+      this.updateIndependentCheck(1)
       const url = `/posts/independent/${this.independentsAPI[1]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -566,6 +593,7 @@ export default {
     independent_cook() {
       this.independentCheck = 2
       this.$store.state.independentCheck = 2
+      this.updateIndependentCheck(2)
       const url = `/posts/independent/${this.independentsAPI[2]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -590,6 +618,7 @@ export default {
     independent_health() {
       this.independentCheck = 3
       this.$store.state.independentCheck = 3
+      this.updateIndependentCheck(3)
       const url = `/posts/independent/${this.independentsAPI[3]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -614,6 +643,7 @@ export default {
     independent_etc() {
       this.independentCheck = 4
       this.$store.state.independentCheck = 4
+      this.updateIndependentCheck(4)
       const url = `/posts/independent/${this.independentsAPI[4]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
