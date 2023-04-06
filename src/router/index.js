@@ -3,6 +3,7 @@ import MainView from '../views/MainView.vue'
 import BoardView from '../views/BoardView.vue'
 import IndependentView from '../views/IndependentView.vue'
 import PostWriteView from '../views/PostWriteView.vue'
+import PostView from '../views/PostView.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/PostWrite',
     name: 'PostWriteView',
     component: PostWriteView
+  },
+  {
+    path: '/posts/:postId',
+    name: 'PostView',
+    component: PostView
   }
 ]
 

@@ -628,7 +628,7 @@ export default {
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
-          this.totalPage = 101
+
           if (this.totalPage < 10)
             this.totalPage = 1
           else if (this.totalPage % 10 === 0)

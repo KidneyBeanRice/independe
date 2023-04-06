@@ -130,10 +130,14 @@
                 <v-col cols="auto">
                   <v-list v-for="popularBoard in popularBoard" :key="popularBoard">
                     <div v-if="popularBoard.independentPostType === null">
-                      <p class="text-grey-darken-1">[{{ popularBoard.regionType }}·{{ popularBoard.regionPostType }}]</p>
+                      <router-link :to="{ name: 'BoardView', params: { regionType: popularBoard.regionTypeEn, regionPostType: popularBoard.regionPostTypeEn }}"  style="text-decoration: none;">
+                        <p class="text-grey-darken-1">[{{ popularBoard.regionType }}·{{ popularBoard.regionPostType }}]</p>
+                      </router-link>
                     </div>
                     <div v-else>
-                      <p class="text-grey-darken-1">[자취·{{ popularBoard.independentPostType }}]</p>
+                      <router-link :to="{ name: 'IndependentView', params: { independentType: popularBoard.independentPostTypeEn }}" style="text-decoration: none;">
+                        <p class="text-grey-darken-1">[자취·{{ popularBoard.independentPostType }}]</p>
+                      </router-link>
                     </div>
                   </v-list>
                 </v-col>
@@ -142,7 +146,9 @@
                     <div v-if="popularBoard.title.length <= 23">
                       <v-img style="float:left" v-if="popularBoard.picture === true" :width="15"
                         src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                      {{ popularBoard.title }}
+                      <router-link :to="{ name: 'PostView', params: { postId: popularBoard.postId }}" style="text-decoration: none; color:black;">
+                        {{ popularBoard.title }}
+                      </router-link>
                     </div>
                     <div v-else>
                       <v-img style="float:left" v-if="popularBoard.picture === true" :width="15"

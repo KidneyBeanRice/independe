@@ -194,7 +194,7 @@
               <v-row>
                 <v-col cols="7">
                   <v-file-input multiple variant="outlined" prepend-icon="mdi-camera" ref="fileInput"
-                    v-on:change="previewImage" label="이미지를 첨부하세요"></v-file-input>
+                    v-on:change="previewImage" accept="video/*,image/*" label="이미지를 첨부하세요"></v-file-input>
                 </v-col>
                 <v-col align="end">
                   <v-btn style="height:55px; width: 100px;" class="mr-5" @click="cancle">
@@ -218,11 +218,11 @@
                     </v-col>
                   </v-col>
                 </v-row>
-                <p align="center" class="my-1" style="color:#A9A9A9">이미지는 최대 20개 까지 업로드 할 수 있습니다.</p>
+                <p align="center" class="my-1" style="color:#A9A9A9">이미지는 최대 10개 까지 업로드 할 수 있습니다.</p>
               </v-sheet>
             </div>
           </v-sheet>
-        </v-row>
+        </v-row>        
       </v-container>
     </v-main>
   </v-app>
@@ -273,20 +273,14 @@ export default {
       link: ['메인', '게시판', '자취생활'],
 
       boards: ['region', 'independent'],
-      regions: ['ALL', 'SEOUL', 'ULSAN', 'PUSAN', 'KEYONGNAM'],
-      regionsPost: ['FREE', 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
-      independents: ['CLEAN', 'WASH', 'COOK', 'HEALTH', 'ETC'],
+      regions: ['ALL', 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
+      regionsPost: ['FREE', 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],      
 
       boardName: ['자유게시판', '서울 이야기', '부산 이야기', '울산 이야기', '경남 이야기', '청소 정보', '세탁 정보', '요리 정보', '건강 정보', '기타 정보'],
       category: ['잡담', '식당', '오락', '만남', '거래'],
 
-      memberId: "",
       title: '',
       content: '',
-      regionType: '',
-      regionPostType: '',
-      independentPostType: '',
-      image: '',
 
       boardCheck: 0,
       categoryCheck: 0,
@@ -296,7 +290,7 @@ export default {
 
       imageUrl: [],
       imageFiles: [],
-      limit: 19
+      limit: 10
     }
   },
   methods: {
@@ -311,16 +305,17 @@ export default {
     },
     previewImage() {
       const files = this.$refs.fileInput.files
-      this.imageCheck++
+      
       for (let i = 0; i < files.length; i++) {
         const file = files[i]
-        if (file && file.type.startsWith('image/')) {
+        if (file && (file.type.startsWith('image/') || file.type.startsWith('video/'))) {
           if (this.imageFiles.length < this.limit) { // 이미지 파일 제한 개수 체크
             const reader = new FileReader()
             reader.readAsDataURL(file)
             reader.onload = () => {
               this.imageUrl.push(reader.result)
               this.imageFiles.push(file)
+              this.imageCheck = this.imageCheck + 1
             }
           }
         }
@@ -329,24 +324,24 @@ export default {
     write() {
       const formData = new FormData()
 
-      formData.append('memberId', this.memberId)
       formData.append('title', this.title)
-      formData.append('content', this.content)
+      formData.append('content', this.content)      
 
       if (this.boardCheck === 0) {
         formData.append('regionType', this.regions[this.typeCheck])
-        formData.append('regionPostType', this.regionsPost[this.typeCheck])
+        if (this.typeCheck === 0)
+          formData.append('regionPostType', this.regionsPost[0])
+        else 
+          formData.append('regionPostType', this.regionsPost[this.categoryCheck + 1])
       }
       else if (this.boardCheck === 1)
         formData.append('independentPostType', this.independents[this.typeCheck])
-
-      if (this.imageCheck !== 0)
-        for (let i = 0; i < this.imageFiles.length; i++) 
-          formData.append('images[]', this.imageFiles[i])
-        
-
+      
+      for (let i = 0; i < this.imageFiles.length; i++) 
+        formData.append('files', this.imageFiles[i])
+              
       if (this.boardCheck === 0)
-        this.$axios.post("https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/writePost" /*'/api/posts/region/new'*/, formData, { headers: {'Content-Type': 'multipart/form-data'}})
+        this.$axios.post("/posts/region/new", formData, { headers: {'Content-Type': 'multipart/form-data'}})
           .then(res => {
             console.log(res.data);
             this.$router.go(-1)
@@ -355,19 +350,19 @@ export default {
             console.log(error);
           });
       else if (this.boardCheck === 1)
-        this.$axios.post('/posts/independent/new', formData, { headers: {'Content-Type': 'multipart/form-data'}})
+        this.$axios.post("/posts/independent/new", formData, { headers: {'Content-Type': 'multipart/form-data'}})
           .then(res => {
             console.log(res.data);
             this.$router.go(-1)
           })
           .catch(error => {
             console.log(error);
-          });
+          });          
     },
     deleteImage(index) {
       this.imageUrl.splice(index, 1)
-      this.imageFile.splice(index, 1)
-      this.imageCheck--
+      this.imageFiles.splice(index, 1)  
+      this.imageCheck -= 1      
     },
     cancle() {
       this.$router.go(-1)
