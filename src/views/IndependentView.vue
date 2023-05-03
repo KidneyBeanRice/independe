@@ -13,7 +13,8 @@
                 <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
               </v-tab>
             </router-link>
-            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="$store.state.boardCheck = 0 ">
+            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;"
+              @click="$store.state.boardCheck = 0">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                   <v-tab v-bind="props">
@@ -23,7 +24,7 @@
                 <v-list>
                   <v-list-item align="center">
                     <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="region_all">
-                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 0 ">자유</v-list-item-title>
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 0">자유</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
                     <router-link to="/board/SEOUL/TALK" style="text-decoration: none; color:black;" @click="region_seoul">
@@ -38,14 +39,16 @@
                       <v-list-item-title class="my-2" @click="$store.state.boardCheck = 3">울산</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/board/KEYNONGNAM/TALK" style="text-decoration: none; color:black;" @click="region_kyeongnam">
+                    <router-link to="/board/KEYNONGNAM/TALK" style="text-decoration: none; color:black;"
+                      @click="region_kyeongnam">
                       <v-list-item-title class="my-2" @click="$store.state.boardCheck = 4">경남</v-list-item-title>
                     </router-link>
                   </v-list-item>
                 </v-list>
               </v-menu>
             </router-link>
-            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="$store.state.independentCheck = 0 ">
+            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;"
+              @click="$store.state.independentCheck = 0">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                   <v-tab v-bind="props">
@@ -54,23 +57,28 @@
                 </template>
                 <v-list>
                   <v-list-item align="center">
-                    <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="independent_clean">
-                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 0 ">청소</v-list-item-title>
+                    <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;"
+                      @click="independent_clean">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 0">청소</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/WASH" style="text-decoration: none; color:black;" @click="independent_wash">
+                    <router-link to="/independent/WASH" style="text-decoration: none; color:black;"
+                      @click="independent_wash">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 1">세탁</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/COOK" style="text-decoration: none; color:black;" @click="independent_cook">
+                    <router-link to="/independent/COOK" style="text-decoration: none; color:black;"
+                      @click="independent_cook">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 2">요리</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/HEALTH" style="text-decoration: none; color:black;" @click="independent_health">
+                    <router-link to="/independent/HEALTH" style="text-decoration: none; color:black;"
+                      @click="independent_health">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 3">건강</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/ETC" style="text-decoration: none; color:black;" @click="independent_etc">
+                    <router-link to="/independent/ETC" style="text-decoration: none; color:black;"
+                      @click="independent_etc">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 4">기타</v-list-item-title>
                     </router-link>
                   </v-list-item>
@@ -191,7 +199,7 @@
         </v-row>
 
         <v-divider :thickness="1" class="border-opacity-25 my-3" length="1160"></v-divider>
-       
+
         <v-row class="mx-1 mt-3">
           <v-sheet :height="30" :width="1150" class="mb-2 font-weight-bold" align="center" justify="center">
             <v-row>
@@ -212,23 +220,27 @@
             <v-list v-for="Board in Board" :key="Board" style="overflow:hidden; font-size:14px">
               <v-row>
                 <v-col cols="1">
-                  <div v-if="$filter.formatDate(Board.lastModifiedDate) === today" align="center" justify="center">
-                    {{ $filter.formatTime(Board.lastModifiedDate) }}
+                  <div v-if="$filter.formatDate(Board.createdDate) === today" align="center" justify="center">
+                    {{ $filter.formatTime(Board.createdDate) }}
                   </div>
                   <div v-else align="center" justify="center">
-                    {{ $filter.formatDate(Board.lastModifiedDate) }}
+                    {{ $filter.formatDate(Board.createdDate) }}
                   </div>
                 </v-col>
                 <v-col cols="6">
                   <div v-if="Board.title.length < 37">
                     <v-img style="float:left" v-if="Board.picture === true" :width="15" src="../img/imagePlaceHolder.png"
                       class="mr-1 pt-1"></v-img>
+                      <router-link :to="{ name: 'PostView', params: { postId: Board.postId }}" style="text-decoration: none; color:black;">
                     {{ Board.title }}
+                  </router-link>
                   </div>
                   <div v-else>
                     <v-img style="float:left" v-if="Board.picture === true" :width="15" src="../img/imagePlaceHolder.png"
                       class="mr-1 pt-1"></v-img>
+                      <router-link :to="{ name: 'PostView', params: { postId: Board.postId }}" style="text-decoration: none; color:black;">
                     <p>{{ Board.title.substr(0, 37) }}...</p>
+                  </router-link>
                   </div>
                 </v-col>
                 <v-col cols="2">
@@ -276,65 +288,69 @@
             </v-list>
 
             <v-row class="mt-3" align=center>
-                <v-col cols="5">
-                  <v-row align=center>
+              <v-col cols="5">
+                <v-row align=center>
                   <v-menu>
-                <template v-slot:activator="{ props }">
-                  <v-btn v-bind="props" style="width:130px; height:40px; border-color:#A9A9A9" variant="outlined" >
-                    <p >{{ search[searchKeyword] }} ▼</p>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item style="text-align: center;">
-                      <v-list-item-title @click="searchKeyword = 0" class="my-2">제목 + 내용</v-list-item-title>
-                      <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                      <v-list-item-title @click="searchKeyword = 1" class="my-2">제목</v-list-item-title>
-                      <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                      <v-list-item-title @click="searchKeyword = 2" class="my-2">내용</v-list-item-title>
-                      <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                      <v-list-item-title @click="searchKeyword = 3" class="my-2">작성자</v-list-item-title>                      
-                  </v-list-item>
-                </v-list>
-                </v-menu>
+                    <template v-slot:activator="{ props }">
+                      <v-btn v-bind="props" style="width:130px; height:40px; border-color:#A9A9A9" variant="outlined">
+                        <p>{{ search[searchKeyword] }} ▼</p>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item style="text-align: center;">
+                        <v-list-item-title @click="searchKeyword = 0" class="my-2">제목 + 내용</v-list-item-title>
+                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                        <v-list-item-title @click="searchKeyword = 1" class="my-2">제목</v-list-item-title>
+                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                        <v-list-item-title @click="searchKeyword = 2" class="my-2">내용</v-list-item-title>
+                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                        <v-list-item-title @click="searchKeyword = 3" class="my-2">작성자</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
                   <v-card-text>
-                    <v-text-field :loading="error" density="compact" variant="outlined"
-                      append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="onClick">                      
+                    <v-text-field :loading="error" density="compact" variant="outlined" append-inner-icon="mdi-magnify"
+                      single-line hide-details @click:append-inner="onClick">
                     </v-text-field>
                   </v-card-text>
                 </v-row>
-                </v-col>
-                <v-col>
-                  <v-row justify="end">
-                    <v-btn variant="flat" color="#5E913B" class="font-weight-bold" to="/PostWrite">
-                      <div class="text-white">글쓰기</div>
-                    </v-btn>         
-              </v-row>
               </v-col>
-              </v-row>
+              <v-col>
+                <v-row justify="end">
+                  <v-btn variant="flat" color="#5E913B" class="font-weight-bold" to="/PostWrite">
+                    <div class="text-white">글쓰기</div>
+                  </v-btn>
+                </v-row>
+              </v-col>
+            </v-row>
 
             <v-row class="my-3" justify="center">
               <div v-if="totalPage <= 10">
                 <v-row class="my-5">
-                  <div :key="totalPage" v-for="totalPage in totalPage" @click="currentPage = totalPage - 1, page()">
-                    <router-link
-                      :to="{ params: { independentType: independents[independentCheck] }, query: { page: totalPage } }"
-                      style="text-decoration: none;">
-                      <div v-if="currentPage === totalPage - 1">
-                        <v-btn variant="text" size="x-small" class="font-weight-bold"
-                          style="font-size: 16px; color:#5E913B;">{{ totalPage }}</v-btn>
+                  <div v-if="totalPage <= 10">
+                    <v-row class="my-3" justify="center">
+                      <div :key="totalPage" v-for="totalPage in totalPage" @click="currentPage = totalPage - 1, page()">
+                        <router-link
+                          :to="{ params: { independentType: independentsAPI[independentCheck] }, query: { page: totalPage } }"
+                          style="text-decoration: none;">
+                          <div v-if="currentPage === totalPage - 1">
+                            <v-btn variant="text" size="x-small" class="font-weight-bold"
+                              style="font-size: 16px; color:#5E913B;">{{ totalPage }}</v-btn>
+                          </div>
+                          <div v-else>
+                            <v-btn variant="text" size="x-small" style="font-size: 14px; color:#A9A9A9">{{ totalPage
+                            }}</v-btn>
+                          </div>
+                        </router-link>
                       </div>
-                      <div v-else>
-                        <v-btn variant="text" size="x-small" style="font-size: 14px; color:#A9A9A9">{{ totalPage
-                        }}</v-btn>
-                      </div>
-                    </router-link>
+                    </v-row>
                   </div>
                 </v-row>
               </div>
               <div v-else>
                 <v-row class="my-3">
                   <router-link
-                    :to="{ params: { independentType: independents[independentCheck] }, query: { page: currentPage } }"
+                    :to="{ params: { independentType: independentsAPI[independentCheck] }, query: { page: currentPage } }"
                     @click="page()" style="text-decoration: none;">
                     <v-btn @click="currentPage = 0" :disabled="currentPage < 1" variant="text" size="x-small"
                       :style="{ color: currentPage <= 1 ? '#5E913B' : '' }">
@@ -342,7 +358,7 @@
                     </v-btn>
                   </router-link>
                   <router-link
-                    :to="{ params: { independentType: independents[independentCheck] }, query: { page: currentPage } }"
+                    :to="{ params: { independentType: independentsAPI[independentCheck] }, query: { page: currentPage } }"
                     @click="page()" style="text-decoration: none;">
                     <v-btn @click="currentPage = Math.max(currentPage - 10, 0)" :disabled="currentPage < 1" variant="text"
                       size="x-small" :style="{ color: currentPage <= 1 ? '#5E913B' : '' }">
@@ -353,7 +369,7 @@
                     :class="{ active: pageNumber === currentPage, 'last-page': pageNumber === displayPageNumbers[displayPageNumbers.length - 1] }"
                     @click="currentPage = pageNumber - 1, page()">
                     <router-link
-                      :to="{ params: { independentType: independents[independentCheck] }, query: { page: pageNumber } }"
+                      :to="{ params: { independentType: independentsAPI[independentCheck] }, query: { page: pageNumber } }"
                       style="text-decoration: none;">
                       <div v-if="currentPage === pageNumber - 1">
                         <v-btn @click="currentPage = pageNumber" variant="text" size="x-small" class="font-weight-bold"
@@ -371,7 +387,7 @@
                     </router-link>
                   </div>
                   <router-link
-                    :to="{ params: { independentType: independents[independentCheck] }, query: { page: currentPage } }"
+                    :to="{ params: { independentType: independentsAPI[independentCheck] }, query: { page: currentPage } }"
                     @click="page()" style="text-decoration: none;"
                     :style="{ color: currentPage >= totalPage ? '#5E913B' : '' }">
                     <v-btn @click="currentPage = Math.min(currentPage + 10, totalPage)"
@@ -380,7 +396,7 @@
                     </v-btn>
                   </router-link>
                   <router-link
-                    :to="{ params: { independentType: independents[independentCheck] }, query: { page: currentPage } }"
+                    :to="{ params: { independentType: independentsAPI[independentCheck] }, query: { page: currentPage } }"
                     @click="page()" style="text-decoration: none;"
                     :style="{ color: currentPage >= totalPage ? '#5E913B' : '' }">
                     <v-btn @click="currentPage = totalPage" :disabled="currentPage >= totalPage - 1" variant="text"
@@ -390,34 +406,34 @@
                   </router-link>
                 </v-row>
               </div>
-            </v-row>            
-          </v-sheet> 
+            </v-row>
+          </v-sheet>
           <v-row>
-          <v-row class="mx-1">
-            <v-col cols="10">
-              <p class="font-weight-bold text-h5 mt-5">{{ independents[independentCheck] }} 정보 영상</p>
-            </v-col>
-            <v-col cols="2">
-              <div class="mt-7 text-subtitle-2 mr-4" align="end">더 많은 영상보기</div>
-            </v-col>
-          </v-row>
-          <v-row class="px-3">
-            <div v-for="video in video" :key="video" class="mx-1">
-              <v-col cols="auto">
-                <iframe width="360" height="195" :src="video.videoUrl" title="YouTube video player" frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowfullscreen></iframe>
-                <div v-if="video.title.length <= 20">
-                  <p class="my-1 font-weight-bold" align="center">{{ video.title }}</p>
-                </div>
-                <div v-else>
-                  <p class="my-1 font-weight-bold" align="center">{{ video.title.substr(0, 20) }}...</p>
-                </div>
+            <v-row class="mx-1">
+              <v-col cols="10">
+                <p class="font-weight-bold text-h5 mt-5">{{ independents[independentCheck] }} 정보 영상</p>
               </v-col>
-            </div>
+              <v-col cols="2">
+                <div class="mt-7 text-subtitle-2 mr-4" align="end">더 많은 영상보기</div>
+              </v-col>
+            </v-row>
+            <v-row class="px-3">
+              <div v-for="video in video" :key="video" class="mx-1">
+                <v-col cols="auto">
+                  <iframe width="360" height="195" :src="video.videoUrl" title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+                  <div v-if="video.title.length <= 20">
+                    <p class="my-1 font-weight-bold" align="center">{{ video.title }}</p>
+                  </div>
+                  <div v-else>
+                    <p class="my-1 font-weight-bold" align="center">{{ video.title.substr(0, 20) }}...</p>
+                  </div>
+                </v-col>
+              </div>
+            </v-row>
           </v-row>
-        </v-row> 
-        </v-row>        
+        </v-row>
       </v-container>
     </v-main>
   </v-app>
@@ -488,28 +504,35 @@ export default {
     }
   },
   created() {
-  window.addEventListener('popstate', () => {        
-    const url = window.location.href;
-    const segments = url.split('/');
-    const value = segments[segments.length - 1]; 
-    const arr = ["CLEAN", "WASH", "COOK", "HEALTH", "ETC"];
-    const index = arr.indexOf(value);
+    window.addEventListener('popstate', () => {
+      const pathname = window.location.pathname;
+      if (pathname.startsWith('/independent/')) {
+        const segments = pathname.split('/');
+        const value = segments[segments.length - 1];
 
-    this.independentCheck = index
-    this.$store.state.independentCheck = index
+        const arr = ['CLEAN', 'WASH', 'COOK', 'HEALTH', 'ETC'];
+        const index = arr.indexOf(value);
 
-    if (this.$store.state.independentCheck === 0)
-      this.independent_clean()
-    else if (this.$store.state.independentCheck === 1)
-      this.independent_wash()
-    else if (this.$store.state.independentCheck === 2)
-      this.independent_cook()
-    else if (this.$store.state.independentCheck === 3)
-      this.independent_health()
-    else if (this.$store.state.independentCheck === 4)
-      this.independent_etc()
-  });
-},
+        console.log(segments)
+        this.independentCheck = index
+        this.$store.state.independentCheck = index
+
+        if (this.$store.state.independentCheck === 0)
+          this.independent_clean()
+        else if (this.$store.state.independentCheck === 1)
+          this.independent_wash()
+        else if (this.$store.state.independentCheck === 2)
+          this.independent_cook()
+        else if (this.$store.state.independentCheck === 3)
+          this.independent_health()
+        else if (this.$store.state.independentCheck === 4)
+          this.independent_etc()
+      }
+      else {
+        window.location.href = pathname;
+      }
+    });
+  },
   computed: {
     displayPageNumbers() {
       const currentPage = this.currentPage;
@@ -544,13 +567,15 @@ export default {
       this.independentCheck = 0
       this.$store.state.independentCheck = 0
       this.updateIndependentCheck(0)
+      this.currentPage = 0
       const url = `/posts/independent/${this.independentsAPI[0]}`;
 
+      //this.$axios.get('https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/independe', { params: { page: this.currentPage } })
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
           this.Board = res.data.data.postsResponses
           this.totalPage = res.data.count
-          this.video = res.data.data.independentPostVideoDtos          
+          this.video = res.data.data.independentPostVideoDtos
 
           if (this.totalPage < 10)
             this.totalPage = 1
@@ -569,6 +594,7 @@ export default {
       this.independentCheck = 1
       this.$store.state.independentCheck = 1
       this.updateIndependentCheck(1)
+      this.currentPage = 0
       const url = `/posts/independent/${this.independentsAPI[1]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -594,6 +620,7 @@ export default {
       this.independentCheck = 2
       this.$store.state.independentCheck = 2
       this.updateIndependentCheck(2)
+      this.currentPage = 0
       const url = `/posts/independent/${this.independentsAPI[2]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -619,6 +646,7 @@ export default {
       this.independentCheck = 3
       this.$store.state.independentCheck = 3
       this.updateIndependentCheck(3)
+      this.currentPage = 0
       const url = `/posts/independent/${this.independentsAPI[3]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -644,6 +672,7 @@ export default {
       this.independentCheck = 4
       this.$store.state.independentCheck = 4
       this.updateIndependentCheck(4)
+      this.currentPage = 0
       const url = `/posts/independent/${this.independentsAPI[4]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } })
@@ -669,7 +698,8 @@ export default {
       const url = `/posts/independent/${this.independentsAPI[this.independentCheck]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
-          this.Board = res.data.data
+          this.Board = res.data.data.postsResponses
+
           console.log(res.data)
         })
         .catch(function (error) {
@@ -698,7 +728,7 @@ export default {
       this.independent_health()
     else if (this.$store.state.independentCheck === 4)
       this.independent_etc()
-      
+
     this.date()
   },
 }

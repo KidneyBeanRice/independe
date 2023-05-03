@@ -337,23 +337,27 @@
             <v-list v-for="Board in Board" :key="Board" style="overflow:hidden; font-size:14px">
               <v-row>
                 <v-col cols="1">
-                  <div v-if="$filter.formatDate(Board.lastModifiedDate) === today" align="center" justify="center">
-                    {{ $filter.formatTime(Board.lastModifiedDate) }}
+                  <div v-if="$filter.formatDate(Board.createdDate) === today" align="center" justify="center">
+                    {{ $filter.formatTime(Board.createdDate) }}
                   </div>
                   <div v-else align="center" justify="center">
-                    {{ $filter.formatDate(Board.lastModifiedDate) }}
+                    {{ $filter.formatDate(Board.createdDate) }}
                   </div>
                 </v-col>
                 <v-col cols="6">
                   <div v-if="Board.title.length < 37">
                     <v-img style="float:left" v-if="Board.picture === true" :width="15" src="../img/imagePlaceHolder.png"
                       class="mr-1 pt-1"></v-img>
+                      <router-link :to="{ name: 'PostView', params: { postId: Board.postId }}" style="text-decoration: none; color:black;">
                     {{ Board.title }}
+                  </router-link>
                   </div>
                   <div v-else>
                     <v-img style="float:left" v-if="Board.picture === true" :width="15" src="../img/imagePlaceHolder.png"
                       class="mr-1 pt-1"></v-img>
+                      <router-link :to="{ name: 'PostView', params: { postId: Board.postId }}" style="text-decoration: none; color:black;">
                     <p>{{ Board.title.substr(0, 37) }}...</p>
+                  </router-link>
                   </div>
                 </v-col>
                 <v-col cols="2">
@@ -516,8 +520,6 @@
                 </v-row>
               </div>
             </v-row>
-
-
           </v-sheet>
         </v-row>
       </v-container>
@@ -589,63 +591,8 @@ export default {
 
       link: ['메인', '게시판', '자취생활'],
       search: ['제목 + 내용', '제목', '내용', '작성자'],
-      searchKeyword: 0
+      searchKeyword: 0,
     }
-  },
-  created() {
-    window.addEventListener('popstate', () => {
-      const pathname = window.location.pathname;
-      if (pathname.startsWith('/board/')) {
-        const url = window.location.href;
-        const segments = url.split('/');
-        const value = segments[segments.length - 2];
-        const arr = ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM']
-        const index = arr.indexOf(value)
-
-        const url2 = window.location.href;
-        const segments2 = url2.split('/');
-        const value2 = segments2[segments.length - 1];
-        const arr2 = ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET']
-        const index2 = arr2.indexOf(value2)
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const page = parseInt(urlParams.get('page'));
-
-        this.regionCategoryCheck = index2
-        this.regionCheck = index
-        this.$store.state.boardCheck = index
-
-        if (this.$store.state.boardCheck === 0)
-          this.region_all()
-        else if (this.$store.state.boardCheck === 1)
-          this.region_seoul()
-        else if (this.$store.state.boardCheck === 2)
-          this.region_busan()
-        else if (this.$store.state.boardCheck === 3)
-          this.region_ulsan()
-        else if (this.$store.state.boardCheck === 4)
-          this.region_kyeongnam()
-
-        if (this.areaCheck === 1)
-          if (index2 === 1)
-            this.regionCategory_talk()
-          else if (index2 === 2)
-            this.regionCategory_restaurant()
-          else if (index2 === 3)
-            this.regionCategory_play()
-          else if (index2 === 4)
-            this.regionCategory_meet()
-          else if (index2 === 5)
-            this.regionCategory_market()
-
-            if (page !== null) {
-              console.log(page)
-            } 
-      } 
-      else {
-        window.location.href = pathname;
-      }
-    })
   },
   computed: {
     displayPageNumbers() {
@@ -673,12 +620,63 @@ export default {
       return pageNumbers;
     }
   },
+  created() {    
+    window.addEventListener('popstate', () => {  
+      const pathname = window.location.pathname;
+      if (pathname.startsWith('/board/')) {
+        this.isBackButtonClicked = true
+        const url = window.location.href;
+        const segments = url.split('/');
+        const value = segments[segments.length - 2];
+        const arr = ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM']
+        const index = arr.indexOf(value)
+
+        const url2 = window.location.href;
+        const segments2 = url2.split('/');
+        const value2 = segments2[segments.length - 1];
+        const arr2 = ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET']
+        const index2 = arr2.indexOf(value2)
+
+        this.regionCategoryCheck = index2
+        this.regionCheck = index
+        this.$store.state.boardCheck = index
+
+        if (this.$store.state.boardCheck === 0)
+          this.region_all()
+        else if (this.$store.state.boardCheck === 1)
+          this.region_seoul()
+        else if (this.$store.state.boardCheck === 2)
+          this.region_busan()
+        else if (this.$store.state.boardCheck === 3)
+          this.region_ulsan()
+        else if (this.$store.state.boardCheck === 4)
+          this.region_kyeongnam()
+
+        if (this.areaCheck === 1)
+          if (index2 === 1)
+            this.regionCategory_talk()
+          else if (index2 === 2)
+            this.regionCategory_restaurant()
+          else if (index2 === 3)
+            this.regionCategory_play()
+          else if (index2 === 4)
+            this.regionCategory_meet()
+          else if (index2 === 5)
+            this.regionCategory_market()
+          else if (index2 === 0)
+            this.region_all()
+      }
+      else {
+        window.location.href = pathname;
+      }
+    })
+  },
   methods: {
     updateBoardCheck(newValue) {
-      this.$store.dispatch('updateBoardCheck', newValue);      
+      this.$store.dispatch('updateBoardCheck', newValue);
     },
     updateCategoryCheck(newValue) {
-      this.$store.dispatch('updateCategoryCheck', newValue);      
+      this.$store.dispatch('updateCategoryCheck', newValue);
     },
     region_all() {
       this.areaCheck = 0
@@ -686,15 +684,15 @@ export default {
       this.regionCategoryCheck = 0
       this.$store.state.boardCheck = 0
       this.updateBoardCheck(0)
-      //const url = `/posts/region/${this.regionsAPI[0]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+      this.updateCategoryCheck(0)
+      this.currentPage = 0;
+      const url = `/posts/region/${this.regionsAPI[0]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
 
-      this.$axios.get('https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/region/ALL/FREE', { params: { page: this.currentPage } })
-      //this.$axios.get(url, { params: { page: this.currentPage } })
+      //this.$axios.get('https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/independe', { params: { page: this.currentPage } })
+        this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
-
-          this.totalPage = 150
 
           if (this.totalPage < 10)
             this.totalPage = 1
@@ -715,12 +713,13 @@ export default {
       this.regionCategoryCheck = this.$store.state.CategoryCheck
       this.$store.state.boardCheck = 1
       this.updateBoardCheck(1)
+      this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[1]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
-
+          
           if (this.totalPage < 10)
             this.totalPage = 1
           else if (this.totalPage % 10 === 0)
@@ -740,6 +739,7 @@ export default {
       this.regionCategoryCheck = this.$store.state.CategoryCheck
       this.$store.state.boardCheck = 2
       this.updateBoardCheck(2)
+      this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[2]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
@@ -765,6 +765,7 @@ export default {
       this.regionCategoryCheck = this.$store.state.CategoryCheck
       this.$store.state.boardCheck = 3
       this.updateBoardCheck(3)
+      this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[3]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
@@ -790,6 +791,7 @@ export default {
       this.regionCategoryCheck = this.$store.state.CategoryCheck
       this.$store.state.boardCheck = 4
       this.updateBoardCheck(4)
+      this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[4]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
@@ -813,6 +815,7 @@ export default {
       this.regionCategoryCheck = 1
       this.$store.state.CategoryCheck = 1
       this.updateCategoryCheck(1)
+      this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[1]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
@@ -836,6 +839,7 @@ export default {
       this.regionCategoryCheck = 2
       this.$store.state.CategoryCheck = 2
       this.updateCategoryCheck(2)
+      this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[2]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
@@ -859,6 +863,7 @@ export default {
       this.regionCategoryCheck = 3
       this.$store.state.CategoryCheck = 3
       this.updateCategoryCheck(3)
+      this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[3]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
@@ -882,6 +887,7 @@ export default {
       this.regionCategoryCheck = 4
       this.$store.state.CategoryCheck = 4
       this.updateCategoryCheck(4)
+      this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[4]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
@@ -905,6 +911,7 @@ export default {
       this.regionCategoryCheck = 5
       this.$store.state.CategoryCheck = 5
       this.updateCategoryCheck(5)
+      this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[5]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
@@ -924,11 +931,12 @@ export default {
           console.log(error);
         });
     },
-    page() {
+    page() {      
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
       this.$axios.get(url, { params: { page: this.currentPage } })
         .then(res => {
           this.Board = res.data.data
+          this.$store.commit('updateNowPage', this.currentPage);
           console.log(res.data)
         })
         .catch(function (error) {
@@ -957,6 +965,17 @@ export default {
       this.region_ulsan()
     else if (this.$store.state.boardCheck === 4)
       this.region_kyeongnam()
+    
+    if (this.$store.state.categoryCheck === 1)
+      this.regionCategory_talk()
+    else if (this.$store.state.categoryCheck === 2)
+      this.regionCategory_restaurant()
+    else if (this.$store.state.categoryCheck === 3)
+      this.regionCategory_play()
+    else if (this.$store.state.categoryCheck === 4)
+      this.regionCategory_meet()
+    else if (this.$store.state.categoryCheck === 5)
+      this.regionCategory_market()
 
     this.date()
   },

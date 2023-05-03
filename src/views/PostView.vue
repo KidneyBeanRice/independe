@@ -106,12 +106,151 @@
       </v-row>
     </v-container>
   </v-app-bar>
-  <p>{{ Board.title }}</p>
-  <p>{{ Board.content }}</p>
-  <v-img :src="imageUrl"></v-img>
-  <div v-for="(imageUrl, index) in imageUrls" :key="index">
-    <img :src="imageUrl" alt="image">
-  </div>
+
+  <v-app>
+    <v-main>
+      <v-container>
+        <v-row align="end">
+          <v-col cols="11">
+            <div v-if="Board.independentPostType === null" class="mt-5">
+              <v-row>
+                <v-col cols="auto">
+                  <router-link
+                    :to="{ name: 'BoardView', params: { regionType: Board.regionTypeEn, regionPostType: Board.regionPostTypeEn } }"
+                    style="text-decoration: none; font-size:18px">
+                    <div
+                      @click="$store.state.boardCheck = regionsAPI.indexOf(Board.regionTypeEn), $store.state.categoryCheck = regionCategoryAPI.indexOf(Board.regionPostTypeEn)"
+                      class="text-black">지역 {{ Board.regionType }}</div>
+                  </router-link>
+                </v-col>
+                <v-col cols="auto">
+                  <div class="mx-3">></div>
+                </v-col>
+                <v-col cols="auto">
+                  <router-link
+                    :to="{ name: 'BoardView', params: { regionType: Board.regionTypeEn, regionPostType: Board.regionPostTypeEn } }"
+                    style="text-decoration: none; font-size:18px">
+                    <div
+                      @click="$store.state.boardCheck = regionsAPI.indexOf(Board.regionTypeEn), $store.state.categoryCheck = regionCategoryAPI.indexOf(Board.regionPostTypeEn)"
+                      class="text-black">{{ Board.regionPostType }}</div>
+                  </router-link>
+                </v-col>
+              </v-row>
+            </div>
+            <div v-else class="mt-5">
+              <v-row>
+                <v-col cols="auto">
+                  <router-link
+                    :to="{ name: 'IndependentView', params: { independentType: 'Board.independentPostTypeEn' } }"
+                    style="text-decoration: none; font-size:18px">
+                    <div @click="$store.state.independentCheck = independentsAPI.indexOf(Board.independentPostTypeEn)"
+                      class="text-black">자취 정보</div>
+                  </router-link>
+                </v-col>
+                <v-col cols="auto">
+                  <div class="mx-3">></div>
+                </v-col>
+                <v-col cols="auto">
+                  <router-link
+                    :to="{ name: 'IndependentView', params: { independentType: 'Board.independentPostTypeEn' } }"
+                    style="text-decoration: none; font-size:18px">
+                    <div @click="$store.state.independentCheck = independentsAPI.indexOf(Board.independentPostTypeEn)"
+                      class="text-black">{{ Board.independentPostType }}</div>
+                  </router-link>
+                </v-col>
+              </v-row>
+            </div>
+          </v-col>
+          <v-col cols="auto" align="end">            
+            <v-row align="end" jutify="end">            
+              <v-img @click="copyUrl" class="ml-5" width="23" height="23" src="../img/link_copy.png" :style="{ cursor: 'pointer' }"></v-img>
+              <v-img class="ml-5" width="23" height="23" src="../img/scrap_default.png" :style="{ cursor: 'pointer' }"></v-img>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-row align="end">
+          <v-col cols="10">
+            <div class="text-h4">{{ Board.title }}</div>
+          </v-col>          
+          <v-col align="end">            
+              <div>{{ $filter.formatYear(Board.createdDate) }}-{{ $filter.formatDate(Board.createdDate) }} {{$filter.formatTime(Board.createdDate) }}</div>            
+          </v-col>
+        </v-row>
+        <v-spacer></v-spacer>
+        <v-row>
+          <v-col cols="3">
+            <div>작성자 : {{ Board.nickname }}</div>
+          </v-col>
+          <v-col cols="9" align="end">
+            <div style="font-size:14px">조회수 : {{ Board.views }}&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;추천수 : {{ Board.recommendCount }}&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; 댓글수 : {{ Board.commentCount }}</div>
+          </v-col>
+        </v-row>
+
+        <v-divider :thickness="1" class="border-opacity-25 mt-7" length="1180"></v-divider>        
+
+        <v-row>
+          <v-col>
+            <div v-for="(imageUrl, index) in imageUrls" :key="index">
+              <v-row>
+                <v-col class="text-center">
+                  <img :src="imageUrl" alt="image" style="max-width: 100%;"/>
+                </v-col>
+              </v-row>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <div id="content">{{ Board.content }}</div>
+          </v-col>
+        </v-row>
+        <v-row class="mt-15">
+          <v-col>
+            <v-img src="../img/post_recommend_default.png" width="30" height="30"></v-img>
+            <div>{{ Board.recommendCount }}</div>
+          </v-col>
+        </v-row>
+        <v-divider :thickness="1" class="border-opacity-25 mt-7" length="1180"></v-divider>        
+
+      </v-container>
+    </v-main>
+  </v-app>
+  
+  <!--푸터-->
+  <v-footer border>
+    <v-container>
+      <v-row>
+        <v-col cols="3"></v-col>
+        <v-col cols="6">
+          <v-sheet height="80" width="650" align="center">
+            <v-row justify="center" class="text-grey-lighten-1">
+              <v-col cols="auto">
+                <p>서비스 소개</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>개인정보 처리방침</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>이용약관</p>
+              </v-col>
+            </v-row>
+            <v-row class="text-grey-lighten-2" style="font-size:12px" justify="center">
+              <v-col cols="auto">
+                <p>[팀] 인디펜더</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>최준혁 이용희 최성우</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>chlwnsgur1214@naver.com</p>
+              </v-col>
+            </v-row>
+          </v-sheet>
+        </v-col>
+        <v-col cols="3"> </v-col>
+      </v-row>
+    </v-container>
+  </v-footer>
 </template>
 
 <script>
@@ -124,28 +263,27 @@ export default {
 
       Board: [],
       imageUrls: [],
+      showCopyText: false,
+      independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
+      regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
+      regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
     }
   },
   methods: {
     read() {
-      const path = this.$route.path; // 현재 URL 경로 문자열
-      const pathSegments = path.split('/'); // '/'를 기준으로 경로 문자열을 배열로 분리
+      const path = this.$route.path;
+      const pathSegments = path.split('/'); 
       const postId = parseInt(pathSegments[2]);
 
       const url = `/posts/${postId}`;
+      //const url = 'https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/post'
+
       this.$axios.get(url)
         .then((res) => {
           this.Board = res.data.data
           console.log(res.data)
-        })
-        .catch(err => console.error(err))
-    },
-    image() {
-      const url = `/images`;
 
-      this.$axios.get(url)
-        .then((res) => {
-          const base64ImageDataArray = res.data.imageFiles;
+          const base64ImageDataArray = res.data.data.files;
           const imageUrls = [];
 
           base64ImageDataArray.forEach((base64ImageData) => {
@@ -162,22 +300,27 @@ export default {
           });
 
           this.imageUrls = imageUrls;
-
-          console.log(res.data.imageFiles)
         })
         .catch(err => console.error(err))
+    },
+    copyUrl() {
+      const url = window.location.href;
+      const tempInput = document.createElement('input');
+      tempInput.value = url;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
     }
   },
   mounted() {
-    if (this.$store.state.independentCheck < 5)
-      this.active_tab = 1
-    else if (this.$store.state.boardCheck < 5)
-      this.active_tab = 2
-    else
-      this.active_tab = 0
-
     this.read();
-    this.image();
   },
 }   
 </script>
+
+<style>
+  #content {
+    white-space: pre-line;
+  }
+</style>

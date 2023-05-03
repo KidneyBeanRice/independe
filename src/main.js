@@ -15,6 +15,12 @@ app.use(store)
 app.use(vuetify)  
 
 app.config.globalProperties.$filter = {
+    formatYear(value) {
+        var date = new Date(value);
+        var year = date.getFullYear();
+
+        return year
+    },
     formatDate(value) {
         var date = new Date(value);
         var month = date.getMonth() + 1;

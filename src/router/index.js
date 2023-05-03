@@ -4,6 +4,7 @@ import BoardView from '../views/BoardView.vue'
 import IndependentView from '../views/IndependentView.vue'
 import PostWriteView from '../views/PostWriteView.vue'
 import PostView from '../views/PostView.vue'
+import LoginView from '../views/LoginView.vue'
 
 const routes = [
   {
@@ -30,7 +31,12 @@ const routes = [
     path: '/posts/:postId',
     name: 'PostView',
     component: PostView
-  }
+  },
+  {
+    path: '/login',
+    name: 'LoginView',
+    component: LoginView
+  },
 ]
 
 const router = createRouter({

@@ -5,7 +5,7 @@ export default createStore({
   state: {
     boardCheck: 0,
     independentCheck: 0,
-    categoryCheck: 0
+    categoryCheck: 0,
   },
   getters: {
   },

@@ -131,12 +131,12 @@
                   <v-list v-for="popularBoard in popularBoard" :key="popularBoard">
                     <div v-if="popularBoard.independentPostType === null">
                       <router-link :to="{ name: 'BoardView', params: { regionType: popularBoard.regionTypeEn, regionPostType: popularBoard.regionPostTypeEn }}"  style="text-decoration: none;">
-                        <p class="text-grey-darken-1">[{{ popularBoard.regionType }}·{{ popularBoard.regionPostType }}]</p>
+                        <p @click="$store.state.boardCheck = regionsAPI.indexOf(popularBoard.regionTypeEn), $store.state.categoryCheck = regionCategoryAPI.indexOf(popularBoard.regionPostTypeEn)" class="text-grey-darken-1">[{{ popularBoard.regionType }}·{{ popularBoard.regionPostType }}]</p>
                       </router-link>
                     </div>
                     <div v-else>
                       <router-link :to="{ name: 'IndependentView', params: { independentType: popularBoard.independentPostTypeEn }}" style="text-decoration: none;">
-                        <p class="text-grey-darken-1">[자취·{{ popularBoard.independentPostType }}]</p>
+                        <p @click="$store.state.independentCheck = independentsAPI.indexOf(popularBoard.independentPostTypeEn)" class="text-grey-darken-1">[자취·{{ popularBoard.independentPostType }}]</p>
                       </router-link>
                     </div>
                   </v-list>
@@ -153,7 +153,9 @@
                     <div v-else>
                       <v-img style="float:left" v-if="popularBoard.picture === true" :width="15"
                         src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                      <p>{{ popularBoard.title.substr(0, 23) }}...</p>
+                      <router-link :to="{ name: 'PostView', params: { postId: popularBoard.postId }}" style="text-decoration: none; color:black;">
+                        <p>{{ popularBoard.title.substr(0, 23) }}...</p>
+                      </router-link>
                     </div>
                   </v-list>
                 </v-col>
@@ -250,7 +252,9 @@
               </v-row>
             </v-col>
             <v-col cols="1">
-              <div class="mt-5 text-subtitle-2 ">더보기 ></div>
+              <router-link :to="{ name: 'IndependentView', params: { independentType: 'CLEAN'}}" style="text-decoration: none;">
+                <div @click="$store.state.independentCheck = 0" class="text-grey-darken-1 mt-5 text-subtitle-2">더보기 ></div>
+              </router-link>
             </v-col>
           </v-row>
           <v-row>
@@ -261,7 +265,9 @@
                   <v-row>
                     <v-col cols="auto">
                       <v-list v-for="independentBoard in independentBoard.slice(0, 5)" :key="independentBoard">
-                        <p class="text-grey-darken-1">[{{ independentBoard.independentPostType }}]</p>
+                        <router-link :to="{ name: 'IndependentView', params: { independentType: independentBoard.independentPostTypeEn }}" style="text-decoration: none;">
+                          <p @click="$store.state.independentCheck = independentsAPI.indexOf(independentBoard.independentPostTypeEn)" class="text-grey-darken-1">[{{ independentBoard.independentPostType }}]</p>
+                        </router-link>
                       </v-list>
                     </v-col>
                     <v-col cols="6">
@@ -269,12 +275,16 @@
                         <div v-if="independentBoard.title.length <= 15">
                           <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
                             src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                          {{ independentBoard.title }}
+                          <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}" style="text-decoration: none; color:black;">
+                            {{ independentBoard.title }}
+                          </router-link>
                         </div>
                         <div v-else>
                           <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
                             src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                            <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}" style="text-decoration: none; color:black;">
                           <p>{{ independentBoard.title.substr(0, 15) }}...</p>
+                        </router-link>
                         </div>
                       </v-list>
                     </v-col>
@@ -305,7 +315,9 @@
                   <v-row>
                     <v-col cols="auto">
                       <v-list v-for="independentBoard in independentBoard.slice(5, 10)" :key="independentBoard">
-                        <p class="text-grey-darken-1">[{{ independentBoard.independentPostType }}]</p>
+                        <router-link :to="{ name: 'IndependentView', params: { independentType: independentBoard.independentPostTypeEn }}" style="text-decoration: none;">
+                          <p @click="$store.state.independentCheck = independentsAPI.indexOf(independentBoard.independentPostTypeEn)" class="text-grey-darken-1">[{{ independentBoard.independentPostType }}]</p>
+                        </router-link>
                       </v-list>
                     </v-col>
                     <v-col cols="6">
@@ -313,12 +325,16 @@
                         <div v-if="independentBoard.title.length <= 15">
                           <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
                             src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                            <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}" style="text-decoration: none; color:black;">
                           {{ independentBoard.title }}
+                        </router-link>
                         </div>
                         <div v-else>
                           <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
                             src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                            <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}" style="text-decoration: none; color:black;">
                           <p>{{ independentBoard.title.substr(0, 15) }}...</p>
+                        </router-link>
                         </div>
                       </v-list>
                     </v-col>
@@ -363,7 +379,9 @@
                 </v-row>
               </v-col>
               <v-col cols="2">
-                <div class="mt-5 text-subtitle-2">더보기 ></div>
+                <router-link :to="{ name: 'BoardView', params: { regionType: 'ALL', regionPostType: 'FREE' }}" style="text-decoration: none;">
+                  <div @click="$store.state.boardCheck = 0, $store.state.categoryCheck = 0" class="mt-5 text-subtitle-2 text-grey-darken-1">더보기 ></div>
+                </router-link>
               </v-col>
               <v-divider :thickness="2" class="border-opacity-25 mb-2 mx-3" length="560"></v-divider>
             </v-row>
@@ -371,7 +389,9 @@
               <v-row>
                 <v-col cols="auto">
                   <v-list v-for="allBoard in allBoard" :key="allBoard">
-                    <p class="text-grey-darken-1">[자유]</p>
+                    <router-link :to="{ name: 'BoardView', params: { regionType: 'ALL', regionPostType: 'FREE' }}"  style="text-decoration: none;">                                            
+                    <p @click="$store.state.boardCheck = 0, $store.state.categoryCheck = 0" class="text-grey-darken-1">[자유]</p>
+                  </router-link>
                   </v-list>
                 </v-col>
                 <v-col cols="6">
@@ -379,12 +399,16 @@
                     <div v-if="allBoard.title.length <= 15">
                       <v-img style="float:left" v-if="allBoard.picture === true" :width="15"
                         src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                      {{ allBoard.title }}
-                    </div>
+                        <router-link :to="{ name: 'PostView', params: { postId: allBoard.postId }}" style="text-decoration: none; color:black;">
+                        {{ allBoard.title }}
+                      </router-link>
+                    </div>                                                                  
                     <div v-else>
                       <v-img style="float:left" v-if="allBoard.picture === true" :width="15"
                         src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                        <router-link :to="{ name: 'PostView', params: { postId: allBoard.postId }}" style="text-decoration: none; color:black;">
                       <p>{{ allBoard.title.substr(0, 15) }}...</p>
+                    </router-link>
                     </div>
                   </v-list>
                 </v-col>
@@ -422,7 +446,9 @@
                 </v-row>
               </v-col>
               <v-col cols="2">
-                <div class="mt-5 text-subtitle-2">더보기 ></div>
+                <router-link :to="{ name: 'BoardView', params: { regionType: 'SEOUL', regionPostType: 'TALK' }}"  style="text-decoration: none;">
+                  <div @click="$store.state.boardCheck = 1, $store.state.categoryCheck = 1" class="mt-5 text-subtitle-2 text-grey-darken-1">더보기 ></div>
+                </router-link>
               </v-col>
               <v-divider :thickness="2" class="border-opacity-25 mb-2 mx-3" length="560"></v-divider>
             </v-row>
@@ -430,7 +456,9 @@
               <v-row>
                 <v-col cols="auto">
                   <v-list v-for="regionBoard in regionBoard" :key="regionBoard">
-                    <p class="text-grey-darken-1">[{{ regionBoard.regionType }}·{{ regionBoard.regionPostType }}]</p>
+                    <router-link :to="{ name: 'BoardView', params: { regionType: regionBoard.regionTypeEn, regionPostType: regionBoard.regionPostTypeEn }}"  style="text-decoration: none;">
+                        <p @click="$store.state.boardCheck = regionsAPI.indexOf(regionBoard.regionTypeEn), $store.state.categoryCheck = regionCategoryAPI.indexOf(regionBoard.regionPostTypeEn)" class="text-grey-darken-1">[{{ regionBoard.regionType }}·{{ regionBoard.regionPostType }}]</p>
+                      </router-link>                    
                   </v-list>
                 </v-col>
                 <v-col cols="5">
@@ -438,12 +466,16 @@
                     <div v-if="regionBoard.title.length <= 12">
                       <v-img style="float:left" v-if="regionBoard.picture === true" :width="15"
                         src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                      {{ regionBoard.title }}
+                        <router-link :to="{ name: 'PostView', params: { postId: regionBoard.postId }}" style="text-decoration: none; color:black;">
+                        {{ regionBoard.title }}
+                      </router-link>
                     </div>
                     <div v-else>
                       <v-img style="float:left" v-if="regionBoard.picture === true" :width="15"
                         src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                        <router-link :to="{ name: 'PostView', params: { postId: regionBoard.postId }}" style="text-decoration: none; color:black;">
                       <p>{{ regionBoard.title.substr(0, 12) }}...</p>
+                    </router-link>
                     </div>
                   </v-list>
                 </v-col>
@@ -551,11 +583,15 @@ export default {
       allBoard: [],
       regionBoard: [],
       topSearch: [],
-      video: []
+      video: [],
+
+      independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
+      regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
+      regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
     }
   },
   methods: {
-    read() {
+    read() {            
       this.$axios.get('/posts/main'/*'https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/posts/main'*/)
         .then((res) => {
           this.todayMent = res.data.data.todayMent
@@ -572,5 +608,12 @@ export default {
   mounted() {
     this.read();
   },
+  create() {
+    let token = this.$store.getters.getToken;
+    if (token.access == null && token.refresh == null) { //다 없으면 로그인 페이지로
+      //이미 로그인 페이지가 떠있는 상태에서 새로 고침하면 중복 에러 떠서 이렇게 처리함
+      this.$router.push({name: 'Login'}).catch(() => {}); 
+    }
+  }
 }   
 </script>

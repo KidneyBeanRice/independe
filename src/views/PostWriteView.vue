@@ -275,6 +275,7 @@ export default {
       boards: ['region', 'independent'],
       regions: ['ALL', 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
       regionsPost: ['FREE', 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],      
+      independents: ['CLEAN', 'WASH', 'PLAY', 'MEET', 'MARKET'],
 
       boardName: ['자유게시판', '서울 이야기', '부산 이야기', '울산 이야기', '경남 이야기', '청소 정보', '세탁 정보', '요리 정보', '건강 정보', '기타 정보'],
       category: ['잡담', '식당', '오락', '만남', '거래'],
