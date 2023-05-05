@@ -162,7 +162,7 @@
             </div>
           </v-col>
           <v-col cols="auto" align="end">            
-            <v-row align="end" jutify="end">            
+            <v-row align="end">            
               <v-img @click="copyUrl" class="ml-5" width="23" height="23" src="../img/link_copy.png" :style="{ cursor: 'pointer' }"></v-img>
               <v-img class="ml-5" width="23" height="23" src="../img/scrap_default.png" :style="{ cursor: 'pointer' }"></v-img>
             </v-row>
@@ -204,14 +204,25 @@
             <div id="content">{{ Board.content }}</div>
           </v-col>
         </v-row>
-        <v-row class="mt-15">
-          <v-col>
-            <v-img src="../img/post_recommend_default.png" width="30" height="30"></v-img>
-            <div>{{ Board.recommendCount }}</div>
-          </v-col>
+        <v-row class="mt-15" align="center">
+          <v-col cols="auto">
+            <v-row>
+              <v-img src="../img/post_recommend_default.png" width="30" height="30"></v-img>                                    
+              <div class="ml-2 mt-1" style="font-size:18px;">{{ Board.recommendCount }}</div>
+            </v-row>          
+          </v-col>          
+          <v-col cols="auto" class="ml-5">
+            <v-row>
+              <v-img src="../img/post_comment.png" width="30" height="30"></v-img>                                    
+              <div class="ml-2 mt-1" style="font-size:18px;">{{ Board.commentCount }}</div>
+            </v-row>          
+          </v-col>    
+          <v-col cols="auto" class="ml-auto">
+            <v-img src="../img/post_report_default.png" width="35" height="35"></v-img>                                    
+          </v-col>                               
         </v-row>
         <v-divider :thickness="1" class="border-opacity-25 mt-7" length="1180"></v-divider>        
-
+        
       </v-container>
     </v-main>
   </v-app>

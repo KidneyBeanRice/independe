@@ -1,41 +1,19 @@
 <template>
-    <form @submit.prevent="login">
-      <div>
-        <label for="email">이메일:</label>
-        <input type="email" id="email" v-model="email">
-      </div>
-      <div>
-        <label for="password">비밀번호:</label>
-        <input type="password" id="password" v-model="password">
-      </div>
-      <button type="submit">로그인</button>
-    </form>
-  </template>
+ <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
+   <div @click="naver" class="text-white">네이버</div>
+ </v-btn>
+</template>
   
-  <script>
-  export default {
-    data() {
-      return {
-        email: '',
-        password: '',
-      }
-    },
-    methods: {
-        login() {
-        this.axios.get('/api/login', {
-        email: this.email,
-        password: this.password
-        })
-        .then(response => {
-        const token = response.data.token;        
-        localStorage.setItem('token', token);
-        this.$router.push('/dashboard');
-        })
-        .catch(error => {
-        console.log(error);
-        })
-    }
+<script>
+export default {
+   methods: {
+    naver() {            
+      this.$axios.get('/oauth2/authorization/naver')
+      .then(res => {
+            console.log(res.data);
+      })
+      .catch(err => console.error(err))
     }
   }
-  </script>
-  
+}
+</script>
