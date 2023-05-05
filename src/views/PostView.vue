@@ -161,7 +161,7 @@
               </v-row>
             </div>
           </v-col>
-          <v-col cols="auto" align="end">            
+          <v-col cols="auto" align="end" >            
             <v-row align="end">            
               <v-img @click="copyUrl" class="ml-5" width="23" height="23" src="../img/link_copy.png" :style="{ cursor: 'pointer' }"></v-img>
               <v-img class="ml-5" width="23" height="23" src="../img/scrap_default.png" :style="{ cursor: 'pointer' }"></v-img>
@@ -205,7 +205,7 @@
           </v-col>
         </v-row>
         <v-row class="mt-15" align="center">
-          <v-col cols="auto">
+          <v-col cols="auto" class="ml-3">
             <v-row>
               <v-img src="../img/post_recommend_default.png" width="30" height="30"></v-img>                                    
               <div class="ml-2 mt-1" style="font-size:18px;">{{ Board.recommendCount }}</div>
@@ -221,8 +221,21 @@
             <v-img src="../img/post_report_default.png" width="35" height="35"></v-img>                                    
           </v-col>                               
         </v-row>
-        <v-divider :thickness="1" class="border-opacity-25 mt-7" length="1180"></v-divider>        
+
+        <v-divider :thickness="1" class="border-opacity-25 my-7" length="1180"></v-divider>        
         
+        <v-row>
+          <v-col>
+            <div style="font-size:16; font-weight:bold">댓글수 {{ Board.commentCount }}개</div>
+          </v-col>
+        </v-row>
+
+          <v-row>          
+            <v-col cols="11">
+              <v-textarea class="no-resize" v-model="comment" variant="outlined" placeholder="댓글을 작성해 보세요."></v-textarea>
+            </v-col>      
+          </v-row>
+
       </v-container>
     </v-main>
   </v-app>
@@ -334,4 +347,9 @@ export default {
   #content {
     white-space: pre-line;
   }
+
+  .no-resize ::-webkit-resizer {
+  display: none;
+  resize: none;
+}
 </style>
