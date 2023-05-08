@@ -161,19 +161,22 @@
               </v-row>
             </div>
           </v-col>
-          <v-col cols="auto" align="end" >            
-            <v-row align="end">            
-              <v-img @click="copyUrl" class="ml-5" width="23" height="23" src="../img/link_copy.png" :style="{ cursor: 'pointer' }"></v-img>
-              <v-img class="ml-5" width="23" height="23" src="../img/scrap_default.png" :style="{ cursor: 'pointer' }"></v-img>
+          <v-col cols="auto" align="end">
+            <v-row align="end">
+              <v-img @click="copyUrl" class="ml-5" width="23" height="23" src="../img/link_copy.png"
+                :style="{ cursor: 'pointer' }"></v-img>
+              <v-img class="ml-5" width="23" height="23" src="../img/scrap_default.png"
+                :style="{ cursor: 'pointer' }"></v-img>
             </v-row>
           </v-col>
         </v-row>
         <v-row align="end">
           <v-col cols="10">
             <div class="text-h4">{{ Board.title }}</div>
-          </v-col>          
-          <v-col align="end">            
-              <div>{{ $filter.formatYear(Board.createdDate) }}-{{ $filter.formatDate(Board.createdDate) }} {{$filter.formatTime(Board.createdDate) }}</div>            
+          </v-col>
+          <v-col align="end">
+            <div>{{ $filter.formatYear(Board.createdDate) }}-{{ $filter.formatDate(Board.createdDate) }}
+              {{ $filter.formatTime(Board.createdDate) }}</div>
           </v-col>
         </v-row>
         <v-spacer></v-spacer>
@@ -182,18 +185,19 @@
             <div>작성자 : {{ Board.nickname }}</div>
           </v-col>
           <v-col cols="9" align="end">
-            <div style="font-size:14px">조회수 : {{ Board.views }}&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;추천수 : {{ Board.recommendCount }}&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; 댓글수 : {{ Board.commentCount }}</div>
+            <div style="font-size:14px">조회수 : {{ Board.views }}&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;추천수 : {{
+              Board.recommendCount }}&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; 댓글수 : {{ Board.commentCount }}</div>
           </v-col>
         </v-row>
 
-        <v-divider :thickness="1" class="border-opacity-25 mt-7" length="1180"></v-divider>        
+        <v-divider :thickness="1" class="border-opacity-25 mt-7" length="1180"></v-divider>
 
         <v-row>
           <v-col>
             <div v-for="(imageUrl, index) in imageUrls" :key="index">
               <v-row>
                 <v-col class="text-center">
-                  <img :src="imageUrl" alt="image" style="max-width: 100%;"/>
+                  <img :src="imageUrl" alt="image" style="max-width: 100%;" />
                 </v-col>
               </v-row>
             </div>
@@ -207,39 +211,168 @@
         <v-row class="mt-15" align="center">
           <v-col cols="auto" class="ml-3">
             <v-row>
-              <v-img src="../img/post_recommend_default.png" width="30" height="30"></v-img>                                    
+              <v-img src="../img/post_recommend_default.png" width="30" height="30"></v-img>
               <div class="ml-2 mt-1" style="font-size:18px;">{{ Board.recommendCount }}</div>
-            </v-row>          
-          </v-col>          
+            </v-row>
+          </v-col>
           <v-col cols="auto" class="ml-5">
             <v-row>
-              <v-img src="../img/post_comment.png" width="30" height="30"></v-img>                                    
+              <v-img src="../img/post_comment.png" width="30" height="30"></v-img>
               <div class="ml-2 mt-1" style="font-size:18px;">{{ Board.commentCount }}</div>
-            </v-row>          
-          </v-col>    
+            </v-row>
+          </v-col>
           <v-col cols="auto" class="ml-auto">
-            <v-img src="../img/post_report_default.png" width="35" height="35"></v-img>                                    
-          </v-col>                               
+            <v-img src="../img/post_report_default.png" width="35" height="35"></v-img>
+          </v-col>
         </v-row>
 
-        <v-divider :thickness="1" class="border-opacity-25 my-7" length="1180"></v-divider>        
-        
+        <v-divider :thickness="1" class="border-opacity-25 my-7" length="1180"></v-divider>
+
         <v-row>
           <v-col>
             <div style="font-size:16; font-weight:bold">댓글수 {{ Board.commentCount }}개</div>
           </v-col>
         </v-row>
 
-          <v-row>          
-            <v-col cols="11">
-              <v-textarea class="no-resize" v-model="comment" variant="outlined" placeholder="댓글을 작성해 보세요."></v-textarea>
-            </v-col>      
-          </v-row>
+        <v-row>
+          <v-col cols="11">
+            <v-textarea rows="2" class="no-resize" v-model="comment" variant="outlined"
+              placeholder="댓글을 작성해 보세요."></v-textarea>
+          </v-col>
+          <v-col>
+            <v-btn variant="outlined" style="height:80px; width:75px; color:#ADADAD">등록</v-btn>
+          </v-col>
+        </v-row>
 
+        <v-row>
+          <v-col cols="auto" class="mb-3">
+            <v-row>
+              <v-img class="ml-3" src="../img/bestCommend.png" width="30" height="30"></v-img>
+              <div class="mt-1 ml-1" style="font-size:16; font-weight:bold">베스트댓글</div>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-row class="mb-5">
+          <v-col>
+            <v-sheet class="text-black" color="#F6FAF4">
+              <v-row>
+                <v-col cols="auto" style="color:gray">
+                  <p :key="index" v-for="(bestComment, index) in Board.bestComment">
+                    &nbsp;{{ bestComment.nickname }}
+                  </p>
+                </v-col>
+                <v-col style="color:gray" cols="auto">
+                  <div :key="index" v-for="(bestComment, index) in Board.bestComment">
+                    {{ $filter.formatDate(bestComment.createdDate) }} {{ $filter.formatTime(bestComment.createdDate) }}
+                  </div>
+                </v-col>
+                <v-col style="color:gray" cols="auto">
+                  <div :key="index" v-for="(bestComment, index) in Board.bestComment">
+                    추천수 {{ bestComment.recommendCount }}
+                  </div>
+                </v-col>
+                <v-col cols="auto" class="ml-auto mr-2">
+                  <v-row>
+                    <v-img class="mt-3 mr-3" src="../img/comment_recommend.png" width="20" height="20"></v-img>
+                  </v-row>
+                </v-col>
+              </v-row>
+              <v-row class="mt-1">
+                <v-col>
+                  <p :key="index" v-for="(bestComment, index) in Board.bestComment">
+                    &nbsp;{{ bestComment.content }}
+                  </p>
+                </v-col>
+              </v-row>
+            </v-sheet>
+          </v-col>
+        </v-row>
+
+        <div>
+          <div v-for="comment in Board.comments" :key="comment.commentId">
+            <div v-if="comment.parentId === null">
+              <v-divider :thickness="1" class="border-opacity-25 my-3" length="1180"
+                style="border-color:lightslategray"></v-divider>
+              <v-row>
+                <v-col cols="auto" style="color:gray">
+                  &nbsp;{{ comment.nickname }}
+                </v-col>
+                <v-col style="color:gray" cols="auto">
+                  {{ $filter.formatDate(comment.createdDate) }} {{ $filter.formatTime(comment.createdDate) }}
+                </v-col>
+                <v-col style="color:gray" cols="auto">
+                  <div style="color:gray">추천수 {{ comment.recommendCount }}</div>
+                </v-col>
+                <v-col cols="auto" class="ml-auto">
+                  <v-row>
+                    <v-img class="mt-3 mr-5" src="../img/comment_recommend.png" width="20" height="20"></v-img>
+                    <v-img @click="toggleReply(comment.commentId)" class="mt-3 mr-5" src="../img/recomment.png" width="21"
+                      height="21" :style="{ cursor: 'pointer' }"></v-img>
+                  </v-row>
+                </v-col>
+              </v-row>
+              <v-row class="mt-1">
+                <v-col>
+                  &nbsp;{{ comment.content }}
+                </v-col>
+              </v-row>
+            </div>
+            <!-- 댓글에 대한 대댓글 표시 -->
+            <div v-for="reply in getReplies(comment.commentId)" :key="reply.commentId">
+              <v-sheet class="text-black" color="#F7F7F7" :width="1170">
+                <v-divider :thickness="1" class="border-opacity-25 my-3" length="1180"
+                  style="border-color:lightslategray;"></v-divider>
+                <v-row>
+                  <v-col cols="auto" style="color:gray">
+                    &emsp;&emsp;ㄴ{{ reply.nickname }}
+                  </v-col>
+                  <v-col style="color:gray" cols="auto">
+                    {{ $filter.formatDate(reply.createdDate) }} {{ $filter.formatTime(reply.createdDate) }}
+                  </v-col>
+                  <v-col style="color:gray" cols="auto">
+                    <div style="color:gray">추천수 {{ reply.recommendCount }}</div>
+                  </v-col>
+                  <v-col cols="auto" class="ml-auto">
+                    <v-row>
+                      <v-img class="mt-3 mr-5" src="../img/comment_recommend.png" width="20" height="20"></v-img>
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <v-row class="mt-1">
+                  <v-col>
+                    &emsp;&emsp;{{ reply.content }}
+                  </v-col>
+                </v-row>
+              </v-sheet>
+            </div>
+
+            <!-- <div v-if="recommendCheck === true">
+              <v-row class="mt-10">
+                <v-col cols="11">
+                  <v-textarea rows="1" class="no-resize" variant="outlined" placeholder="대댓글을 작성해 보세요."></v-textarea>
+                </v-col>
+                <v-col>
+                  <v-btn variant="outlined" style="height:57px; width:75px; color:#ADADAD">등록</v-btn>
+                </v-col>
+              </v-row>
+            </div>
+          </div> -->
+            <div v-if="showReply[comment.commentId]">
+              <v-row class="mt-10">
+                <v-col cols="11">
+                  <v-textarea rows="1" class="no-resize" variant="outlined" placeholder="대댓글을 작성해 보세요."></v-textarea>
+                </v-col>
+                <v-col>
+                  <v-btn variant="outlined" style="height:57px; width:75px; color:#ADADAD">등록</v-btn>
+                </v-col>
+              </v-row>
+            </div>
+          </div>
+        </div>
       </v-container>
     </v-main>
   </v-app>
-  
+
   <!--푸터-->
   <v-footer border>
     <v-container>
@@ -286,8 +419,11 @@ export default {
       link: ['메인', '게시판', '자취생활'],
 
       Board: [],
+      bestComment: [],
       imageUrls: [],
+      recommendCheck: false,
       showCopyText: false,
+      showReply: {},
       independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
       regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
       regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
@@ -295,16 +431,17 @@ export default {
   },
   methods: {
     read() {
-      const path = this.$route.path;
-      const pathSegments = path.split('/'); 
-      const postId = parseInt(pathSegments[2]);
+      //const path = this.$route.path;
+      //const pathSegments = path.split('/'); 
+      //const postId = parseInt(pathSegments[2]);
 
-      const url = `/posts/${postId}`;
-      //const url = 'https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/post'
+      //const url = `/posts/${postId}`;
+      const url = 'https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/post'
 
       this.$axios.get(url)
         .then((res) => {
           this.Board = res.data.data
+          this.bestComment = res.data.data.bestComment
           console.log(res.data)
 
           const base64ImageDataArray = res.data.data.files;
@@ -335,6 +472,20 @@ export default {
       tempInput.select();
       document.execCommand('copy');
       document.body.removeChild(tempInput);
+    },
+    getReplies(parentId) {
+      // parentId와 일치하는 대댓글만 반환
+      return this.Board.comments.filter(comment => comment.parentId === parentId);
+    },
+    recommend() {
+      this.recommendCheck = !this.recommendCheck;
+    },
+    toggleReply(commentId) {
+      if (this.showReply[commentId] === undefined) {
+        this.showReply = Object.assign({}, this.showReply, { [commentId]: true });
+      } else {
+        this.showReply = Object.assign({}, this.showReply, { [commentId]: !this.showReply[commentId] });
+      }
     }
   },
   mounted() {
@@ -344,11 +495,11 @@ export default {
 </script>
 
 <style>
-  #content {
-    white-space: pre-line;
-  }
+#content {
+  white-space: pre-line;
+}
 
-  .no-resize ::-webkit-resizer {
+.no-resize ::-webkit-resizer {
   display: none;
   resize: none;
 }
