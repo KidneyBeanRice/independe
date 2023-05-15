@@ -374,7 +374,7 @@
   </v-app>
 
   <!--푸터-->
-  <v-footer border>
+  <v-footer border class="mt-10">
     <v-container>
       <v-row>
         <v-col cols="3"></v-col>

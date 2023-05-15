@@ -5,6 +5,7 @@ import IndependentView from '../views/IndependentView.vue'
 import PostWriteView from '../views/PostWriteView.vue'
 import PostView from '../views/PostView.vue'
 import LoginView from '../views/LoginView.vue'
+import SignUpView from '../views/SignUpView.vue'
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
     name: 'LoginView',
     component: LoginView
   },
+  {
+    path: '/signup',
+    name: 'SignUpView',
+    component: SignUpView
+  }
 ]
 
 const router = createRouter({
