@@ -130,7 +130,7 @@
         </v-main>
     </v-app>
 
-    <!--푸터-->
+    <!--푸터--> 
     <v-footer border class="mt-5">
         <v-container>
             <v-row>
