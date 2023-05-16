@@ -122,9 +122,9 @@
         </v-container>
     </v-app-bar>
 
-    <v-app>
+    <v-app> 
         <v-main>
-            <v-container>
+            <v-container> 
 
             </v-container>
         </v-main>
