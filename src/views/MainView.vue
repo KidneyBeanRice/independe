@@ -1,0 +1,619 @@
+<template>
+  <!--시스템 바-->
+  <v-app-bar height="80" :elevation="1">
+    <v-container>
+      <v-row align="center">
+        <v-col cols="auto">
+          <router-link to="/"><v-img :width="220" src="../img/logo.png"></v-img></router-link>
+        </v-col>
+        <v-col cols="auto">
+          <v-tabs color="#5E913B" v-model="active_tab">
+            <router-link to="/" style="text-decoration: none; color:black;">
+              <v-tab @click="$store.state.myGlobalVariable = 0">
+                <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
+              </v-tab>
+            </router-link>
+            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="$store.state.boardCheck = 0 ">
+              <v-menu open-on-hover>
+                <template v-slot:activator="{ props }">
+                  <v-tab v-bind="props">
+                    <p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p>
+                  </v-tab>
+                </template>
+                <v-list>
+                  <v-list-item align="center">
+                    <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="region_all">
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 0 ">자유</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/board/SEOUL/TALK" style="text-decoration: none; color:black;" @click="region_seoul">
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 1">서울</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/board/PUSAN/TALK" style="text-decoration: none; color:black;" @click="region_busan">
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 2">부산</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/board/ULSAN/TALK" style="text-decoration: none; color:black;" @click="region_ulsan">
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 3">울산</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/board/KEYNONGNAM/TALK" style="text-decoration: none; color:black;" @click="region_kyeongnam">
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 4">경남</v-list-item-title>
+                    </router-link>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </router-link>
+            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="$store.state.independentCheck = 0">
+              <v-menu open-on-hover>
+                <template v-slot:activator="{ props }">
+                  <v-tab v-bind="props">
+                    <p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p>
+                  </v-tab>
+                </template>
+                <v-list>
+                  <v-list-item align="center">
+                    <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="independent_clean">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 0 ">청소</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/independent/WASH" style="text-decoration: none; color:black;" @click="independent_wash">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 1">세탁</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/independent/COOK" style="text-decoration: none; color:black;" @click="independent_cook">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 2">요리</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/independent/HEALTH" style="text-decoration: none; color:black;" @click="independent_health">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 3">건강</v-list-item-title>
+                    </router-link>
+                    <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
+                    <router-link to="/independent/ETC" style="text-decoration: none; color:black;" @click="independent_etc">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 4">기타</v-list-item-title>
+                    </router-link>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </router-link>
+          </v-tabs>
+        </v-col>
+        <v-col cols="3" class="ml-11">
+          <v-card-text>
+            <v-text-field :loading="error" density="compact" variant="outlined" label="통합검색"
+              append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="onClick"></v-text-field>
+          </v-card-text>
+        </v-col>
+        <v-col cols="1">
+          <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
+            <div class="text-white">로그인</div>
+          </v-btn>
+        </v-col>
+        <v-col cols="1">
+          <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
+            <div class="text-white">회원가입</div>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-app-bar>
+
+  <v-app>
+    <v-main>
+      <v-container>
+        <!-- 오늘의 멘트 -->
+        <v-row>
+          <v-col cols="12" class="my-1">
+            <h1 class="text-center my-2 font-weight-bold" style="color:#5E913B">Daily TIP</h1>
+            <v-card variant="outlined" style="border-width:2px;" class="rounded-pill">
+              <v-card-text>
+                <div align="center" class="font-weight-bold text-h6">{{ todayMent }}</div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <v-row class="my-10">
+          <!--인기 게시판-->
+          <v-col cols="auto">
+            <v-row>
+              <v-col cols="auto">
+                <v-img :width="35" height="45" src="../img/main_hot_board.png"></v-img>
+              </v-col>
+              <h2 class="font-weight-bold my-5" style="color:#5E913B">HOT 게시판</h2>
+            </v-row>
+
+            <v-sheet :height="405" :width="850" class="my-2">
+              <v-divider :thickness="2" class="border-opacity-25 mb-2" length="810"></v-divider>
+              <v-row>
+                <v-col cols="auto">
+                  <v-list v-for="popularBoard in popularBoard" :key="popularBoard">
+                    <div v-if="popularBoard.independentPostType === null">
+                      <router-link :to="{ name: 'BoardView', params: { regionType: popularBoard.regionTypeEn, regionPostType: popularBoard.regionPostTypeEn }}"  style="text-decoration: none;">
+                        <p @click="$store.state.boardCheck = regionsAPI.indexOf(popularBoard.regionTypeEn), $store.state.categoryCheck = regionCategoryAPI.indexOf(popularBoard.regionPostTypeEn)" class="text-grey-darken-1">[{{ popularBoard.regionType }}·{{ popularBoard.regionPostType }}]</p>
+                      </router-link>
+                    </div>
+                    <div v-else>
+                      <router-link :to="{ name: 'IndependentView', params: { independentType: popularBoard.independentPostTypeEn }}" style="text-decoration: none;">
+                        <p @click="$store.state.independentCheck = independentsAPI.indexOf(popularBoard.independentPostTypeEn)" class="text-grey-darken-1">[자취·{{ popularBoard.independentPostType }}]</p>
+                      </router-link>
+                    </div>
+                  </v-list>
+                </v-col>
+                <v-col cols="6">
+                  <v-list v-for="popularBoard in popularBoard" :key="popularBoard">
+                    <div v-if="popularBoard.title.length <= 23">
+                      <v-img style="float:left" v-if="popularBoard.picture === true" :width="15"
+                        src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                      <router-link :to="{ name: 'PostView', params: { postId: popularBoard.postId }}" style="text-decoration: none; color:black;">
+                        {{ popularBoard.title }}
+                      </router-link>
+                    </div>
+                    <div v-else>
+                      <v-img style="float:left" v-if="popularBoard.picture === true" :width="15"
+                        src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                      <router-link :to="{ name: 'PostView', params: { postId: popularBoard.postId }}" style="text-decoration: none; color:black;">
+                        <p>{{ popularBoard.title.substr(0, 23) }}...</p>
+                      </router-link>
+                    </div>
+                  </v-list>
+                </v-col>
+                <v-col cols="4" class="mx-4">
+                  <v-list v-for="popularBoard in popularBoard" :key="popularBoard" style="overflow:hidden">
+                    <v-row>
+                      <v-col cols="4">
+                        <div>
+                          <v-img style="float:left;" :width="15" src="../img/commentIcon.png" class="my-1 mx-1"></v-img>
+                          <p class="text-grey-darken-1 mx-1">{{ popularBoard.commentCount }}</p>
+                        </div>
+                      </v-col>
+                      <v-col cols="4">
+                        <div>
+                          <v-img style="float:left" :width="15" src="../img/recommendIcon.png" class="my-1 mx-1"></v-img>
+                          <p class="text-grey-darken-1 mx-1">{{ popularBoard.recommendCount }}</p>
+                        </div>
+                      </v-col>
+                      <v-col cols="4">
+                        <div>
+                          <v-img style="float:left" :width="15" src="../img/viewIcon.png" class="my-1 mx-1"></v-img>
+                          <p class="text-grey-darken-1 mx-1">{{ popularBoard.views }}</p>
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-list>
+                </v-col>
+              </v-row>
+            </v-sheet>
+          </v-col>
+
+          <!--실시간 검색어-->
+          <v-col cols="auto">
+            <v-sheet :height="430" :width="290" color="grey-lighten-5" class="mt-13">
+              <v-row>
+                <v-col cols="1"></v-col>
+                <p class="font-weight-black pt-2">실시간 인기 검색어</p>
+              </v-row>
+              <v-row class="mx-1">
+                <v-col cols="auto">
+                  <v-list v-for="(topSearch, index) in topSearch" :key="index" style="background-color: #FAFAFA;">
+                    <p class="text-subtitle-2">{{ index + 1 }}</p>
+                  </v-list>
+                </v-col>
+                <v-col cols="7">
+                  <v-list v-for="topSearch in topSearch" :key="topSearch"
+                    style="background-color: #FAFAFA; text-emphasis-color: #FFFFFF;">
+                    <div v-if="topSearch.keywordName.length <= 9">
+                      <p class="text-subtitle-2">{{ topSearch.keywordName }}</p>
+                    </div>
+                    <div v-else>
+                      <p class="text-subtitle-2">{{ topSearch.keywordName.substr(0, 9) }}...</p>
+                    </div>
+                  </v-list>
+                </v-col>
+                <v-col cols="3">
+                  <v-list v-for="(topSearch, index) in topSearch" :key="index" style="background-color: #FAFAFA;">
+                    <div>
+                      <div v-if="topSearch.keywordCount >= 10000">
+                        <div v-if="index === 0">
+                          <p class="text-subtitle-2" style="color:#D50000;">{{
+                            topSearch.keywordCount.toPrecision(3) / 1000 }}K</p>
+                        </div>
+                        <div v-else>
+                          <p class="text-subtitle-2">{{ topSearch.keywordCount.toPrecision(3) / 1000 }}K</p>
+                        </div>
+                      </div>
+                      <div v-else>
+                        <div v-if="index === 0">
+                          <p class="text-subtitle-2" style="color:#D50000;">{{ topSearch.keywordCount }}</p>
+                        </div>
+                        <div v-else>
+                          <p class="text-subtitle-2">{{ topSearch.keywordCount }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </v-list>
+                </v-col>
+              </v-row>
+
+            </v-sheet>
+          </v-col>
+        </v-row>
+
+        <!--실시간 자취 게시판-->
+        <v-row class="mx-1">
+          <v-row>
+            <v-col cols="11">
+              <v-row>
+                <v-col cols="auto">
+                  <v-img :width="35" height="45" src="../img/main_independent_board.png"></v-img>
+                </v-col>
+                <h2 class="font-weight-bold my-5" style="color:#5E913B">인기 자취 정보</h2>
+              </v-row>
+            </v-col>
+            <v-col cols="1">
+              <router-link :to="{ name: 'IndependentView', params: { independentType: 'CLEAN'}}" style="text-decoration: none;">
+                <div @click="$store.state.independentCheck = 0" class="text-grey-darken-1 mt-5 text-subtitle-2">더보기 ></div>
+              </router-link>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-sheet :height="220" :width="1160" class="mx-2">
+              <v-divider :thickness="2" class="border-opacity-25 mb-2" length="1160"></v-divider>
+              <v-row>
+                <v-col cols="6">
+                  <v-row>
+                    <v-col cols="auto">
+                      <v-list v-for="independentBoard in independentBoard.slice(0, 5)" :key="independentBoard">
+                        <router-link :to="{ name: 'IndependentView', params: { independentType: independentBoard.independentPostTypeEn }}" style="text-decoration: none;">
+                          <p @click="$store.state.independentCheck = independentsAPI.indexOf(independentBoard.independentPostTypeEn)" class="text-grey-darken-1">[{{ independentBoard.independentPostType }}]</p>
+                        </router-link>
+                      </v-list>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-list v-for="independentBoard in independentBoard.slice(0, 5)" :key="independentBoard">
+                        <div v-if="independentBoard.title.length <= 15">
+                          <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
+                            src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                          <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}" style="text-decoration: none; color:black;">
+                            {{ independentBoard.title }}
+                          </router-link>
+                        </div>
+                        <div v-else>
+                          <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
+                            src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                            <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}" style="text-decoration: none; color:black;">
+                          <p>{{ independentBoard.title.substr(0, 15) }}...</p>
+                        </router-link>
+                        </div>
+                      </v-list>
+                    </v-col>
+                    <v-col cols="4" class="mx-4">
+                      <v-list v-for="independentBoard in independentBoard.slice(0, 5)" :key="independentBoard"
+                        style="overflow:hidden">
+                        <v-row>
+                          <v-col cols="6">
+                            <div>
+                              <v-img style="float:left;" :width="15" src="../img/commentIcon.png"
+                                class="my-1 mx-1"></v-img>
+                              <p class="text-grey-darken-1 mx-1">{{ independentBoard.commentCount }}</p>
+                            </div>
+                          </v-col>
+                          <v-col cols="6">
+                            <div>
+                              <v-img style="float:left" :width="15" src="../img/recommendIcon.png"
+                                class="my-1 mx-1"></v-img>
+                              <p class="text-grey-darken-1 mx-1">{{ independentBoard.recommendCount }}</p>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-list>
+                    </v-col>
+                  </v-row>
+                </v-col>
+                <v-col cols="6">
+                  <v-row>
+                    <v-col cols="auto">
+                      <v-list v-for="independentBoard in independentBoard.slice(5, 10)" :key="independentBoard">
+                        <router-link :to="{ name: 'IndependentView', params: { independentType: independentBoard.independentPostTypeEn }}" style="text-decoration: none;">
+                          <p @click="$store.state.independentCheck = independentsAPI.indexOf(independentBoard.independentPostTypeEn)" class="text-grey-darken-1">[{{ independentBoard.independentPostType }}]</p>
+                        </router-link>
+                      </v-list>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-list v-for="independentBoard in independentBoard.slice(5, 10)" :key="independentBoard">
+                        <div v-if="independentBoard.title.length <= 15">
+                          <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
+                            src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                            <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}" style="text-decoration: none; color:black;">
+                          {{ independentBoard.title }}
+                        </router-link>
+                        </div>
+                        <div v-else>
+                          <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
+                            src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                            <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}" style="text-decoration: none; color:black;">
+                          <p>{{ independentBoard.title.substr(0, 15) }}...</p>
+                        </router-link>
+                        </div>
+                      </v-list>
+                    </v-col>
+                    <v-col cols="4" class="mx-4">
+                      <v-list v-for="independentBoard in independentBoard.slice(5, 10)" :key="independentBoard"
+                        style="overflow:hidden">
+                        <v-row>
+                          <v-col cols="6">
+                            <div>
+                              <v-img style="float:left;" :width="15" src="../img/commentIcon.png"
+                                class="my-1 mx-1"></v-img>
+                              <p class="text-grey-darken-1 mx-1">{{ independentBoard.commentCount }}</p>
+                            </div>
+                          </v-col>
+                          <v-col cols="6">
+                            <div>
+                              <v-img style="float:left" :width="15" src="../img/recommendIcon.png"
+                                class="my-1 mx-1"></v-img>
+                              <p class="text-grey-darken-1 mx-1">{{ independentBoard.recommendCount }}</p>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-list>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+            </v-sheet>
+          </v-row>
+        </v-row>
+
+        <v-row class="my-15">
+          <!--실시간 전체 게시판-->
+          <v-col cols="6">
+            <v-row>
+              <v-col cols="10">
+                <v-row>
+                  <v-col cols="auto">
+                    <v-img :width="35" height="45" src="../img/main_all_board.png"></v-img>
+                  </v-col>
+                  <h2 class="font-weight-bold my-5" style="color:#5E913B">인기 전체 게시판</h2>
+                </v-row>
+              </v-col>
+              <v-col cols="2">
+                <router-link :to="{ name: 'BoardView', params: { regionType: 'ALL', regionPostType: 'FREE' }}" style="text-decoration: none;">
+                  <div @click="$store.state.boardCheck = 0, $store.state.categoryCheck = 0" class="mt-5 text-subtitle-2 text-grey-darken-1">더보기 ></div>
+                </router-link>
+              </v-col>
+              <v-divider :thickness="2" class="border-opacity-25 mb-2 mx-3" length="560"></v-divider>
+            </v-row>
+            <v-sheet :height="220" :width="580">
+              <v-row>
+                <v-col cols="auto">
+                  <v-list v-for="allBoard in allBoard" :key="allBoard">
+                    <router-link :to="{ name: 'BoardView', params: { regionType: 'ALL', regionPostType: 'FREE' }}"  style="text-decoration: none;">                                            
+                    <p @click="$store.state.boardCheck = 0, $store.state.categoryCheck = 0" class="text-grey-darken-1">[자유]</p>
+                  </router-link>
+                  </v-list>
+                </v-col>
+                <v-col cols="6">
+                  <v-list v-for="allBoard in allBoard" :key="allBoard">
+                    <div v-if="allBoard.title.length <= 15">
+                      <v-img style="float:left" v-if="allBoard.picture === true" :width="15"
+                        src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                        <router-link :to="{ name: 'PostView', params: { postId: allBoard.postId }}" style="text-decoration: none; color:black;">
+                        {{ allBoard.title }}
+                      </router-link>
+                    </div>                                                                  
+                    <div v-else>
+                      <v-img style="float:left" v-if="allBoard.picture === true" :width="15"
+                        src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                        <router-link :to="{ name: 'PostView', params: { postId: allBoard.postId }}" style="text-decoration: none; color:black;">
+                      <p>{{ allBoard.title.substr(0, 15) }}...</p>
+                    </router-link>
+                    </div>
+                  </v-list>
+                </v-col>
+                <v-col cols="4" class="mx-4">
+                  <v-list v-for="allBoard in allBoard" :key="allBoard" style="overflow:hidden">
+                    <v-row>
+                      <v-col cols="6">
+                        <div>
+                          <v-img style="float:left;" :width="15" src="../img/commentIcon.png" class="my-1 mx-1"></v-img>
+                          <p class="text-grey-darken-1 mx-1">{{ allBoard.commentCount }}</p>
+                        </div>
+                      </v-col>
+                      <v-col cols="6">
+                        <div>
+                          <v-img style="float:left" :width="15" src="../img/recommendIcon.png" class="my-1 mx-1"></v-img>
+                          <p class="text-grey-darken-1 mx-1">{{ allBoard.recommendCount }}</p>
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-list>
+                </v-col>
+              </v-row>
+            </v-sheet>
+          </v-col>
+
+          <!--실시간 지역 게시판-->
+          <v-col cols="6">
+            <v-row>
+              <v-col cols="10">
+                <v-row>
+                  <v-col cols="auto">
+                    <v-img :width="35" height="45" src="../img/main_region_board.png"></v-img>
+                  </v-col>
+                  <h2 class="font-weight-bold my-5" style="color:#5E913B">인기 지역 게시판</h2>
+                </v-row>
+              </v-col>
+              <v-col cols="2">
+                <router-link :to="{ name: 'BoardView', params: { regionType: 'SEOUL', regionPostType: 'TALK' }}"  style="text-decoration: none;">
+                  <div @click="$store.state.boardCheck = 1, $store.state.categoryCheck = 1" class="mt-5 text-subtitle-2 text-grey-darken-1">더보기 ></div>
+                </router-link>
+              </v-col>
+              <v-divider :thickness="2" class="border-opacity-25 mb-2 mx-3" length="560"></v-divider>
+            </v-row>
+            <v-sheet :height="220" :width="580">
+              <v-row>
+                <v-col cols="auto">
+                  <v-list v-for="regionBoard in regionBoard" :key="regionBoard">
+                    <router-link :to="{ name: 'BoardView', params: { regionType: regionBoard.regionTypeEn, regionPostType: regionBoard.regionPostTypeEn }}"  style="text-decoration: none;">
+                        <p @click="$store.state.boardCheck = regionsAPI.indexOf(regionBoard.regionTypeEn), $store.state.categoryCheck = regionCategoryAPI.indexOf(regionBoard.regionPostTypeEn)" class="text-grey-darken-1">[{{ regionBoard.regionType }}·{{ regionBoard.regionPostType }}]</p>
+                      </router-link>                    
+                  </v-list>
+                </v-col>
+                <v-col cols="5">
+                  <v-list v-for="regionBoard in regionBoard" :key="regionBoard">
+                    <div v-if="regionBoard.title.length <= 12">
+                      <v-img style="float:left" v-if="regionBoard.picture === true" :width="15"
+                        src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                        <router-link :to="{ name: 'PostView', params: { postId: regionBoard.postId }}" style="text-decoration: none; color:black;">
+                        {{ regionBoard.title }}
+                      </router-link>
+                    </div>
+                    <div v-else>
+                      <v-img style="float:left" v-if="regionBoard.picture === true" :width="15"
+                        src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
+                        <router-link :to="{ name: 'PostView', params: { postId: regionBoard.postId }}" style="text-decoration: none; color:black;">
+                      <p>{{ regionBoard.title.substr(0, 12) }}...</p>
+                    </router-link>
+                    </div>
+                  </v-list>
+                </v-col>
+                <v-col cols="4" class="ml-6">
+                  <v-list v-for="regionBoard in regionBoard" :key="regionBoard" style="overflow:hidden">
+                    <v-row>
+                      <v-col cols="6">
+                        <div>
+                          <v-img style="float:left;" :width="15" src="../img/commentIcon.png" class="my-1 mx-1"></v-img>
+                          <p class="text-grey-darken-1 mx-1">{{ regionBoard.commentCount }}</p>
+                        </div>
+                      </v-col>
+                      <v-col cols="6">
+                        <div>
+                          <v-img style="float:left" :width="15" src="../img/recommendIcon.png" class="my-1 mx-1"></v-img>
+                          <p class="text-grey-darken-1 mx-1">{{ regionBoard.recommendCount }}</p>
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-list>
+                </v-col>
+              </v-row>
+            </v-sheet>
+          </v-col>
+        </v-row>
+
+        <!--자취 정보 영상-->
+        <v-row class="my-15">
+          <v-row class="mx-1">
+            <v-col cols="10">
+              <p class="font-weight-bold text-h4" style="color:#5E913B">자취 정보 영상</p>
+            </v-col>
+            <v-col cols="2">
+              <div class="mt-5 text-subtitle-2 mr-4" align="end">더 많은 영상보기</div>
+            </v-col>
+          </v-row>
+          <v-row class="px-3">
+            <div v-for="video in video" :key="video" class="mx-1">
+              <v-col cols="auto">
+                <iframe width="360" height="195" :src="video.videoUrl" title="YouTube video player" frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
+                <div v-if="video.title.length <= 20">
+                  <p class="my-1 font-weight-bold" align="center">{{ video.title }}</p>
+                </div>
+                <div v-else>
+                  <p class="my-1 font-weight-bold" align="center">{{ video.title.substr(0, 20) }}...</p>
+                </div>
+              </v-col>
+            </div>
+          </v-row>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
+
+  <!--푸터-->
+  <v-footer border>
+    <v-container>
+      <v-row>
+        <v-col cols="3"></v-col>
+        <v-col cols="6">
+          <v-sheet height="80" width="650" align="center">
+            <v-row justify="center" class="text-grey-lighten-1">
+              <v-col cols="auto">
+                <p>서비스 소개</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>개인정보 처리방침</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>이용약관</p>
+              </v-col>
+            </v-row>
+            <v-row class="text-grey-lighten-2" style="font-size:12px" justify="center">
+              <v-col cols="auto">
+                <p>[팀] 인디펜더</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>최준혁 이용희 최성우</p>
+              </v-col>
+              <v-col cols="auto">
+                <p>chlwnsgur1214@naver.com</p>
+              </v-col>
+            </v-row>
+          </v-sheet>
+        </v-col>
+        <v-col cols="3"> </v-col>
+      </v-row>
+    </v-container>
+  </v-footer>
+</template>
+
+<script>
+export default {
+  name: 'MainView',
+  data() {
+    return {
+      active_tab: 0,
+      link: ['메인', '게시판', '자취생활'],
+
+      todayMent: [],
+      popularBoard: [],
+      independentBoard: [],
+      allBoard: [],
+      regionBoard: [],
+      topSearch: [],
+      video: [],
+
+      independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
+      regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
+      regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
+    }
+  },
+  methods: {
+    read() {            
+      this.$axios.get('/posts/main'/*'https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/posts/main'*/)
+        .then((res) => {
+          this.todayMent = res.data.data.todayMent
+          this.popularBoard = res.data.data.popularPostDtos
+          this.independentBoard = res.data.data.popularIndependentPostsDtos
+          this.allBoard = res.data.data.regionAllPostDtos
+          this.regionBoard = res.data.data.regionNotAllPostDtos
+          this.topSearch = res.data.data.keywordDtos
+          this.video = res.data.data.videoMainDtos
+        })
+        .catch(err => console.error(err))
+    },
+  },
+  mounted() {
+    this.read();
+  },
+  create() {
+    let token = this.$store.getters.getToken;
+    if (token.access == null && token.refresh == null) { //다 없으면 로그인 페이지로
+      //이미 로그인 페이지가 떠있는 상태에서 새로 고침하면 중복 에러 떠서 이렇게 처리함
+      this.$router.push({name: 'Login'}).catch(() => {}); 
+    }
+  }
+}   
+</script>
