@@ -22,7 +22,7 @@
                                     </v-tab>
                                 </template>
                                 <v-list>
-                                    <v-list-item align="center">
+                                    <v-list-item align="center"> 
                                         <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;"
                                             @click="region_all">
                                             <v-list-item-title class="my-2"
@@ -122,9 +122,9 @@
         </v-container>
     </v-app-bar>
 
-    <v-app> 
+    <v-app>
         <v-main>
-            <v-container> 
+            <v-container>
 
             </v-container>
         </v-main>
@@ -173,7 +173,7 @@ export default {
   data() {
     return {
       active_tab: 0,
-      link: ['메인', '게시판', '자취생활'],dddd
+      link: ['메인', '게시판', '자취생활'],
     }
   },
   methods: {
