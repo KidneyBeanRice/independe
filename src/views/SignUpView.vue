@@ -1,6 +1,6 @@
 <template>
     <!--시스템 바-->
-    <v-app-bar height="80" :elevation="1">
+    <!-- <v-app-bar height="80" :elevation="1">
         <v-container>
             <v-row align="center">
                 <v-col cols="auto">
@@ -120,7 +120,7 @@
                 </v-col>
             </v-row>
         </v-container>
-    </v-app-bar>
+    </v-app-bar> -->
 
     <v-app>
         <v-main>
@@ -129,10 +129,14 @@
                     <v-col cols="auto">
                         <v-img :width="45" :height="45" src="../img/signUp.png"></v-img>
                     </v-col>
-                    <h2 class="font-weight-bold mt-5" style="color:#5E913B">회원가입</h2>
+                    <h2 class="font-weight-bold mt-5" style="color:#5E913B">인디펜더 회원가입</h2>
                 </v-row>
 
-                <v-divider :thickness="1" class="border-opacity-25 my-5" length="1160"></v-divider>
+                <v-row>
+                    <v-col>
+                        <v-divider :thickness="1" class="border-opacity-25 my-5" ></v-divider>
+                    </v-col>
+                </v-row>
 
                 <v-row>
                     <v-col>
@@ -154,19 +158,112 @@
                     </v-col>
                 </v-row>
 
+                <v-row class="mt-3">
+                    <v-col cols="auto">
+                        <v-img :width="45" :height="45" src="../img/privacy.png"></v-img>
+                    </v-col>
+                    <h2 class="font-weight-bold mt-5" style="color:#5E913B">개인정보입력</h2>
+                </v-row>
+
+                <v-row class="mb-5">
+                    <v-col>
+                        <v-divider :thickness="1" class="border-opacity-25 my-5" ></v-divider>
+                    </v-col>
+                </v-row>
+
                 <v-row class="mt-5">
+                    <v-col cols="3"></v-col>
                     <v-col cols="1">
                         <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">아이디</div>
                     </v-col>
                     <v-col cols="4">
-                        <v-text-field class="no-resize" variant="underlined" ></v-text-field>
+                        <v-text-field class="no-resize" variant="underlined"></v-text-field>
                     </v-col>
                     <v-col cols="2">
                         <v-btn variant="flat" color="#898E93" class="mt-3 font-weight-bold">
                             <div class="text-white">중복확인</div>
                         </v-btn>
                     </v-col>
+                    <v-col cols="2"></v-col>
                 </v-row>
+
+                <v-row class="mt-5">
+                    <v-col cols="3"></v-col>
+                    <v-col cols="1">
+                        <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">비밀번호</div>
+                    </v-col>
+                    <v-col cols="4">
+                        <v-text-field class="no-resize" variant="underlined"></v-text-field>
+                    </v-col>                
+                    <v-col cols="2"></v-col>    
+                </v-row>
+
+                <v-row class="mt-5">
+                    <v-col cols="3"></v-col>
+                    <v-col cols="1">
+                        <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">비밀번호 확인</div>
+                    </v-col>
+                    <v-col cols="4">
+                        <v-text-field class="no-resize" variant="underlined"></v-text-field>
+                    </v-col>                
+                    <v-col cols="2"></v-col>    
+                </v-row>
+
+                <v-row class="mt-5">
+                    <v-col cols="3"></v-col>
+                    <v-col cols="1">
+                        <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">닉네임</div>
+                    </v-col>
+                    <v-col cols="4">
+                        <v-text-field class="no-resize" variant="underlined"></v-text-field>
+                    </v-col>
+                    <v-col cols="2">
+                        <v-btn variant="flat" color="#898E93" class="mt-3 font-weight-bold">
+                            <div class="text-white">중복확인</div>
+                        </v-btn>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                </v-row>
+
+                <v-row class="mt-5">
+                    <v-col cols="3"></v-col>
+                    <v-col cols="1">
+                        <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">이메일</div>
+                    </v-col>
+                    <v-col cols="4">
+                        <v-text-field class="no-resize" variant="underlined" ></v-text-field>
+                    </v-col>                
+                    <v-col cols="2"></v-col>    
+                </v-row>
+
+                <v-row class="mt-5">
+                    <v-col cols="3"></v-col>
+                    <v-col cols="1">
+                        <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">전화번호</div>
+                    </v-col>
+                    <v-col cols="4">
+                        <v-text-field class="no-resize" variant="underlined"></v-text-field>
+                    </v-col>                    
+                    <v-col cols="2"></v-col>
+                </v-row>
+
+                <v-row class="mt-15">
+                    <v-col>
+                        <v-divider :thickness="1" class="border-opacity-25 my-5" ></v-divider>
+                    </v-col>
+                </v-row>
+
+                <v-row justify="center" class="my-15">
+                    <v-col cols="12" align="center">
+                        <v-btn style="height:55px; width: 100px;" variant="flat" color="#5E913B" class="font-weight-bold">
+                            <div class="text-white" style="font-size:16px">생성</div>
+                        </v-btn>
+                        <v-btn style="height:55px; width: 100px;" class="ml-5 font-weight-bold">
+                            <div style="font-size:16px">취소</div>
+                        </v-btn>                        
+                    </v-col>
+                </v-row>
+
 
             </v-container>
         </v-main>   
