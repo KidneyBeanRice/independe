@@ -86,9 +86,11 @@
           </v-card-text>
         </v-col>
         <v-col cols="1">
+          <router-link to="/login">
           <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
             <div class="text-white">로그인</div>
           </v-btn>
+        </router-link>
         </v-col>
         <v-col cols="1">
           <v-btn variant="flat" color="#5E913B" class="font-weight-bold">

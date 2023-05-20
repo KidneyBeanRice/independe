@@ -24,12 +24,12 @@
           <v-col cols="6">
             <v-row>
               <v-col>
-                <div style=" font-size:20px">아이디</div>
+                <div style="font-size:20px">아이디</div>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field placeholder="ID" variant="outlined"></v-text-field>
+                <v-text-field v-model="email" placeholder="ID" variant="outlined"></v-text-field>
               </v-col>
             </v-row>
 
@@ -40,13 +40,13 @@
             </v-row>
             <v-row class="mb-5">
               <v-col>
-                <v-text-field placeholder="password" variant="outlined"></v-text-field>
+                <v-text-field v-model="password" placeholder="password" variant="outlined"></v-text-field>
               </v-col>
             </v-row>
 
             <v-row class="mt-10 mb-5">
               <v-col align="center">
-                <v-btn style="height:60px; width: 5000px;" variant="flat" color="#6DA945" class="font-weight-bold">
+                <v-btn @click="login()" style="height:60px; width: 5000px;" variant="flat" color="#6DA945" class="font-weight-bold">
                   <div class="text-white" style="font-size:20px">로그인</div>
                 </v-btn>
               </v-col>
@@ -152,9 +152,32 @@ export default {
     return {
       active_tab: 0,
       link: ['메인', '게시판', '자취생활'],
+      
+      email: "",
+      password: ""
     }
   },
   methods: {
+    login() {
+      const credentials = {
+        email: this.email,
+        password: this.password
+      };
+
+      this.$axios.post('/login', credentials)
+        .then(response => {
+          const token = response.data.token;
+          // 토큰 저장 로직 (로컬 스토리지, 쿠키 등 사용)
+          // 예: localStorage.setItem('token', token);
+          console.log(token)
+          // 로그인 성공 후에 리다이렉트 또는 다른 동작 수행
+        })
+        .catch(error => {
+          // 로그인 실패 처리
+          console.error(error)
+        });
+    }
+  },
     naver() {
       //this.$axios.get('/oauth2/authorization/naver')
       const url = "/oauth2/authorization/naver"
@@ -165,5 +188,4 @@ export default {
         .catch(err => console.error(err))
     }
   }
-}
 </script>
