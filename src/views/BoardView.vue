@@ -687,9 +687,14 @@ export default {
       this.updateCategoryCheck(0)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[0]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
       //this.$axios.get('https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/independe', { params: { page: this.currentPage } })
-        this.$axios.get(url, { params: { page: this.currentPage } })
+        this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -715,7 +720,13 @@ export default {
       this.updateBoardCheck(1)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[1]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -741,7 +752,13 @@ export default {
       this.updateBoardCheck(2)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[2]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -767,7 +784,13 @@ export default {
       this.updateBoardCheck(3)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[3]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -793,7 +816,13 @@ export default {
       this.updateBoardCheck(4)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[4]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -817,7 +846,13 @@ export default {
       this.updateCategoryCheck(1)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[1]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -841,7 +876,13 @@ export default {
       this.updateCategoryCheck(2)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[2]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -865,7 +906,13 @@ export default {
       this.updateCategoryCheck(3)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[3]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -889,7 +936,13 @@ export default {
       this.updateCategoryCheck(4)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[4]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -913,7 +966,13 @@ export default {
       this.updateCategoryCheck(5)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[5]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -933,7 +992,13 @@ export default {
     },
     page() {      
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.$store.commit('updateNowPage', this.currentPage);

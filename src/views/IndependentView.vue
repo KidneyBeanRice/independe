@@ -569,9 +569,14 @@ export default {
       this.updateIndependentCheck(0)
       this.currentPage = 0
       const url = `/posts/independent/${this.independentsAPI[0]}`;
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
       //this.$axios.get('https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/independe', { params: { page: this.currentPage } })
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data.postsResponses
           this.totalPage = res.data.count
@@ -596,8 +601,13 @@ export default {
       this.updateIndependentCheck(1)
       this.currentPage = 0
       const url = `/posts/independent/${this.independentsAPI[1]}`;
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data.postsResponses
           this.totalPage = res.data.count
@@ -622,8 +632,13 @@ export default {
       this.updateIndependentCheck(2)
       this.currentPage = 0
       const url = `/posts/independent/${this.independentsAPI[2]}`;
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data.postsResponses
           this.totalPage = res.data.count
@@ -648,8 +663,13 @@ export default {
       this.updateIndependentCheck(3)
       this.currentPage = 0
       const url = `/posts/independent/${this.independentsAPI[3]}`;
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data.postsResponses
           this.totalPage = res.data.count
@@ -674,8 +694,13 @@ export default {
       this.updateIndependentCheck(4)
       this.currentPage = 0
       const url = `/posts/independent/${this.independentsAPI[4]}`;
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data.postsResponses
           this.totalPage = res.data.count
@@ -696,7 +721,13 @@ export default {
     },
     page() {
       const url = `/posts/independent/${this.independentsAPI[this.independentCheck]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } },{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data.postsResponses
 

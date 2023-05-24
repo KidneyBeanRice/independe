@@ -34,7 +34,6 @@ export default createStore({
     },
     setToken(state, token) {
       state.token = token; // 토큰 값을 상태에 저장하는 뮤테이션
-      VueCookies.set('token', token); // 쿠키에 토큰 저장
     },
     setAuthCookie(state, authCookie) {
       state.authCookie = authCookie; // 쿠키 값을 상태에 저장하는 뮤테이션

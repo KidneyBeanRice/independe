@@ -174,7 +174,6 @@ export default {
         .then(response => {
           const token = response.headers.authorization;
           this.saveToken(token); // 토큰 값을 Vuex 스토어에 저장
-          localStorage.setItem('token', token); // 토큰 저장
           console.log(token);
           // 로그인 성공 후에 리다이렉트 또는 다른 동작 수행
         })

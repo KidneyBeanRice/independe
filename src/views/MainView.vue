@@ -616,7 +616,7 @@ export default {
           this.regionBoard = res.data.data.regionNotAllPostDtos;
           this.topSearch = res.data.data.keywordDtos;
           this.video = res.data.data.videoMainDtos;
-          console.log(res.send);
+          console.log(token);
         })
         .catch(err => console.error(err));
     },
