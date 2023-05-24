@@ -159,7 +159,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getToken']),
+    ...mapGetters(['getToken', 'getAuthCookie', 'getUrlCookie']),
   },
   methods: {
     ...mapActions(['saveToken', 'saveAuthCookie', 'saveUrlCookie']),
@@ -194,7 +194,8 @@ export default {
           this.saveAuthCookie(authCookie); // 인증 쿠키 값을 Vuex 스토어에 저장
           this.saveUrlCookie(urlCookie); // URL 쿠키 값을 Vuex 스토어에 저장
 
-          console.log(response.data);
+          console.log(authCookie);
+          console.log(urlCookie);
         })
         .catch(error => {
           console.error(error);
