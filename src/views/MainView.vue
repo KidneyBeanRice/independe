@@ -572,13 +572,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'MainView',
   data() {
     return {
       active_tab: 0,
       link: ['메인', '게시판', '자취생활'],
-
       todayMent: [],
       popularBoard: [],
       independentBoard: [],
@@ -586,36 +587,45 @@ export default {
       regionBoard: [],
       topSearch: [],
       video: [],
-
       independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
       regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
       regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
-    }
+    };
+  },
+  computed: {
+    ...mapGetters(['getToken', 'getAuthCookie', 'getUrlCookie']),
   },
   methods: {
-    read() {            
-      this.$axios.get('/posts/main'/*'https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/posts/main'*/)
+    read() {
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+      const authCookie = this.getAuthCookie; // Vuex 스토어에서 인증 쿠키 값을 가져옴
+      const urlCookie = this.getUrlCookie; // Vuex 스토어에서 URL 쿠키 값을 가져옴
+
+      this.$axios.get('/posts/main'/*'https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/posts/main'*/, {
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+          oauth2_auth_request: authCookie, // 헤더에 인증 쿠키 추가
+          redirect_uri: urlCookie, // 헤더에 URL 쿠키 추가
+        },
+      })
         .then((res) => {
-          this.todayMent = res.data.data.todayMent
-          this.popularBoard = res.data.data.popularPostDtos
-          this.independentBoard = res.data.data.popularIndependentPostsDtos
-          this.allBoard = res.data.data.regionAllPostDtos
-          this.regionBoard = res.data.data.regionNotAllPostDtos
-          this.topSearch = res.data.data.keywordDtos
-          this.video = res.data.data.videoMainDtos
+          this.todayMent = res.data.data.todayMent;
+          this.popularBoard = res.data.data.popularPostDtos;
+          this.independentBoard = res.data.data.popularIndependentPostsDtos;
+          this.allBoard = res.data.data.regionAllPostDtos;
+          this.regionBoard = res.data.data.regionNotAllPostDtos;
+          this.topSearch = res.data.data.keywordDtos;
+          this.video = res.data.data.videoMainDtos;
+          console.log(res.send);
         })
-        .catch(err => console.error(err))
+        .catch(err => console.error(err));
     },
   },
   mounted() {
     this.read();
   },
-  create() {
-    let token = this.$store.getters.getToken;
-    if (token.access == null && token.refresh == null) { //다 없으면 로그인 페이지로
-      //이미 로그인 페이지가 떠있는 상태에서 새로 고침하면 중복 에러 떠서 이렇게 처리함
-      this.$router.push({name: 'Login'}).catch(() => {}); 
-    }
-  }
-}   
+  created() {
+   
+  },
+};
 </script>

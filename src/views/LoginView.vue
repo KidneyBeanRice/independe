@@ -29,7 +29,7 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field v-model="email" placeholder="ID" variant="outlined"></v-text-field>
+                <v-text-field v-model="username" placeholder="ID" variant="outlined"></v-text-field>
               </v-col>
             </v-row>
 
@@ -46,7 +46,8 @@
 
             <v-row class="mt-10 mb-5">
               <v-col align="center">
-                <v-btn @click="login()" style="height:60px; width: 5000px;" variant="flat" color="#6DA945" class="font-weight-bold">
+                <v-btn @click="login()" style="height:60px; width: 5000px;" variant="flat" color="#6DA945"
+                  class="font-weight-bold">
                   <div class="text-white" style="font-size:20px">로그인</div>
                 </v-btn>
               </v-col>
@@ -54,7 +55,6 @@
           </v-col>
           <v-col cols="3"></v-col>
         </v-row>
-
         <v-container class="mt-5">
           <v-row justify="center" align="center" class="mb-5">
             <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">SNS로 로그인 하기</div>
@@ -146,46 +146,60 @@
 </template>
   
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   name: 'LoginView',
   data() {
     return {
       active_tab: 0,
       link: ['메인', '게시판', '자취생활'],
-      
-      email: "",
-      password: ""
-    }
+      username: '',
+      password: '',
+    };
+  },
+  computed: {
+    ...mapGetters(['getToken']),
   },
   methods: {
+    ...mapActions(['saveToken', 'saveAuthCookie', 'saveUrlCookie']),
     login() {
       const credentials = {
-        email: this.email,
-        password: this.password
+        username: this.username,
+        password: this.password,
       };
 
-      this.$axios.post('/login', credentials)
+      this.$axios
+        .post('/login', credentials)
         .then(response => {
-          const token = response.data.token;
-          // 토큰 저장 로직 (로컬 스토리지, 쿠키 등 사용)
-          // 예: localStorage.setItem('token', token);
-          console.log(token)
+          const token = response.headers.authorization;
+          this.saveToken(token); // 토큰 값을 Vuex 스토어에 저장
+          localStorage.setItem('token', token); // 토큰 저장
+          console.log(token);
           // 로그인 성공 후에 리다이렉트 또는 다른 동작 수행
         })
         .catch(error => {
           // 로그인 실패 처리
-          console.error(error)
+          console.error(error);
         });
-    }
-  },
+    },
     naver() {
-      //this.$axios.get('/oauth2/authorization/naver')
-      const url = "/oauth2/authorization/naver"
-      this.$axios.get(url)
-        .then(res => {
-          console.log(res.data);
+      const url = '/oauth2/authorization/naver';
+      this.$axios
+        .get(url)
+        .then(response => {
+          const authCookie = response.headers.oauth2_auth_request;
+          const urlCookie = response.headers.redirect_uri;
+
+          this.saveAuthCookie(authCookie); // 인증 쿠키 값을 Vuex 스토어에 저장
+          this.saveUrlCookie(urlCookie); // URL 쿠키 값을 Vuex 스토어에 저장
+
+          console.log(response.data);
         })
-        .catch(err => console.error(err))
-    }
-  }
+        .catch(error => {
+          console.error(error);
+        });
+    },
+  },
+};
 </script>
