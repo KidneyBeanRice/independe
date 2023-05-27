@@ -761,6 +761,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -793,6 +795,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -825,6 +829,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -857,6 +863,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -889,6 +897,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -919,6 +929,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -949,6 +961,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -979,6 +993,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -1009,6 +1025,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -1039,6 +1057,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
