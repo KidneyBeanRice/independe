@@ -159,10 +159,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getToken', 'getAuthCookie', 'getUrlCookie']),
+    ...mapGetters(['getToken']),
   },
   methods: {
-    ...mapActions(['saveToken', 'saveAuthCookie', 'saveUrlCookie']),
+    ...mapActions(['saveToken']),
     login() {
       const credentials = {
         username: this.username,
@@ -174,7 +174,7 @@ export default {
         .then(response => {
           const token = response.headers.authorization;
           this.saveToken(token); // 토큰 값을 Vuex 스토어에 저장
-          console.log(token);
+          this.$router.go(-1)
           // 로그인 성공 후에 리다이렉트 또는 다른 동작 수행
         })
         .catch(error => {
@@ -195,6 +195,7 @@ export default {
 
           console.log(authCookie);
           console.log(urlCookie);
+          this.$router.go(-1)
         })
         .catch(error => {
           console.error(error);

@@ -265,6 +265,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'PostWriteView',
   data() {
@@ -375,6 +377,9 @@ export default {
       this.active_tab = 1
     else if (this.boardCheck === 1)
       this.active_tab = 2
+  },
+  computed: {
+    ...mapGetters(['getToken']),
   },
 }   
 </script>
