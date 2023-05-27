@@ -476,6 +476,8 @@
 </template>
   
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'IndependentView',
   data() {
@@ -557,7 +559,8 @@ export default {
         pageNumbers.push(i);
       }
       return pageNumbers;
-    }
+    },
+    ...mapGetters(['getToken'])
   },
   methods: {
     updateIndependentCheck(newValue) {

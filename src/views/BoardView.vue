@@ -564,6 +564,8 @@
 </template>
   
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'BoardView',
   data() {
@@ -618,7 +620,8 @@ export default {
         pageNumbers.push(i);
       }
       return pageNumbers;
-    }
+    },
+    ...mapGetters(['getToken']),
   },
   created() {    
     window.addEventListener('popstate', () => {  

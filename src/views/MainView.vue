@@ -593,19 +593,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getToken', 'getAuthCookie', 'getUrlCookie']),
+    ...mapGetters(['getToken']),
   },
   methods: {
     read() {
       const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
-      const authCookie = this.getAuthCookie; // Vuex 스토어에서 인증 쿠키 값을 가져옴
-      const urlCookie = this.getUrlCookie; // Vuex 스토어에서 URL 쿠키 값을 가져옴
 
       this.$axios.get('/posts/main'/*'https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/posts/main'*/, {
         headers: {
           Authorization: token, // 헤더에 토큰 추가
-          oauth2_auth_request: authCookie, // 헤더에 인증 쿠키 추가
-          redirect_uri: urlCookie, // 헤더에 URL 쿠키 추가
         },
       })
         .then((res) => {
