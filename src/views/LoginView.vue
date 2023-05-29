@@ -61,7 +61,7 @@
           </v-row>
           <v-row justify="center" class="mb-5">
             <v-col cols="1">
-              <a href="http://192.168.0.18:8080/oauth2/authorization/naver">
+              <a href="http://spring:8080/oauth2/authorization/naver">                
                 <v-img :height="75" src="../img/naver.png"></v-img>
               </a>
             </v-col>
