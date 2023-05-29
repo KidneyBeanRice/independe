@@ -26,6 +26,9 @@ export default createStore({
     setToken(state, token) {
       state.token = token; // 토큰 값을 상태에 저장하는 뮤테이션
     },
+    removeToken(state) {
+      state.token = null;
+    },
   },
   actions: {
     updateIndependentCheck({ commit }, newValue) {
@@ -39,6 +42,9 @@ export default createStore({
     },
     saveToken({ commit }, token) {
       commit('setToken', token); // 토큰 값을 저장하는 액션
+    },
+    logout({ commit }) {
+      commit('removeToken');
     },
   },
   modules: {},

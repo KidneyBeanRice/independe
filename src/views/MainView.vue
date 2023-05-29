@@ -13,7 +13,8 @@
                 <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
               </v-tab>
             </router-link>
-            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="$store.state.boardCheck = 0 ">
+            <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;"
+              @click="$store.state.boardCheck = 0">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                   <v-tab v-bind="props">
@@ -23,7 +24,7 @@
                 <v-list>
                   <v-list-item align="center">
                     <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;" @click="region_all">
-                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 0 ">자유</v-list-item-title>
+                      <v-list-item-title class="my-2" @click="$store.state.boardCheck = 0">자유</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
                     <router-link to="/board/SEOUL/TALK" style="text-decoration: none; color:black;" @click="region_seoul">
@@ -38,14 +39,16 @@
                       <v-list-item-title class="my-2" @click="$store.state.boardCheck = 3">울산</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/board/KEYNONGNAM/TALK" style="text-decoration: none; color:black;" @click="region_kyeongnam">
+                    <router-link to="/board/KEYNONGNAM/TALK" style="text-decoration: none; color:black;"
+                      @click="region_kyeongnam">
                       <v-list-item-title class="my-2" @click="$store.state.boardCheck = 4">경남</v-list-item-title>
                     </router-link>
                   </v-list-item>
                 </v-list>
               </v-menu>
             </router-link>
-            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="$store.state.independentCheck = 0">
+            <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;"
+              @click="$store.state.independentCheck = 0">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                   <v-tab v-bind="props">
@@ -54,23 +57,28 @@
                 </template>
                 <v-list>
                   <v-list-item align="center">
-                    <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;" @click="independent_clean">
-                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 0 ">청소</v-list-item-title>
+                    <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;"
+                      @click="independent_clean">
+                      <v-list-item-title class="my-2" @click="$store.state.independentCheck = 0">청소</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/WASH" style="text-decoration: none; color:black;" @click="independent_wash">
+                    <router-link to="/independent/WASH" style="text-decoration: none; color:black;"
+                      @click="independent_wash">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 1">세탁</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/COOK" style="text-decoration: none; color:black;" @click="independent_cook">
+                    <router-link to="/independent/COOK" style="text-decoration: none; color:black;"
+                      @click="independent_cook">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 2">요리</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/HEALTH" style="text-decoration: none; color:black;" @click="independent_health">
+                    <router-link to="/independent/HEALTH" style="text-decoration: none; color:black;"
+                      @click="independent_health">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 3">건강</v-list-item-title>
                     </router-link>
                     <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                    <router-link to="/independent/ETC" style="text-decoration: none; color:black;" @click="independent_etc">
+                    <router-link to="/independent/ETC" style="text-decoration: none; color:black;"
+                      @click="independent_etc">
                       <v-list-item-title class="my-2" @click="$store.state.independentCheck = 4">기타</v-list-item-title>
                     </router-link>
                   </v-list-item>
@@ -85,18 +93,38 @@
               append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="onClick"></v-text-field>
           </v-card-text>
         </v-col>
-        <v-col cols="1">
+        <v-col cols="1" v-if="!getToken">
           <router-link to="/login">
-          <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
-            <div class="text-white">로그인</div>
-          </v-btn>
-        </router-link>
+            <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
+              <div class="text-white">로그인</div>
+            </v-btn>
+          </router-link>
         </v-col>
-        <v-col cols="1">
+        <v-col cols="1" v-if="!getToken">
           <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
             <div class="text-white">회원가입</div>
           </v-btn>
         </v-col>
+        <div v-else>
+    <v-col cols="1">
+      <v-btn variant="flat" color="#5E913B" class="font-weight-bold" @click="handleLogout">
+        <div class="text-white">로그아웃</div>
+      </v-btn>
+    </v-col>
+    <v-menu :close-on-content-click="false">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" variant="outlined" @click="getCurrentLocation">
+          <p>▼</p>
+        </v-btn>
+      </template>
+      <v-card :height="300" :width="300">
+        <v-switch v-model="locationEnabled" label="위치 정보" color="info" hide-details></v-switch>
+      </v-card>
+    </v-menu>
+    <div v-if="locationEnabled">
+      <p>{{ currentLocation }}</p>
+    </div>
+  </div>
       </v-row>
     </v-container>
   </v-app-bar>
@@ -132,13 +160,19 @@
                 <v-col cols="auto">
                   <v-list v-for="popularBoard in popularBoard" :key="popularBoard">
                     <div v-if="popularBoard.independentPostType === null">
-                      <router-link :to="{ name: 'BoardView', params: { regionType: popularBoard.regionTypeEn, regionPostType: popularBoard.regionPostTypeEn }}"  style="text-decoration: none;">
-                        <p @click="$store.state.boardCheck = regionsAPI.indexOf(popularBoard.regionTypeEn), $store.state.categoryCheck = regionCategoryAPI.indexOf(popularBoard.regionPostTypeEn)" class="text-grey-darken-1">[{{ popularBoard.regionType }}·{{ popularBoard.regionPostType }}]</p>
+                      <router-link
+                        :to="{ name: 'BoardView', params: { regionType: popularBoard.regionTypeEn, regionPostType: popularBoard.regionPostTypeEn } }"
+                        style="text-decoration: none;">
+                        <p @click="$store.state.boardCheck = regionsAPI.indexOf(popularBoard.regionTypeEn), $store.state.categoryCheck = regionCategoryAPI.indexOf(popularBoard.regionPostTypeEn)"
+                          class="text-grey-darken-1">[{{ popularBoard.regionType }}·{{ popularBoard.regionPostType }}]</p>
                       </router-link>
                     </div>
                     <div v-else>
-                      <router-link :to="{ name: 'IndependentView', params: { independentType: popularBoard.independentPostTypeEn }}" style="text-decoration: none;">
-                        <p @click="$store.state.independentCheck = independentsAPI.indexOf(popularBoard.independentPostTypeEn)" class="text-grey-darken-1">[자취·{{ popularBoard.independentPostType }}]</p>
+                      <router-link
+                        :to="{ name: 'IndependentView', params: { independentType: popularBoard.independentPostTypeEn } }"
+                        style="text-decoration: none;">
+                        <p @click="$store.state.independentCheck = independentsAPI.indexOf(popularBoard.independentPostTypeEn)"
+                          class="text-grey-darken-1">[자취·{{ popularBoard.independentPostType }}]</p>
                       </router-link>
                     </div>
                   </v-list>
@@ -148,14 +182,16 @@
                     <div v-if="popularBoard.title.length <= 23">
                       <v-img style="float:left" v-if="popularBoard.picture === true" :width="15"
                         src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                      <router-link :to="{ name: 'PostView', params: { postId: popularBoard.postId }}" style="text-decoration: none; color:black;">
+                      <router-link :to="{ name: 'PostView', params: { postId: popularBoard.postId } }"
+                        style="text-decoration: none; color:black;">
                         {{ popularBoard.title }}
                       </router-link>
                     </div>
                     <div v-else>
                       <v-img style="float:left" v-if="popularBoard.picture === true" :width="15"
                         src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                      <router-link :to="{ name: 'PostView', params: { postId: popularBoard.postId }}" style="text-decoration: none; color:black;">
+                      <router-link :to="{ name: 'PostView', params: { postId: popularBoard.postId } }"
+                        style="text-decoration: none; color:black;">
                         <p>{{ popularBoard.title.substr(0, 23) }}...</p>
                       </router-link>
                     </div>
@@ -254,8 +290,10 @@
               </v-row>
             </v-col>
             <v-col cols="1">
-              <router-link :to="{ name: 'IndependentView', params: { independentType: 'CLEAN'}}" style="text-decoration: none;">
-                <div @click="$store.state.independentCheck = 0" class="text-grey-darken-1 mt-5 text-subtitle-2">더보기 ></div>
+              <router-link :to="{ name: 'IndependentView', params: { independentType: 'CLEAN' } }"
+                style="text-decoration: none;">
+                <div @click="$store.state.independentCheck = 0" class="text-grey-darken-1 mt-5 text-subtitle-2">더보기 >
+                </div>
               </router-link>
             </v-col>
           </v-row>
@@ -267,8 +305,11 @@
                   <v-row>
                     <v-col cols="auto">
                       <v-list v-for="independentBoard in independentBoard.slice(0, 5)" :key="independentBoard">
-                        <router-link :to="{ name: 'IndependentView', params: { independentType: independentBoard.independentPostTypeEn }}" style="text-decoration: none;">
-                          <p @click="$store.state.independentCheck = independentsAPI.indexOf(independentBoard.independentPostTypeEn)" class="text-grey-darken-1">[{{ independentBoard.independentPostType }}]</p>
+                        <router-link
+                          :to="{ name: 'IndependentView', params: { independentType: independentBoard.independentPostTypeEn } }"
+                          style="text-decoration: none;">
+                          <p @click="$store.state.independentCheck = independentsAPI.indexOf(independentBoard.independentPostTypeEn)"
+                            class="text-grey-darken-1">[{{ independentBoard.independentPostType }}]</p>
                         </router-link>
                       </v-list>
                     </v-col>
@@ -277,16 +318,18 @@
                         <div v-if="independentBoard.title.length <= 15">
                           <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
                             src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                          <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}" style="text-decoration: none; color:black;">
+                          <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId } }"
+                            style="text-decoration: none; color:black;">
                             {{ independentBoard.title }}
                           </router-link>
                         </div>
                         <div v-else>
                           <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
                             src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                            <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}" style="text-decoration: none; color:black;">
-                          <p>{{ independentBoard.title.substr(0, 15) }}...</p>
-                        </router-link>
+                          <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId } }"
+                            style="text-decoration: none; color:black;">
+                            <p>{{ independentBoard.title.substr(0, 15) }}...</p>
+                          </router-link>
                         </div>
                       </v-list>
                     </v-col>
@@ -317,8 +360,11 @@
                   <v-row>
                     <v-col cols="auto">
                       <v-list v-for="independentBoard in independentBoard.slice(5, 10)" :key="independentBoard">
-                        <router-link :to="{ name: 'IndependentView', params: { independentType: independentBoard.independentPostTypeEn }}" style="text-decoration: none;">
-                          <p @click="$store.state.independentCheck = independentsAPI.indexOf(independentBoard.independentPostTypeEn)" class="text-grey-darken-1">[{{ independentBoard.independentPostType }}]</p>
+                        <router-link
+                          :to="{ name: 'IndependentView', params: { independentType: independentBoard.independentPostTypeEn } }"
+                          style="text-decoration: none;">
+                          <p @click="$store.state.independentCheck = independentsAPI.indexOf(independentBoard.independentPostTypeEn)"
+                            class="text-grey-darken-1">[{{ independentBoard.independentPostType }}]</p>
                         </router-link>
                       </v-list>
                     </v-col>
@@ -327,16 +373,18 @@
                         <div v-if="independentBoard.title.length <= 15">
                           <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
                             src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                            <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}" style="text-decoration: none; color:black;">
-                          {{ independentBoard.title }}
-                        </router-link>
+                          <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId } }"
+                            style="text-decoration: none; color:black;">
+                            {{ independentBoard.title }}
+                          </router-link>
                         </div>
                         <div v-else>
                           <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
                             src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                            <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}" style="text-decoration: none; color:black;">
-                          <p>{{ independentBoard.title.substr(0, 15) }}...</p>
-                        </router-link>
+                          <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId } }"
+                            style="text-decoration: none; color:black;">
+                            <p>{{ independentBoard.title.substr(0, 15) }}...</p>
+                          </router-link>
                         </div>
                       </v-list>
                     </v-col>
@@ -381,8 +429,10 @@
                 </v-row>
               </v-col>
               <v-col cols="2">
-                <router-link :to="{ name: 'BoardView', params: { regionType: 'ALL', regionPostType: 'FREE' }}" style="text-decoration: none;">
-                  <div @click="$store.state.boardCheck = 0, $store.state.categoryCheck = 0" class="mt-5 text-subtitle-2 text-grey-darken-1">더보기 ></div>
+                <router-link :to="{ name: 'BoardView', params: { regionType: 'ALL', regionPostType: 'FREE' } }"
+                  style="text-decoration: none;">
+                  <div @click="$store.state.boardCheck = 0, $store.state.categoryCheck = 0"
+                    class="mt-5 text-subtitle-2 text-grey-darken-1">더보기 ></div>
                 </router-link>
               </v-col>
               <v-divider :thickness="2" class="border-opacity-25 mb-2 mx-3" length="560"></v-divider>
@@ -391,9 +441,11 @@
               <v-row>
                 <v-col cols="auto">
                   <v-list v-for="allBoard in allBoard" :key="allBoard">
-                    <router-link :to="{ name: 'BoardView', params: { regionType: 'ALL', regionPostType: 'FREE' }}"  style="text-decoration: none;">                                            
-                    <p @click="$store.state.boardCheck = 0, $store.state.categoryCheck = 0" class="text-grey-darken-1">[자유]</p>
-                  </router-link>
+                    <router-link :to="{ name: 'BoardView', params: { regionType: 'ALL', regionPostType: 'FREE' } }"
+                      style="text-decoration: none;">
+                      <p @click="$store.state.boardCheck = 0, $store.state.categoryCheck = 0" class="text-grey-darken-1">
+                        [자유]</p>
+                    </router-link>
                   </v-list>
                 </v-col>
                 <v-col cols="6">
@@ -401,16 +453,18 @@
                     <div v-if="allBoard.title.length <= 15">
                       <v-img style="float:left" v-if="allBoard.picture === true" :width="15"
                         src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                        <router-link :to="{ name: 'PostView', params: { postId: allBoard.postId }}" style="text-decoration: none; color:black;">
+                      <router-link :to="{ name: 'PostView', params: { postId: allBoard.postId } }"
+                        style="text-decoration: none; color:black;">
                         {{ allBoard.title }}
                       </router-link>
-                    </div>                                                                  
+                    </div>
                     <div v-else>
                       <v-img style="float:left" v-if="allBoard.picture === true" :width="15"
                         src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                        <router-link :to="{ name: 'PostView', params: { postId: allBoard.postId }}" style="text-decoration: none; color:black;">
-                      <p>{{ allBoard.title.substr(0, 15) }}...</p>
-                    </router-link>
+                      <router-link :to="{ name: 'PostView', params: { postId: allBoard.postId } }"
+                        style="text-decoration: none; color:black;">
+                        <p>{{ allBoard.title.substr(0, 15) }}...</p>
+                      </router-link>
                     </div>
                   </v-list>
                 </v-col>
@@ -448,8 +502,10 @@
                 </v-row>
               </v-col>
               <v-col cols="2">
-                <router-link :to="{ name: 'BoardView', params: { regionType: 'SEOUL', regionPostType: 'TALK' }}"  style="text-decoration: none;">
-                  <div @click="$store.state.boardCheck = 1, $store.state.categoryCheck = 1" class="mt-5 text-subtitle-2 text-grey-darken-1">더보기 ></div>
+                <router-link :to="{ name: 'BoardView', params: { regionType: 'SEOUL', regionPostType: 'TALK' } }"
+                  style="text-decoration: none;">
+                  <div @click="$store.state.boardCheck = 1, $store.state.categoryCheck = 1"
+                    class="mt-5 text-subtitle-2 text-grey-darken-1">더보기 ></div>
                 </router-link>
               </v-col>
               <v-divider :thickness="2" class="border-opacity-25 mb-2 mx-3" length="560"></v-divider>
@@ -458,9 +514,12 @@
               <v-row>
                 <v-col cols="auto">
                   <v-list v-for="regionBoard in regionBoard" :key="regionBoard">
-                    <router-link :to="{ name: 'BoardView', params: { regionType: regionBoard.regionTypeEn, regionPostType: regionBoard.regionPostTypeEn }}"  style="text-decoration: none;">
-                        <p @click="$store.state.boardCheck = regionsAPI.indexOf(regionBoard.regionTypeEn), $store.state.categoryCheck = regionCategoryAPI.indexOf(regionBoard.regionPostTypeEn)" class="text-grey-darken-1">[{{ regionBoard.regionType }}·{{ regionBoard.regionPostType }}]</p>
-                      </router-link>                    
+                    <router-link
+                      :to="{ name: 'BoardView', params: { regionType: regionBoard.regionTypeEn, regionPostType: regionBoard.regionPostTypeEn } }"
+                      style="text-decoration: none;">
+                      <p @click="$store.state.boardCheck = regionsAPI.indexOf(regionBoard.regionTypeEn), $store.state.categoryCheck = regionCategoryAPI.indexOf(regionBoard.regionPostTypeEn)"
+                        class="text-grey-darken-1">[{{ regionBoard.regionType }}·{{ regionBoard.regionPostType }}]</p>
+                    </router-link>
                   </v-list>
                 </v-col>
                 <v-col cols="5">
@@ -468,16 +527,18 @@
                     <div v-if="regionBoard.title.length <= 12">
                       <v-img style="float:left" v-if="regionBoard.picture === true" :width="15"
                         src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                        <router-link :to="{ name: 'PostView', params: { postId: regionBoard.postId }}" style="text-decoration: none; color:black;">
+                      <router-link :to="{ name: 'PostView', params: { postId: regionBoard.postId } }"
+                        style="text-decoration: none; color:black;">
                         {{ regionBoard.title }}
                       </router-link>
                     </div>
                     <div v-else>
                       <v-img style="float:left" v-if="regionBoard.picture === true" :width="15"
                         src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                        <router-link :to="{ name: 'PostView', params: { postId: regionBoard.postId }}" style="text-decoration: none; color:black;">
-                      <p>{{ regionBoard.title.substr(0, 12) }}...</p>
-                    </router-link>
+                      <router-link :to="{ name: 'PostView', params: { postId: regionBoard.postId } }"
+                        style="text-decoration: none; color:black;">
+                        <p>{{ regionBoard.title.substr(0, 12) }}...</p>
+                      </router-link>
                     </div>
                   </v-list>
                 </v-col>
@@ -572,6 +633,7 @@
 </template>
 
 <script>
+/* global kakao */
 import { mapGetters } from 'vuex';
 
 export default {
@@ -590,6 +652,9 @@ export default {
       independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
       regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
       regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
+
+      currentLocation: '',
+      locationEnabled: false,
     };
   },
   computed: {
@@ -612,16 +677,52 @@ export default {
           this.regionBoard = res.data.data.regionNotAllPostDtos;
           this.topSearch = res.data.data.keywordDtos;
           this.video = res.data.data.videoMainDtos;
-          console.log(token);
         })
         .catch(err => console.error(err));
+    },
+    handleLogout() {
+      this.$store.dispatch('logout');
+    },
+    getCurrentLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            const geocoder = new kakao.maps.services.Geocoder();
+
+            geocoder.coord2Address(longitude, latitude, (result, status) => {
+              if (status === kakao.maps.services.Status.OK) {
+                const address = result[0].address_name;
+
+                this.currentLocation = address;
+                this.locationEnabled = true;
+                console.log(address);
+                console.log(this.currentLocation);
+              }
+            });
+          },
+          error => {
+            console.error(error);
+          }
+        );
+      } else {
+        console.error('이 브라우저에서는 위치 정보를 지원하지 않습니다.');
+      }
     },
   },
   mounted() {
     this.read();
-  },
-  created() {
-   
-  },
+
+    const script = document.createElement('script');
+  script.onload = () => {
+    // SDK가 로드된 후에 실행되어야 하는 코드
+    // 여기서 KakaoMap API를 사용할 수 있습니다.
+    this.getCurrentLocation();
+  };
+  script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=4e77d9b3460eb3b942634fb28e5e1c40&autoload&autoload=false`;
+  document.head.appendChild(script);
+  }
 };
 </script>
