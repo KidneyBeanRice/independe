@@ -106,22 +106,22 @@
           </v-btn>
         </v-col>
         <div v-else>
-    <v-col cols="1">
-      <v-btn variant="flat" color="#5E913B" class="font-weight-bold" @click="handleLogout">
-        <div class="text-white">로그아웃</div>
-      </v-btn>
-    </v-col>
-    <v-menu :close-on-content-click="false">
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" variant="outlined" @click="getCurrentLocation">
-          <p>▼</p>
-        </v-btn>
-      </template>
-      <v-card :height="300" :width="300">
-        <v-switch label="위치 정보" color="info" hide-details></v-switch>
-      </v-card>
-    </v-menu>
-  </div>
+          <v-col cols="1">
+            <v-btn variant="flat" color="#5E913B" class="font-weight-bold" @click="handleLogout">
+              <div class="text-white">로그아웃</div>
+            </v-btn>
+          </v-col>
+          <v-menu :close-on-content-click="false">
+            <template v-slot:activator="{ props }">
+              <v-btn v-bind="props" variant="outlined" @click="getCurrentLocation">
+                <p>▼</p>
+              </v-btn>
+            </template>
+            <v-card :height="300" :width="300">
+              <v-switch label="위치 정보" color="info" hide-details></v-switch>
+            </v-card>
+          </v-menu>
+        </div>
       </v-row>
     </v-container>
   </v-app-bar>
@@ -592,7 +592,10 @@
     </v-main>
   </v-app>
 
-  <div id="map" calss="map" style="width: 100%; height: 400px;"></div>
+  <div>
+    <div id="map" style="width: 500px; height: 400px;"></div>
+    <div id="centerAddr"></div>
+  </div>
 
   <!--푸터-->
   <v-footer border>
@@ -631,7 +634,7 @@
   </v-footer>
 </template>
 
-<script>  
+<script>
 import { mapGetters } from 'vuex';
 
 export default {
@@ -650,6 +653,10 @@ export default {
       independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
       regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
       regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
+
+      map: null,
+      marker: null,
+      currentLocation: '',
     };
   },
   computed: {
@@ -683,26 +690,102 @@ export default {
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
       script.src =
-        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=4e77d9b3460eb3b942634fb28e5e1c40";
+        "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=4e77d9b3460eb3b942634fb28e5e1c40&libraries=services";
       document.head.appendChild(script);
     },
     initMap() {
-      var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
-      var options = {
-        //지도를 생성할 때 필요한 기본 옵션
-        center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-        level: 3 //지도의 레벨(확대, 축소 정도)
-      };
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
 
-      new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴      
-    }
+            const mapContainer = document.getElementById('map');
+            const mapOption = {
+              center: new kakao.maps.LatLng(lat, lng),
+              level: 1,
+            };
+
+            const map = new kakao.maps.Map(mapContainer, mapOption);
+
+
+            const geocoder = new kakao.maps.services.Geocoder();
+
+            const marker = new kakao.maps.Marker();
+            const infowindow = new kakao.maps.InfoWindow({ zindex: 1 });
+
+            searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+
+            kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+              searchDetailAddrFromCoords(mouseEvent.latLng, function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                  let detailAddr = !result[0].road_address
+                    ? '<div>도로명주소 : ' +
+                    result[0].road_address.address_name +
+                    '</div>'
+                    : '';
+                  detailAddr +=
+                    '<div>지번 주소 : ' + result[0].address.address_name + '</div>';
+
+                  const content =
+                    '<div class="bAddr">' +
+                    '<span class="title">법정동 주소정보</span>' +
+                    detailAddr +
+                    '</div>';
+
+                  marker.setPosition(mouseEvent.latLng);
+                  marker.setMap(map);
+
+                  infowindow.setContent(content);
+                  infowindow.open(map, marker);
+                }
+              });
+            });
+
+            kakao.maps.event.addListener(map, 'idle', function () {
+              searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+            });
+
+            function searchAddrFromCoords(coords, callback) {
+              geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+            }
+
+            function searchDetailAddrFromCoords(coords, callback) {
+              geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+            }
+
+            function displayCenterInfo(result, status) {
+              if (status === kakao.maps.services.Status.OK) {
+                const infoDiv = document.getElementById('centerAddr');
+
+                if (infoDiv) {
+                  for (let i = 0; i < result.length; i++) {
+                    if (result[i].region_type === 'H') {
+                      infoDiv.innerHTML = result[i].address_name;
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+          },
+          (error) => {
+            console.error('Geolocation error:', error);
+          }
+        );
+      } else {
+        console.error('Geolocation is not supported by this browser.');
+      }
+    },
   },
   mounted() {
     this.read();
-
-    window.kakao && window.kakao.maps
-      ? this.initMap()
-      : this.addKakaoMapScript();
+    this.initMap();
+    if (window.kakao && window.kakao.maps) {
+      this.initMap();
+    } else {
+      this.addKakaoMapScript();
+    }
   },
-}
+};
 </script>
