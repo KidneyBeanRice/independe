@@ -118,12 +118,9 @@
         </v-btn>
       </template>
       <v-card :height="300" :width="300">
-        <v-switch v-model="locationEnabled" label="위치 정보" color="info" hide-details></v-switch>
+        <v-switch label="위치 정보" color="info" hide-details></v-switch>
       </v-card>
     </v-menu>
-    <div v-if="locationEnabled">
-      <p>{{ currentLocation }}</p>
-    </div>
   </div>
       </v-row>
     </v-container>
@@ -595,6 +592,8 @@
     </v-main>
   </v-app>
 
+  <div id="map" calss="map" style="width: 100%; height: 400px;"></div>
+
   <!--푸터-->
   <v-footer border>
     <v-container>
@@ -632,8 +631,7 @@
   </v-footer>
 </template>
 
-<script>
-/* global kakao */
+<script>  
 import { mapGetters } from 'vuex';
 
 export default {
@@ -652,9 +650,6 @@ export default {
       independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
       regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
       regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
-
-      currentLocation: '',
-      locationEnabled: false,
     };
   },
   computed: {
@@ -683,46 +678,31 @@ export default {
     handleLogout() {
       this.$store.dispatch('logout');
     },
-    getCurrentLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-
-            const geocoder = new kakao.maps.services.Geocoder();
-
-            geocoder.coord2Address(longitude, latitude, (result, status) => {
-              if (status === kakao.maps.services.Status.OK) {
-                const address = result[0].address_name;
-
-                this.currentLocation = address;
-                this.locationEnabled = true;
-                console.log(address);
-                console.log(this.currentLocation);
-              }
-            });
-          },
-          error => {
-            console.error(error);
-          }
-        );
-      } else {
-        console.error('이 브라우저에서는 위치 정보를 지원하지 않습니다.');
-      }
+    addKakaoMapScript() {
+      const script = document.createElement("script");
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.initMap);
+      script.src =
+        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=4e77d9b3460eb3b942634fb28e5e1c40";
+      document.head.appendChild(script);
     },
+    initMap() {
+      var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
+      var options = {
+        //지도를 생성할 때 필요한 기본 옵션
+        center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+        level: 3 //지도의 레벨(확대, 축소 정도)
+      };
+
+      new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴      
+    }
   },
   mounted() {
     this.read();
 
-    const script = document.createElement('script');
-  script.onload = () => {
-    // SDK가 로드된 후에 실행되어야 하는 코드
-    // 여기서 KakaoMap API를 사용할 수 있습니다.
-    this.getCurrentLocation();
-  };
-  script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=4e77d9b3460eb3b942634fb28e5e1c40&autoload&autoload=false`;
-  document.head.appendChild(script);
-  }
-};
+    window.kakao && window.kakao.maps
+      ? this.initMap()
+      : this.addKakaoMapScript();
+  },
+}
 </script>
