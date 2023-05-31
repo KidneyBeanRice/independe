@@ -561,7 +561,7 @@
             </v-sheet>
           </v-col>
         </v-row>
-
+    
         <!--자취 정보 영상-->
         <v-row class="my-15">
           <v-row class="mx-1">
@@ -593,8 +593,8 @@
   </v-app>
 
   <div>
-    <div id="map" style="width: 500px; height: 400px;"></div>
-    <div id="centerAddr"></div>
+    <div id="map" style="width: 0; height: 0;"></div>
+    <h1 id="centerAddr"></h1>
   </div>
 
   <!--푸터-->
@@ -653,10 +653,6 @@ export default {
       independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
       regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
       regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
-
-      map: null,
-      marker: null,
-      currentLocation: '',
     };
   },
   computed: {
@@ -761,7 +757,7 @@ export default {
                 if (infoDiv) {
                   for (let i = 0; i < result.length; i++) {
                     if (result[i].region_type === 'H') {
-                      infoDiv.innerHTML = result[i].address_name;
+                      infoDiv.innerHTML = result[i].address_name;                  
                       break;
                     }
                   }
