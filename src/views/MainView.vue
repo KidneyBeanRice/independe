@@ -561,7 +561,7 @@
             </v-sheet>
           </v-col>
         </v-row>
-    
+
         <!--자취 정보 영상-->
         <v-row class="my-15">
           <v-row class="mx-1">
@@ -591,11 +591,6 @@
       </v-container>
     </v-main>
   </v-app>
-
-  <div>
-    <div id="map" style="width: 0; height: 0;"></div>
-    <h1 id="centerAddr"></h1>
-  </div>
 
   <!--푸터-->
   <v-footer border>
@@ -653,6 +648,8 @@ export default {
       independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
       regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
       regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
+
+      currentLocation: ''
     };
   },
   computed: {
@@ -689,99 +686,30 @@ export default {
         "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=4e77d9b3460eb3b942634fb28e5e1c40&libraries=services";
       document.head.appendChild(script);
     },
-    initMap() {
+    getAddr() {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
+        navigator.geolocation.getCurrentPosition(position => {  
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
 
-            const mapContainer = document.getElementById('map');
-            const mapOption = {
-              center: new kakao.maps.LatLng(lat, lng),
-              level: 1,
-            };
-
-            const map = new kakao.maps.Map(mapContainer, mapOption);
-
-
-            const geocoder = new kakao.maps.services.Geocoder();
-
-            const marker = new kakao.maps.Marker();
-            const infowindow = new kakao.maps.InfoWindow({ zindex: 1 });
-
-            searchAddrFromCoords(map.getCenter(), displayCenterInfo);
-
-            kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
-              searchDetailAddrFromCoords(mouseEvent.latLng, function (result, status) {
-                if (status === kakao.maps.services.Status.OK) {
-                  let detailAddr = !result[0].road_address
-                    ? '<div>도로명주소 : ' +
-                    result[0].road_address.address_name +
-                    '</div>'
-                    : '';
-                  detailAddr +=
-                    '<div>지번 주소 : ' + result[0].address.address_name + '</div>';
-
-                  const content =
-                    '<div class="bAddr">' +
-                    '<span class="title">법정동 주소정보</span>' +
-                    detailAddr +
-                    '</div>';
-
-                  marker.setPosition(mouseEvent.latLng);
-                  marker.setMap(map);
-
-                  infowindow.setContent(content);
-                  infowindow.open(map, marker);
-                }
-              });
-            });
-
-            kakao.maps.event.addListener(map, 'idle', function () {
-              searchAddrFromCoords(map.getCenter(), displayCenterInfo);
-            });
-
-            function searchAddrFromCoords(coords, callback) {
-              geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+          let geocoder = new kakao.maps.services.Geocoder();
+          let coord = new kakao.maps.LatLng(lat, lng);
+          let callback = (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              console.log(result[0].road_address.region_1depth_name);
+              this.currentLocation = result[0].road_address.region_1depth_name
             }
-
-            function searchDetailAddrFromCoords(coords, callback) {
-              geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
-            }
-
-            function displayCenterInfo(result, status) {
-              if (status === kakao.maps.services.Status.OK) {
-                const infoDiv = document.getElementById('centerAddr');
-
-                if (infoDiv) {
-                  for (let i = 0; i < result.length; i++) {
-                    if (result[i].region_type === 'H') {
-                      infoDiv.innerHTML = result[i].address_name;                  
-                      break;
-                    }
-                  }
-                }
-              }
-            }
-          },
-          (error) => {
-            console.error('Geolocation error:', error);
-          }
-        );
+          };
+          geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+        });
       } else {
-        console.error('Geolocation is not supported by this browser.');
+        console.log("Geolocation is not supported by this browser.");
       }
-    },
+    }
   },
   mounted() {
     this.read();
-    this.initMap();
-    if (window.kakao && window.kakao.maps) {
-      this.initMap();
-    } else {
-      this.addKakaoMapScript();
-    }
+    this.getAddr();
   },
 };
 </script>
