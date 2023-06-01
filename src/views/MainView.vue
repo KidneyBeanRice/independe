@@ -89,8 +89,9 @@
         </v-col>
         <v-col cols="3" class="ml-11">
           <v-card-text>
-            <v-text-field :loading="error" density="compact" variant="outlined" label="통합검색"
-              append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="onClick"></v-text-field>
+            <v-text-field v-model="searchText" :loading="error" density="compact" variant="outlined" label="통합검색"
+              append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="totalSearch"
+              @keydown.enter="totalSearch"></v-text-field>
           </v-card-text>
         </v-col>
         <v-col cols="1" v-if="!getToken">
@@ -649,13 +650,23 @@ export default {
       regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
       regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
 
-      currentLocation: ''
+      searchText: '', // 검색어를 저장하는 데이터 속성
+      error: false, // 로딩 상태를 나타내는 데이터 속성
+
+      currentLocation: '',
     };
   },
   computed: {
     ...mapGetters(['getToken']),
   },
   methods: {
+    totalSearch() {
+      if (this.searchText !== '')
+      {
+        const query = this.searchText ? `?searchText=${encodeURIComponent(this.searchText)}` : '';
+        window.location.href = '/search' + query;
+      }      
+    },
     read() {
       const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
@@ -688,7 +699,7 @@ export default {
     },
     getAddr() {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {  
+        navigator.geolocation.getCurrentPosition(position => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
 
