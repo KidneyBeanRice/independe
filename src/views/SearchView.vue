@@ -12,7 +12,7 @@
                 <v-tab @click="$store.state.myGlobalVariable = 0">
                   <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
                 </v-tab>
-              </router-link>
+              </router-link> 
               <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;"
                 @click="$store.state.boardCheck = 0">
                 <v-menu open-on-hover>
