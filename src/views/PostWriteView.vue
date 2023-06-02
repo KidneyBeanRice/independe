@@ -265,6 +265,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'PostWriteView',
   data() {
@@ -324,6 +326,7 @@ export default {
     },
     write() {
       const formData = new FormData()
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
       formData.append('title', this.title)
       formData.append('content', this.content)      
@@ -342,7 +345,7 @@ export default {
         formData.append('files', this.imageFiles[i])
               
       if (this.boardCheck === 0)
-        this.$axios.post("/posts/region/new", formData, { headers: {'Content-Type': 'multipart/form-data'}})
+        this.$axios.post("/posts/region/new", formData, { headers: {'Content-Type': 'multipart/form-data', Authorization: token}})
           .then(res => {
             console.log(res.data);
             this.$router.go(-1)
@@ -351,7 +354,7 @@ export default {
             console.log(error);
           });
       else if (this.boardCheck === 1)
-        this.$axios.post("/posts/independent/new", formData, { headers: {'Content-Type': 'multipart/form-data'}})
+        this.$axios.post("/posts/independent/new", formData, { headers: {'Content-Type': 'multipart/form-data', Authorization: token}})
           .then(res => {
             console.log(res.data);
             this.$router.go(-1)
@@ -374,6 +377,9 @@ export default {
       this.active_tab = 1
     else if (this.boardCheck === 1)
       this.active_tab = 2
+  },
+  computed: {
+    ...mapGetters(['getToken']),
   },
 }   
 </script>

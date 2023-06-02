@@ -411,6 +411,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'PostView',
   data() {
@@ -431,14 +433,19 @@ export default {
   },
   methods: {
     read() {
-      //const path = this.$route.path;
-      //const pathSegments = path.split('/'); 
-      //const postId = parseInt(pathSegments[2]);
+      const path = this.$route.path;
+      const pathSegments = path.split('/'); 
+      const postId = parseInt(pathSegments[2]);
 
-      //const url = `/posts/${postId}`;
-      const url = 'https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/post'
+      const url = `/posts/${postId}`;
+      //const url = 'https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/post'
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
-      this.$axios.get(url)
+      this.$axios.get(url,{
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then((res) => {
           this.Board = res.data.data
           this.bestComment = res.data.data.bestComment
@@ -490,6 +497,9 @@ export default {
   },
   mounted() {
     this.read();
+  },
+  computed: {
+    ...mapGetters(['getToken']),
   },
 }   
 </script>

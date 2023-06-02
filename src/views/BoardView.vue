@@ -348,16 +348,18 @@
                   <div v-if="Board.title.length < 37">
                     <v-img style="float:left" v-if="Board.picture === true" :width="15" src="../img/imagePlaceHolder.png"
                       class="mr-1 pt-1"></v-img>
-                      <router-link :to="{ name: 'PostView', params: { postId: Board.postId }}" style="text-decoration: none; color:black;">
-                    {{ Board.title }}
-                  </router-link>
+                    <router-link :to="{ name: 'PostView', params: { postId: Board.postId } }"
+                      style="text-decoration: none; color:black;">
+                      {{ Board.title }}
+                    </router-link>
                   </div>
                   <div v-else>
                     <v-img style="float:left" v-if="Board.picture === true" :width="15" src="../img/imagePlaceHolder.png"
                       class="mr-1 pt-1"></v-img>
-                      <router-link :to="{ name: 'PostView', params: { postId: Board.postId }}" style="text-decoration: none; color:black;">
-                    <p>{{ Board.title.substr(0, 37) }}...</p>
-                  </router-link>
+                    <router-link :to="{ name: 'PostView', params: { postId: Board.postId } }"
+                      style="text-decoration: none; color:black;">
+                      <p>{{ Board.title.substr(0, 37) }}...</p>
+                    </router-link>
                   </div>
                 </v-col>
                 <v-col cols="2">
@@ -404,32 +406,45 @@
               <v-divider :thickness="1" class="border-opacity-25 mt-3" length="1160"></v-divider>
             </v-list>
 
+            <!--검색-->
             <v-row class="mt-3" align=center>
               <v-col cols="5">
                 <v-row align=center>
                   <v-menu>
                     <template v-slot:activator="{ props }">
                       <v-btn v-bind="props" style="width:130px; height:40px; border-color:#A9A9A9" variant="outlined">
-                        <p>{{ search[searchKeyword] }} ▼</p>
+                        <p>{{ search[searchCondition] }} ▼</p>
                       </v-btn>
                     </template>
                     <v-list>
                       <v-list-item style="text-align: center;">
-                        <v-list-item-title @click="searchKeyword = 0" class="my-2">제목 + 내용</v-list-item-title>
+                        <v-list-item-title @click="searchCondition = 0" class="my-2">제목 + 내용</v-list-item-title>
                         <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                        <v-list-item-title @click="searchKeyword = 1" class="my-2">제목</v-list-item-title>
+                        <v-list-item-title @click="searchCondition = 1" class="my-2">제목</v-list-item-title>
                         <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                        <v-list-item-title @click="searchKeyword = 2" class="my-2">내용</v-list-item-title>
+                        <v-list-item-title @click="searchCondition = 2" class="my-2">내용</v-list-item-title>
                         <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                        <v-list-item-title @click="searchKeyword = 3" class="my-2">작성자</v-list-item-title>
+                        <v-list-item-title @click="searchCondition = 3" class="my-2">작성자</v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-menu>
                   <v-card-text>
                     <v-text-field :loading="error" density="compact" variant="outlined" append-inner-icon="mdi-magnify"
-                      single-line hide-details @click:append-inner="onClick">
+                      single-line hide-details v-model="searchKeyword">
                     </v-text-field>
                   </v-card-text>
+                  <router-link :to="{
+                    path: $route.path,
+                    query: {
+                      ...$route.query,
+                      condition: searchAPI[searchCondition],
+                      keyword: searchKeyword
+                    }
+                  }" style="text-decoration: none; color:#5E913B;">
+                    <v-btn variant="flat" color="#5E913B" class="font-weight-bold" @click="boardSearch">
+                      <div class="text-white">검색</div>
+                    </v-btn>
+                  </router-link>
                 </v-row>
               </v-col>
               <v-col>
@@ -564,6 +579,8 @@
 </template>
   
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'BoardView',
   data() {
@@ -591,7 +608,9 @@ export default {
 
       link: ['메인', '게시판', '자취생활'],
       search: ['제목 + 내용', '제목', '내용', '작성자'],
-      searchKeyword: 0,
+      searchAPI: ['all', 'title', 'content', 'nickname'],
+      searchCondition: 0,
+      searchKeyword: ''
     }
   },
   computed: {
@@ -618,10 +637,11 @@ export default {
         pageNumbers.push(i);
       }
       return pageNumbers;
-    }
+    },
+    ...mapGetters(['getToken']),
   },
-  created() {    
-    window.addEventListener('popstate', () => {  
+  created() {
+    window.addEventListener('popstate', () => {
       const pathname = window.location.pathname;
       if (pathname.startsWith('/board/')) {
         this.isBackButtonClicked = true
@@ -678,6 +698,41 @@ export default {
     updateCategoryCheck(newValue) {
       this.$store.dispatch('updateCategoryCheck', newValue);
     },
+    boardSearch() {
+        // 검색 요청을 보낼 URL 생성
+        const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+
+        // 검색 요청 보내기
+        this.$axios.get(url, {
+          params: {
+            condition: this.searchAPI[this.searchCondition],
+            keyword: this.searchKeyword,
+            page: this.currentPage
+          }
+        }, {
+          headers: {
+            Authorization: this.getToken, // 헤더에 토큰 추가
+          },
+        })
+          .then(res => {
+            // 검색 결과 처리
+            this.Board = res.data.data;
+            this.totalPage = res.data.count;
+
+            // 페이지 처리 코드...
+            if (this.totalPage < 10)
+              this.totalPage = 1
+            else if (this.totalPage % 10 === 0)
+              this.totalPage = parseInt(this.totalPage / 10)
+            else
+              this.totalPage = parseInt(this.totalPage / 10) + 1
+
+            console.log(res.data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
     region_all() {
       this.areaCheck = 0
       this.regionCheck = 0
@@ -687,9 +742,14 @@ export default {
       this.updateCategoryCheck(0)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[0]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
       //this.$axios.get('https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/independe', { params: { page: this.currentPage } })
-        this.$axios.get(url, { params: { page: this.currentPage } })
+      this.$axios.get(url, { params: { page: this.currentPage } }, {
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -701,6 +761,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -715,11 +777,17 @@ export default {
       this.updateBoardCheck(1)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[1]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } }, {
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
-          
+
           if (this.totalPage < 10)
             this.totalPage = 1
           else if (this.totalPage % 10 === 0)
@@ -727,6 +795,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -741,7 +811,13 @@ export default {
       this.updateBoardCheck(2)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[2]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } }, {
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -753,6 +829,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -767,7 +845,13 @@ export default {
       this.updateBoardCheck(3)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[3]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } }, {
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -779,6 +863,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -793,7 +879,13 @@ export default {
       this.updateBoardCheck(4)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[4]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } }, {
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -805,6 +897,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -817,7 +911,13 @@ export default {
       this.updateCategoryCheck(1)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[1]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } }, {
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -829,6 +929,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -841,7 +943,13 @@ export default {
       this.updateCategoryCheck(2)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[2]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } }, {
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -853,6 +961,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -865,7 +975,13 @@ export default {
       this.updateCategoryCheck(3)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[3]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } }, {
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -877,6 +993,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -889,7 +1007,13 @@ export default {
       this.updateCategoryCheck(4)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[4]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } }, {
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -901,6 +1025,8 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
@@ -913,7 +1039,13 @@ export default {
       this.updateCategoryCheck(5)
       this.currentPage = 0;
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[5]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } }, {
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.totalPage = res.data.count
@@ -925,15 +1057,23 @@ export default {
           else
             this.totalPage = parseInt(this.totalPage / 10) + 1
 
+          this.searchKeyword = ''
+          this.searchCondition = 0
           console.log(res.data)
         })
         .catch(function (error) {
           console.log(error);
         });
     },
-    page() {      
+    page() {
       const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
-      this.$axios.get(url, { params: { page: this.currentPage } })
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      this.$axios.get(url, { params: { page: this.currentPage } }, {
+        headers: {
+          Authorization: token, // 헤더에 토큰 추가
+        },
+      })
         .then(res => {
           this.Board = res.data.data
           this.$store.commit('updateNowPage', this.currentPage);
@@ -965,7 +1105,7 @@ export default {
       this.region_ulsan()
     else if (this.$store.state.boardCheck === 4)
       this.region_kyeongnam()
-    
+
     if (this.$store.state.categoryCheck === 1)
       this.regionCategory_talk()
     else if (this.$store.state.categoryCheck === 2)

@@ -46,7 +46,12 @@
 
             <v-row class="mt-10 mb-5">
               <v-col align="center">
+<<<<<<< HEAD
                 <v-btn @click="login()" style="height:60px; width: 5000px;" variant="flat" color="#6DA945" class="font-weight-bold">
+=======
+                <v-btn @click="login()" style="height:60px; width: 5000px;" variant="flat" color="#6DA945"
+                  class="font-weight-bold">
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
                   <div class="text-white" style="font-size:20px">로그인</div>
                 </v-btn>
               </v-col>
@@ -60,7 +65,11 @@
           </v-row>
           <v-row justify="center" class="mb-5">
             <v-col cols="1">
+<<<<<<< HEAD
               <a href="http://192.168.0.18:8080/oauth2/authorization/naver">
+=======
+              <a href="http://spring:8080/oauth2/authorization/naver">                
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
                 <v-img :height="75" src="../img/naver.png"></v-img>
               </a>
             </v-col>
@@ -146,12 +155,17 @@
   
 <script>
 import { mapActions, mapGetters } from 'vuex';
+<<<<<<< HEAD
+=======
+
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
 export default {
   name: 'LoginView',
   data() {
     return {
       active_tab: 0,
       link: ['메인', '게시판', '자취생활'],
+<<<<<<< HEAD
       
       username: "",
       password: ""
@@ -160,11 +174,20 @@ export default {
   ,
   computed: {
     ...mapGetters(['getToken'])
+=======
+      username: '',
+      password: '',
+    };
+  },
+  computed: {
+    ...mapGetters(['getToken']),
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
   },
   methods: {
     ...mapActions(['saveToken']),
     login() {
       const credentials = {
+<<<<<<< HEAD
     username: this.username,
     password: this.password
   };
@@ -192,4 +215,44 @@ export default {
         .catch(err => console.error(err))
     },
 }}
+=======
+        username: this.username,
+        password: this.password,
+      };
+
+      this.$axios
+        .post('/login', credentials)
+        .then(response => {
+          const token = response.headers.authorization;
+          this.saveToken(token); // 토큰 값을 Vuex 스토어에 저장
+          this.$router.go(-1)
+          // 로그인 성공 후에 리다이렉트 또는 다른 동작 수행
+        })
+        .catch(error => {
+          // 로그인 실패 처리
+          console.error(error);
+        });
+    },
+    naver() {
+      const url = '/oauth2/authorization/naver';
+      this.$axios
+        .get(url)
+        .then(response => {
+          const authCookie = response.headers.oauth2_auth_request;
+          const urlCookie = response.headers.redirect_uri;
+
+          this.saveAuthCookie(authCookie); // 인증 쿠키 값을 Vuex 스토어에 저장
+          this.saveUrlCookie(urlCookie); // URL 쿠키 값을 Vuex 스토어에 저장
+
+          console.log(authCookie);
+          console.log(urlCookie);
+          this.$router.go(-1)
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+  },
+};
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
 </script>
