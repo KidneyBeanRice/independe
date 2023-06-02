@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 // import { createRouter, createWebHistory } from 'vue-router'
 // import MainView from '../views/MainView.vue'
 // import BoardView from '../views/BoardView.vue'
@@ -62,6 +63,9 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 =======
 import { createRouter, createWebHistory } from 'vue-router';
 >>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
+=======
+import { createRouter, createWebHistory } from 'vue-router';
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
 import MainView from '../views/MainView.vue';
 import BoardView from '../views/BoardView.vue';
 import IndependentView from '../views/IndependentView.vue';
@@ -70,6 +74,10 @@ import PostView from '../views/PostView.vue';
 import LoginView from '../views/LoginView.vue';
 import SignUpView from '../views/SignUpView.vue';
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import SearchView from '../views/SearchView.vue';
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
 =======
 import SearchView from '../views/SearchView.vue';
 >>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
@@ -119,7 +127,11 @@ const routes = [
 
 const router = createRouter({
 <<<<<<< HEAD
+<<<<<<< HEAD
   history: createWebHashHistory(),
+=======
+  history: createWebHistory(),
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
 =======
   history: createWebHistory(),
 >>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
@@ -146,8 +158,12 @@ function checkIfAuthenticated() {
   // 예: const token = localStorage.getItem('token');
   //     return token !== null && token !== undefined;
 <<<<<<< HEAD
+<<<<<<< HEAD
   const token = localStorage.getItem('token');
   return token !== null && token !== undefined;
+=======
+  return false; // 예시로 기본값 false 설정
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
 =======
   return false; // 예시로 기본값 false 설정
 >>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6

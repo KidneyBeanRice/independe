@@ -95,6 +95,7 @@
           </v-card-text>
         </v-col>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <v-col cols="1">
           <router-link to="/login">
           <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
@@ -102,12 +103,17 @@
           </v-btn>
         </router-link>
 =======
+=======
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
         <v-col cols="1" v-if="!getToken">
           <router-link to="/login">
             <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
               <div class="text-white">로그인</div>
             </v-btn>
           </router-link>
+<<<<<<< HEAD
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
+=======
 >>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
         </v-col>
         <v-col cols="1" v-if="!getToken">
@@ -667,6 +673,7 @@ export default {
   },
   computed: {
     ...mapGetters(['getToken']),
+<<<<<<< HEAD
   },
   computed: {
     ...mapGetters(['getToken'])
@@ -693,12 +700,19 @@ export default {
         })
         .catch(err => console.error(err));
 =======
+=======
+  },
+  methods: {
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
     totalSearch() {
       if (this.searchText !== '')
       {
         const query = this.searchText ? `?searchText=${encodeURIComponent(this.searchText)}` : '';
         window.location.href = '/search' + query;
       }      
+<<<<<<< HEAD
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
+=======
 >>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
     },
     read() {
@@ -757,11 +771,15 @@ export default {
     this.getAddr();
   },
 <<<<<<< HEAD
+<<<<<<< HEAD
   created() {
    
   }
 };
 
+=======
+};
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
 =======
 };
 >>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6

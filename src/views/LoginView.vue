@@ -47,7 +47,12 @@
             <v-row class="mt-10 mb-5">
               <v-col align="center">
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <v-btn @click="login()" style="height:60px; width: 5000px;" variant="flat" color="#6DA945" class="font-weight-bold">
+=======
+                <v-btn @click="login()" style="height:60px; width: 5000px;" variant="flat" color="#6DA945"
+                  class="font-weight-bold">
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
 =======
                 <v-btn @click="login()" style="height:60px; width: 5000px;" variant="flat" color="#6DA945"
                   class="font-weight-bold">
@@ -66,7 +71,11 @@
           <v-row justify="center" class="mb-5">
             <v-col cols="1">
 <<<<<<< HEAD
+<<<<<<< HEAD
               <a href="http://192.168.0.18:8080/oauth2/authorization/naver">
+=======
+              <a href="http://spring:8080/oauth2/authorization/naver">                
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
 =======
               <a href="http://spring:8080/oauth2/authorization/naver">                
 >>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
@@ -156,6 +165,10 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
 =======
 
 >>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
@@ -166,6 +179,7 @@ export default {
       active_tab: 0,
       link: ['메인', '게시판', '자취생활'],
 <<<<<<< HEAD
+<<<<<<< HEAD
       
       username: "",
       password: ""
@@ -175,18 +189,24 @@ export default {
   computed: {
     ...mapGetters(['getToken'])
 =======
+=======
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
       username: '',
       password: '',
     };
   },
   computed: {
     ...mapGetters(['getToken']),
+<<<<<<< HEAD
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
+=======
 >>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
   },
   methods: {
     ...mapActions(['saveToken']),
     login() {
       const credentials = {
+<<<<<<< HEAD
 <<<<<<< HEAD
     username: this.username,
     password: this.password
@@ -216,6 +236,8 @@ export default {
     },
 }}
 =======
+=======
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
         username: this.username,
         password: this.password,
       };
@@ -254,5 +276,8 @@ export default {
     },
   },
 };
+<<<<<<< HEAD
+>>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
+=======
 >>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
 </script>
