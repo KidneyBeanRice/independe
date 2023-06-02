@@ -7,4 +7,4 @@ export function formatDate(value) {
     hours = hours > 9 ? hours : `0${hours}`;
     const minutes = date.getMinutes();
     return `${month}-${day} ${hours}:${minutes}`;
-}  
+}   

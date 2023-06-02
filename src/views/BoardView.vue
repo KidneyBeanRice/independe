@@ -729,7 +729,7 @@ export default {
 
             console.log(res.data);
           })
-          .catch(function (error) {
+          .catch(function (error) { 
             console.log(error);
           });
     },
