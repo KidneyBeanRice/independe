@@ -220,7 +220,7 @@
                     <v-btn variant="text" size="x-small" style="font-size: 14px; color:#A9A9A9">{{ totalPage
                     }}</v-btn>
                   </div>
-                </router-link>
+                </router-link> 
               </div>
             </v-row>
           </div>
