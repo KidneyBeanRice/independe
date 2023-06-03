@@ -337,7 +337,7 @@
         })
           .then(res => {
             // 검색 결과 처리
-            this.searchBoard = res.data;
+            this.searchBoard = res.data.data;
             this.totalPage = res.data.count;
 
             // 페이지 처리 코드...

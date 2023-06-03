@@ -89,12 +89,12 @@
                     <v-row class="mt-1">
                         <v-col cols="3"></v-col>
                         <v-col cols="auto">
-                            <div style="font-size:12px; color:darkred" v-if="!idDuplicateCheck && idDupBtn > 0">! 중복된 아이디
-                                입니다.</div>
+                            <div style="font-size:12px; color:darkred" v-if="!idDuplicateCheck && idDupBtn > 0">! 사용 불가능한 아이디 입니다.</div>
+                            <div style="font-size:12px; color:darkgreen" v-else-if="idDuplicateCheck && idDupBtn > 0">사용 가능한 아이디 입니다.</div>
                         </v-col>
                     </v-row>
-
-                    <v-row class="mt-5">
+                    
+                    <v-row class="mt-10">
                         <v-col cols="3"></v-col>
                         <v-col cols="1">
                             <div class="font-weight-bold mt-1" style="color:gray; font-size:20px">비밀번호</div>
@@ -119,7 +119,7 @@
                             <div style="font-size:12px; color:darkblue">* 비밀번호는 8글자 이상, 영문 대 소문자, 숫자와 특수기호를 포함해야 합니다.</div>
                         </v-col>
                     </v-row>
-
+                    
                     <v-row class="mt-10">
                         <v-col cols="3"></v-col>
                         <v-col cols="1">
@@ -137,8 +137,8 @@
                             <div style="font-size:12px; color:darkred" v-if="!passwordCheck">! 비밀번호와 일치하지 않습니다.</div>
                         </v-col>
                     </v-row>
-
-                    <v-row class="mt-5">
+                    
+                    <v-row class="mt-10">
                         <v-col cols="3"></v-col>
                         <v-col cols="1">
                             <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">닉네임</div>
@@ -149,10 +149,18 @@
                         </v-col>
                         <v-col cols="2">
                             <v-btn variant="flat" color="#898E93" class="mt-3 font-weight-bold">
-                                <div class="text-white">중복확인</div>
+                                <div class="text-white" @click="nicknameDuplicate">중복확인</div>
                             </v-btn>
                         </v-col>
                         <v-col cols="2"></v-col>
+                    </v-row>
+                    
+                    <v-row class="mt-1">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="auto">
+                            <div style="font-size:12px; color:darkred" v-if="!nicknameDuplicateCheck && nicknameDupBtn > 0">! 사용 불가능한 닉네임 입니다.</div>
+                            <div style="font-size:12px; color:darkgreen" v-else-if="nicknameDuplicateCheck && nicknameDupBtn > 0">사용 가능한 닉네임 입니다.</div>
+                        </v-col>
                     </v-row>
 
                     <v-row class="mt-1">
@@ -162,8 +170,8 @@
                                 가능합니다.</div>
                         </v-col>
                     </v-row>
-
-                    <v-row class="mt-5">
+                    
+                    <v-row class="mt-10">
                         <v-col cols="3"></v-col>
                         <v-col cols="1">
                             <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">이메일</div>
@@ -181,20 +189,27 @@
                             <div style="font-size:12px; color:darkred" v-if="!emailVaild">! 올바른 이메일 양식이 아닙니다.</div>
                         </v-col>
                     </v-row>
-
-                    <v-row class="mt-5">
+                    
+                    <v-row class="mt-10">
                         <v-col cols="3"></v-col>
                         <v-col cols="1">
                             <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">전화번호</div>
                         </v-col>
                         <v-col cols="4">
                             <v-text-field v-model="number" placeholder="PHONE NUMBER" class="no-resize"
-                                variant="underlined" @input="formatPhoneNumber" type="tel" maxlength="13"></v-text-field>
+                                variant="underlined" @input="formatPhoneNumber" type="tel" maxlength="13" @blur="numberCount++"></v-text-field>
                         </v-col>
                         <v-col cols="2"></v-col>
                     </v-row>
+                    
+                    <v-row class="mt-1">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="auto">
+                            <div style="font-size:12px; color:darkred" v-if="number.length !== 13 && numberCount !== 0">! 전화번호는 13자리 입니다.</div>
+                        </v-col>
+                    </v-row>
 
-                    <v-row class="mt-15">
+                    <v-row class="mt-15 mb-10">
                         <v-col cols="5"></v-col>
                         <v-col cols="1">
                             <v-btn style="height:55px; width: 100px;" @click="cancel">
@@ -210,7 +225,6 @@
                         <v-col cols="5"></v-col>
                     </v-row>
                 </div>
-
             </v-container>
         </v-main>
     </v-app>
@@ -336,8 +350,12 @@ export default {
             nickVaild: true,
             idDupCheck: true,
             idDuplicateCheck: false,
+            nicknameDupCheck: true,
+            nicknameDuplicateCheck: false,
             numberCheck: false,
             idDupBtn: 0,
+            nicknameDupBtn: 0,
+            numberCount: 0,
 
             id: "",
             password: "",
@@ -409,7 +427,7 @@ export default {
         idDuplicate() {
             this.$axios.post("/members/username", { username: this.id })
                 .then(res => {
-                    this.idDupCheck = res.data.isDuplicatedNot
+                    this.idDupCheck = res.data.idDuplicatedNot
                     this.idDupBtn = this.idDupBtn + 1
 
                     if (this.idDupCheck === true)
@@ -418,16 +436,34 @@ export default {
                         this.idDuplicateCheck = false
 
                     console.log(this.idDupBtn)
+                    console.log(res.data.idDuplicatedNot)
                 })
                 .catch(error => {
                     console.log(error);
                 });
         },
         nicknameDuplicate() {
+            this.$axios.post("/members/nickname", { nickname: this.nickname })
+                .then(res => {
+                    this.nicknameDupCheck = res.data.idDuplicatedNot
+                    this.nicknameDupBtn = this.nicknameDupBtn + 1
 
+                    if (this.nicknameDupCheck === true)
+                        this.nicknameDuplicateCheck = true
+                    else
+                        this.nicknameDuplicateCheck = false
+
+                    console.log(this.nicknameDupBtn)
+                    console.log(res.data.idDuplicatedNot)
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         },
         craete() {
-            this.$axios.post("/members/new", { username: this.id, password: this.password, nickname: this.nickname, email: this.email, number: this.number })
+            if (this.idDuplicateCheck && this.idDupBtn > 0 && this.passwordVaild && this.password !== '' && this.passwordCheck && this.passwordCk !== '' && this.nickname !== '' && this.nicknameDuplicateCheck && this.nicknameDupBtn > 0 && this.nickVaild && this.emailVaild && this.email !== '' && this.number !== '' && this.number.length === 13)
+            {
+                this.$axios.post("/members/new", { username: this.id, password: this.password, nickname: this.nickname, email: this.email, number: this.number })
                 .then(res => {
                     alert("회원가입이 완료되었습니다.")
                     this.$router.go(-1);
@@ -436,6 +472,15 @@ export default {
                 .catch(error => {
                     console.log(error);
                 });
+            }
+            else if(this.idDupBtn === 0 || this.nicknameDupBtn === 0)
+            {
+                alert("중복확인을 해주세요.")
+            }
+            else
+            {
+                alert("정보가 올바르지 않습니다. 다시 한 번 확인해 주세요.")
+            }
         }
     },
     mounted() {
