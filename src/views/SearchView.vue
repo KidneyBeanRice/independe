@@ -139,7 +139,7 @@
 <v-row>
   <v-col v-for="item in searchBoard" :key="item" cols="12">
     <v-row>
-      <v-col cols="1"  align="center" justify="center">
+      <v-col cols="1" >
         <div v-if="item.independentPostType === null">
           <router-link
             :to="{ name: 'BoardView', params: { regionType: item.regionTypeEn, regionPostType: item.regionPostTypeEn } }"
