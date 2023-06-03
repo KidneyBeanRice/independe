@@ -94,27 +94,12 @@
               @keydown.enter="totalSearch"></v-text-field>
           </v-card-text>
         </v-col>
-<<<<<<< HEAD
-<<<<<<< HEAD
-        <v-col cols="1">
-          <router-link to="/login">
-          <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
-            <div class="text-white">로그인</div>
-          </v-btn>
-        </router-link>
-=======
-=======
->>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
         <v-col cols="1" v-if="!getToken">
           <router-link to="/login">
             <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
               <div class="text-white">로그인</div>
             </v-btn>
           </router-link>
-<<<<<<< HEAD
->>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
-=======
->>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
         </v-col>
         <v-col cols="1" v-if="!getToken">
           <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
@@ -239,7 +224,7 @@
           </v-col>
 
           <!--실시간 검색어-->
-          <v-col cols="auto">
+          <!-- <v-col cols="auto">
             <v-sheet :height="430" :width="290" color="grey-lighten-5" class="mt-13">
               <v-row>
                 <v-col cols="1"></v-col>
@@ -251,14 +236,14 @@
                     <p class="text-subtitle-2">{{ index + 1 }}</p>
                   </v-list>
                 </v-col>
-                <v-col cols="7">
+                <v-col cols="7">                  
                   <v-list v-for="topSearch in topSearch" :key="topSearch"
                     style="background-color: #FAFAFA; text-emphasis-color: #FFFFFF;">
-                    <div v-if="topSearch.keywordName.length <= 9">
-                      <p class="text-subtitle-2">{{ topSearch.keywordName }}</p>
+                    <div v-if="topSearch.keyword.length <= 9">  
+                      <p class="text-subtitle-2">{{ topSearch.keyword }}</p>
                     </div>
                     <div v-else>
-                      <p class="text-subtitle-2">{{ topSearch.keywordName.substr(0, 9) }}...</p>
+                      <p class="text-subtitle-2">{{ topSearch.keyword.substr(0, 9) }}...</p>
                     </div>
                   </v-list>
                 </v-col>
@@ -288,7 +273,7 @@
               </v-row>
 
             </v-sheet>
-          </v-col>
+          </v-col> -->
         </v-row>
 
         <!--실시간 자취 게시판-->
@@ -331,7 +316,7 @@
                         <div v-if="independentBoard.title.length <= 15">
                           <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
                             src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                          <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId } }"
+                          <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}"
                             style="text-decoration: none; color:black;">
                             {{ independentBoard.title }}
                           </router-link>
@@ -339,7 +324,7 @@
                         <div v-else>
                           <v-img style="float:left" v-if="independentBoard.picture === true" :width="15"
                             src="../img/imagePlaceHolder.png" class="my-1 mr-1"></v-img>
-                          <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId } }"
+                          <router-link :to="{ name: 'PostView', params: { postId: independentBoard.postId }}"
                             style="text-decoration: none; color:black;">
                             <p>{{ independentBoard.title.substr(0, 15) }}...</p>
                           </router-link>
@@ -664,6 +649,7 @@ export default {
       independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
       regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
       regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
+      
 
       searchText: '', // 검색어를 저장하는 데이터 속성
       error: false, // 로딩 상태를 나타내는 데이터 속성
@@ -673,47 +659,14 @@ export default {
   },
   computed: {
     ...mapGetters(['getToken']),
-<<<<<<< HEAD
-  },
-  computed: {
-    ...mapGetters(['getToken'])
   },
   methods: {
-<<<<<<< HEAD
-    read() {
-      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
-
-      this.$axios.get('/posts/main'/*'https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/posts/main'*/, {
-        headers: {
-          Authorization: token // 헤더에 토큰 추가
-        }
-      })
-        .then((res) => {
-          this.todayMent = res.data.data.todayMent;
-          this.popularBoard = res.data.data.popularPostDtos;
-          this.independentBoard = res.data.data.popularIndependentPostsDtos;
-          this.allBoard = res.data.data.regionAllPostDtos;
-          this.regionBoard = res.data.data.regionNotAllPostDtos;
-          this.topSearch = res.data.data.keywordDtos;
-          this.video = res.data.data.videoMainDtos;
-          console.log(res.send);
-        })
-        .catch(err => console.error(err));
-=======
-=======
-  },
-  methods: {
->>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
     totalSearch() {
       if (this.searchText !== '')
       {
         const query = this.searchText ? `?searchText=${encodeURIComponent(this.searchText)}` : '';
         window.location.href = '/search' + query;
       }      
-<<<<<<< HEAD
->>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
-=======
->>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
     },
     read() {
       const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
@@ -731,6 +684,8 @@ export default {
           this.regionBoard = res.data.data.regionNotAllPostDtos;
           this.topSearch = res.data.data.keywordDtos;
           this.video = res.data.data.videoMainDtos;
+
+          console.log(res.data)
         })
         .catch(err => console.error(err));
     },
@@ -770,17 +725,5 @@ export default {
     this.read();
     this.getAddr();
   },
-<<<<<<< HEAD
-<<<<<<< HEAD
-  created() {
-   
-  }
 };
-
-=======
-};
->>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
-=======
-};
->>>>>>> a2cf3ff495a6f94cb8afa3344e895599c744ffd6
 </script>

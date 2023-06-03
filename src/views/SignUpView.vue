@@ -1,276 +1,222 @@
 <template>
-    <!--시스템 바-->
-    <!-- <v-app-bar height="80" :elevation="1">
-        <v-container>
-            <v-row align="center">
-                <v-col cols="auto">
-                    <router-link to="/"><v-img :width="220" src="../img/logo.png"></v-img></router-link>
-                </v-col>
-                <v-col cols="auto">
-                    <v-tabs color="#5E913B" v-model="active_tab">
-                        <router-link to="/" style="text-decoration: none; color:black;">
-                            <v-tab @click="$store.state.myGlobalVariable = 0">
-                                <p class="font-weight-bold text-h6 mx-4">{{ link[0] }}</p>
-                            </v-tab>
-                        </router-link>
-                        <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;"
-                            @click="$store.state.boardCheck = 0">
-                            <v-menu open-on-hover>
-                                <template v-slot:activator="{ props }">
-                                    <v-tab v-bind="props">
-                                        <p class="font-weight-bold text-h6 mx-4">{{ link[1] }}</p>
-                                    </v-tab>
-                                </template>
-                                <v-list>
-                                    <v-list-item align="center">
-                                        <router-link to="/board/ALL/FREE" style="text-decoration: none; color:black;"
-                                            @click="region_all">
-                                            <v-list-item-title class="my-2"
-                                                @click="$store.state.boardCheck = 0">자유</v-list-item-title>
-                                        </router-link>
-                                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                                        <router-link to="/board/SEOUL/TALK" style="text-decoration: none; color:black;"
-                                            @click="region_seoul">
-                                            <v-list-item-title class="my-2"
-                                                @click="$store.state.boardCheck = 1">서울</v-list-item-title>
-                                        </router-link>
-                                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                                        <router-link to="/board/PUSAN/TALK" style="text-decoration: none; color:black;"
-                                            @click="region_busan">
-                                            <v-list-item-title class="my-2"
-                                                @click="$store.state.boardCheck = 2">부산</v-list-item-title>
-                                        </router-link>
-                                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                                        <router-link to="/board/ULSAN/TALK" style="text-decoration: none; color:black;"
-                                            @click="region_ulsan">
-                                            <v-list-item-title class="my-2"
-                                                @click="$store.state.boardCheck = 3">울산</v-list-item-title>
-                                        </router-link>
-                                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                                        <router-link to="/board/KEYNONGNAM/TALK" style="text-decoration: none; color:black;"
-                                            @click="region_kyeongnam">
-                                            <v-list-item-title class="my-2"
-                                                @click="$store.state.boardCheck = 4">경남</v-list-item-title>
-                                        </router-link>
-                                    </v-list-item>
-                                </v-list>
-                            </v-menu>
-                        </router-link>
-                        <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;"
-                            @click="$store.state.independentCheck = 0">
-                            <v-menu open-on-hover>
-                                <template v-slot:activator="{ props }">
-                                    <v-tab v-bind="props">
-                                        <p class="font-weight-bold text-h6 mx-4">{{ link[2] }}</p>
-                                    </v-tab>
-                                </template>
-                                <v-list>
-                                    <v-list-item align="center">
-                                        <router-link to="/independent/CLEAN" style="text-decoration: none; color:black;"
-                                            @click="independent_clean">
-                                            <v-list-item-title class="my-2"
-                                                @click="$store.state.independentCheck = 0">청소</v-list-item-title>
-                                        </router-link>
-                                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                                        <router-link to="/independent/WASH" style="text-decoration: none; color:black;"
-                                            @click="independent_wash">
-                                            <v-list-item-title class="my-2"
-                                                @click="$store.state.independentCheck = 1">세탁</v-list-item-title>
-                                        </router-link>
-                                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                                        <router-link to="/independent/COOK" style="text-decoration: none; color:black;"
-                                            @click="independent_cook">
-                                            <v-list-item-title class="my-2"
-                                                @click="$store.state.independentCheck = 2">요리</v-list-item-title>
-                                        </router-link>
-                                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                                        <router-link to="/independent/HEALTH" style="text-decoration: none; color:black;"
-                                            @click="independent_health">
-                                            <v-list-item-title class="my-2"
-                                                @click="$store.state.independentCheck = 3">건강</v-list-item-title>
-                                        </router-link>
-                                        <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                                        <router-link to="/independent/ETC"
-                                            style="text-decormsid aherrration: none; color:black;" @click="independent_etc">
-                                            <v-list-item-title class="my-2"
-                                                @click="$store.state.independentCheck = 4">기타</v-list-item-title>
-                                        </router-link>
-                                    </v-list-item>
-                                </v-list>
-                            </v-menu>
-                        </router-link>
-                    </v-tabs>
-                </v-col>
-                <v-col cols="3" class="ml-11">
-                    <v-card-text>
-                        <v-text-field :loading="error" density="compact" variant="outlined" label="통합검색"
-                            append-inner-icon="mdi-magnify" single-line hide-details
-                            @click:append-inner="onClick"></v-text-field>
-                    </v-card-text>
-                </v-col>
-                <v-col cols="1">
-                    <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
-                        <div class="text-white">로그인</div>
-                    </v-btn>
-                </v-col>
-                <v-col cols="1">
-                    <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
-                        <div class="text-white">회원가입</div>
-                    </v-btn>
-                </v-col>
-            </v-row>
-        </v-container>
-    </v-app-bar> -->
-
     <v-app>
         <v-main>
             <v-container>
-                <v-row class="mt-3">
-                    <v-col cols="auto">
-                        <v-img :width="45" :height="45" src="../img/signUp.png"></v-img>
-                    </v-col>
-                    <h2 class="font-weight-bold mt-5" style="color:#5E913B">인디펜더 회원가입</h2>
-                </v-row>
+                <div v-if="formCheck === 1">
+                    <v-row class="mt-3">
+                        <v-col cols="auto">
+                            <v-img :width="45" :height="45" src="../img/signUp.png"></v-img>
+                        </v-col>
+                        <h2 class="font-weight-bold mt-5" style="color:#5E913B">인디펜더 회원가입</h2>
+                    </v-row>
 
-                <v-row>
-                    <v-col>
-                        <v-divider :thickness="1" class="border-opacity-25 my-5" ></v-divider>
-                    </v-col>
-                </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-divider :thickness="1" class="border-opacity-25 my-1"></v-divider>
+                        </v-col>
+                    </v-row>
 
-                <v-row>
-                    <v-col>
-                        <div class="font-weight-bold mt-5 mb-3" style="color:gray; font-size:20px">이용약관</div>
-                        <v-textarea v-model="terms" class="no-resize" :readonly="true" variant="outlined"></v-textarea>
-                        <v-row>
-                            <v-checkbox label="[필수] 이용약관에 동의합니다." color="success"></v-checkbox>
-                        </v-row>
-                    </v-col>
-                </v-row>
+                    <v-row>
+                        <v-col>
+                            <div class="font-weight-bold mt-5 mb-3" style="color:gray; font-size:20px">이용약관</div>
+                            <v-textarea v-model="terms" class="no-resize" :readonly="true" variant="outlined"></v-textarea>
+                            <v-row>
+                                <v-checkbox v-model="termsAgreed" label="[필수] 이용약관에 동의합니다." color="success"></v-checkbox>
+                            </v-row>
+                        </v-col>
+                    </v-row>
 
-                <v-row>
-                    <v-col>
-                        <div class="font-weight-bold mt-5 mb-3" style="color:gray; font-size:20px">개인정보 수집 및 이용 동의서</div>
-                        <v-textarea v-model="privacy" class="no-resize" :readonly="true" variant="outlined"></v-textarea>
-                        <v-row>
-                            <v-checkbox label="[필수] 개인정보 수집 및 이용에 동의합니다." color="success"></v-checkbox>
-                        </v-row>
-                    </v-col>
-                </v-row>
+                    <v-row>
+                        <v-col>
+                            <div class="font-weight-bold mt-5 mb-3" style="color:gray; font-size:20px">개인정보 수집 및 이용 동의서
+                            </div>
+                            <v-textarea v-model="privacy" class="no-resize" :readonly="true"
+                                variant="outlined"></v-textarea>
+                            <v-row>
+                                <v-checkbox v-model="privacyAgreed" label="[필수] 개인정보 수집 및 이용에 동의합니다."
+                                    color="success"></v-checkbox>
+                            </v-row>
+                        </v-col>
+                    </v-row>
 
-                <v-row class="mt-3">
-                    <v-col cols="auto">
-                        <v-img :width="45" :height="45" src="../img/privacy.png"></v-img>
-                    </v-col>
-                    <h2 class="font-weight-bold mt-5" style="color:#5E913B">개인정보입력</h2>
-                </v-row>
+                    <v-row>
+                        <v-col cols="5"></v-col>
+                        <v-col cols="1">
+                            <v-btn style="height:55px; width: 100px;" @click="cancel">
+                                <div style="font-size:16px">취소</div>
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="1">
+                            <v-btn style="height:55px; width: 100px;" variant="flat" color="#5E913B"
+                                class="font-weight-bold" @click="next">
+                                <div class="text-white" style="font-size:16px">다음</div>
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="5"></v-col>
+                    </v-row>
+                </div>
+                <div v-else>
+                    <v-row class="mt-3">
+                        <v-col cols="auto">
+                            <v-img :width="45" :height="45" src="../img/privacy.png"></v-img>
+                        </v-col>
+                        <h2 class="font-weight-bold mt-5" style="color:#5E913B">개인정보입력</h2>
+                    </v-row>
 
-                <v-row class="mb-5">
-                    <v-col>
-                        <v-divider :thickness="1" class="border-opacity-25 my-5" ></v-divider>
-                    </v-col>
-                </v-row>
+                    <v-row class="mb-1">
+                        <v-col>
+                            <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
+                        </v-col>
+                    </v-row>
 
-                <v-row class="mt-5">
-                    <v-col cols="3"></v-col>
-                    <v-col cols="1">
-                        <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">아이디</div>
-                    </v-col>
-                    <v-col cols="4">
-                        <v-text-field class="no-resize" variant="underlined"></v-text-field>
-                    </v-col>
-                    <v-col cols="2">
-                        <v-btn variant="flat" color="#898E93" class="mt-3 font-weight-bold">
-                            <div class="text-white">중복확인</div>
-                        </v-btn>
-                    </v-col>
-                    <v-col cols="2"></v-col>
-                </v-row>
+                    <v-row class="mt-5">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="1">
+                            <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">아이디</div>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-text-field v-model="id" placeholder="ID" class="no-resize"
+                                variant="underlined"></v-text-field>
+                        </v-col>
+                        <v-col cols="2">
+                            <v-btn variant="flat" color="#898E93" class="mt-3 font-weight-bold" @click="idDuplicate">
+                                <div class="text-white">중복확인</div>
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="2"></v-col>
+                    </v-row>
 
-                <v-row class="mt-5">
-                    <v-col cols="3"></v-col>
-                    <v-col cols="1">
-                        <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">비밀번호</div>
-                    </v-col>
-                    <v-col cols="4">
-                        <v-text-field class="no-resize" variant="underlined"></v-text-field>
-                    </v-col>                
-                    <v-col cols="2"></v-col>    
-                </v-row>
+                    <v-row class="mt-1">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="auto">
+                            <div style="font-size:12px; color:darkred" v-if="!idDuplicateCheck && idDupBtn > 0">! 중복된 아이디
+                                입니다.</div>
+                        </v-col>
+                    </v-row>
 
-                <v-row class="mt-5">
-                    <v-col cols="3"></v-col>
-                    <v-col cols="1">
-                        <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">비밀번호 확인</div>
-                    </v-col>
-                    <v-col cols="4">
-                        <v-text-field class="no-resize" variant="underlined"></v-text-field>
-                    </v-col>                
-                    <v-col cols="2"></v-col>    
-                </v-row>
+                    <v-row class="mt-5">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="1">
+                            <div class="font-weight-bold mt-1" style="color:gray; font-size:20px">비밀번호</div>
+                        </v-col>
+                        <v-col cols="4" class="py-0">
+                            <v-text-field v-model="password" type="password" placeholder="PASSWORD" class="no-resize"
+                                variant="underlined" @blur="passwordValid"></v-text-field>
+                        </v-col>
+                        <v-col cols="2"></v-col>
+                    </v-row>
 
-                <v-row class="mt-5">
-                    <v-col cols="3"></v-col>
-                    <v-col cols="1">
-                        <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">닉네임</div>
-                    </v-col>
-                    <v-col cols="4">
-                        <v-text-field class="no-resize" variant="underlined"></v-text-field>
-                    </v-col>
-                    <v-col cols="2">
-                        <v-btn variant="flat" color="#898E93" class="mt-3 font-weight-bold">
-                            <div class="text-white">중복확인</div>
-                        </v-btn>
-                    </v-col>
-                    <v-col cols="2"></v-col>
-                </v-row>
+                    <v-row class="mt-1">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="auto">
+                            <div style="font-size:12px; color:darkred" v-if="!passwordVaild">! 비밀번호의 형식이 올바르지 않습니다.</div>
+                        </v-col>
+                    </v-row>
 
-                <v-row class="mt-5">
-                    <v-col cols="3"></v-col>
-                    <v-col cols="1">
-                        <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">이메일</div>
-                    </v-col>
-                    <v-col cols="4">
-                        <v-text-field class="no-resize" variant="underlined" ></v-text-field>
-                    </v-col>                
-                    <v-col cols="2"></v-col>    
-                </v-row>
+                    <v-row class="mt-1">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="auto">
+                            <div style="font-size:12px; color:darkblue">* 비밀번호는 8글자 이상, 영문 대 소문자, 숫자와 특수기호를 포함해야 합니다.</div>
+                        </v-col>
+                    </v-row>
 
-                <v-row class="mt-5">
-                    <v-col cols="3"></v-col>
-                    <v-col cols="1">
-                        <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">전화번호</div>
-                    </v-col>
-                    <v-col cols="4">
-                        <v-text-field class="no-resize" variant="underlined"></v-text-field>
-                    </v-col>                    
-                    <v-col cols="2"></v-col>
-                </v-row>
+                    <v-row class="mt-10">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="1">
+                            <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">비밀번호 확인</div>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-text-field v-model="passwordCk" type="password" placeholder="PASSWORD CHECK"
+                                class="no-resize" variant="underlined" @blur="check"></v-text-field>
+                        </v-col>
+                        <v-col cols="2"></v-col>
+                    </v-row>
+                    <v-row class="mt-1">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="auto">
+                            <div style="font-size:12px; color:darkred" v-if="!passwordCheck">! 비밀번호와 일치하지 않습니다.</div>
+                        </v-col>
+                    </v-row>
 
-                <v-row class="mt-15">
-                    <v-col>
-                        <v-divider :thickness="1" class="border-opacity-25 my-5" ></v-divider>
-                    </v-col>
-                </v-row>
+                    <v-row class="mt-5">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="1">
+                            <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">닉네임</div>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-text-field v-model="nickname" placeholder="NICKNAME" class="no-resize" variant="underlined"
+                                @blur="nicknameValid"></v-text-field>
+                        </v-col>
+                        <v-col cols="2">
+                            <v-btn variant="flat" color="#898E93" class="mt-3 font-weight-bold">
+                                <div class="text-white">중복확인</div>
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="2"></v-col>
+                    </v-row>
 
-                <v-row justify="center" class="my-15">
-                    <v-col cols="12" align="center">
-                        <v-btn style="height:55px; width: 100px;" variant="flat" color="#5E913B" class="font-weight-bold">
-                            <div class="text-white" style="font-size:16px">생성</div>
-                        </v-btn>
-                        <v-btn style="height:55px; width: 100px;" class="ml-5 font-weight-bold">
-                            <div style="font-size:16px">취소</div>
-                        </v-btn>                        
-                    </v-col>
-                </v-row>
+                    <v-row class="mt-1">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="auto">
+                            <div style="font-size:12px; color:darkred" v-if="!nickVaild">! 닉네임이 너무 깁니다. 닉네임은 최대 12글자까지
+                                가능합니다.</div>
+                        </v-col>
+                    </v-row>
 
+                    <v-row class="mt-5">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="1">
+                            <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">이메일</div>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-text-field v-model="email" type="email" placeholder="EMAIL" class="no-resize"
+                                variant="underlined" @blur="emailValid"></v-text-field>
+                        </v-col>
+                        <v-col cols="2"></v-col>
+                    </v-row>
+
+                    <v-row class="mt-1">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="auto">
+                            <div style="font-size:12px; color:darkred" v-if="!emailVaild">! 올바른 이메일 양식이 아닙니다.</div>
+                        </v-col>
+                    </v-row>
+
+                    <v-row class="mt-5">
+                        <v-col cols="3"></v-col>
+                        <v-col cols="1">
+                            <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">전화번호</div>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-text-field v-model="number" placeholder="PHONE NUMBER" class="no-resize"
+                                variant="underlined" @input="formatPhoneNumber" type="tel" maxlength="13"></v-text-field>
+                        </v-col>
+                        <v-col cols="2"></v-col>
+                    </v-row>
+
+                    <v-row class="mt-15">
+                        <v-col cols="5"></v-col>
+                        <v-col cols="1">
+                            <v-btn style="height:55px; width: 100px;" @click="cancel">
+                                <div style="font-size:16px">취소</div>
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="1">
+                            <v-btn style="height:55px; width: 100px;" variant="flat" color="#5E913B"
+                                class="font-weight-bold" @click="craete">
+                                <div class="text-white" style="font-size:16px">생성</div>
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="5"></v-col>
+                    </v-row>
+                </div>
 
             </v-container>
-        </v-main>   
+        </v-main>
     </v-app>
 
     <!--푸터-->
-    <v-footer border class="mt-5">
+    <v-footer border>
         <v-container>
             <v-row>
                 <v-col cols="3"></v-col>
@@ -314,7 +260,7 @@ export default {
             active_tab: 0,
             link: ['메인', '게시판', '자취생활'],
 
-            terms:`이용약관
+            terms: `이용약관
             
 1. 서비스 목적과 범위
       1.1. "인디펜더"는 사용자들이 다양한 커뮤니티 활동을 할 수 있는 온라인 플랫폼을 제공합니다.
@@ -349,8 +295,8 @@ export default {
 
 9.계약 해지 조항
       9.1. 회원은 언제든지 서비스 이용을 중단하고 계정을 해지할 수 있습니다.`,
-
-      privacy:`개인정보 수집 및 이용 동의서
+            privacy: `개인정보 수집 및 이용 동의서
+            
             
 1. 수집하는 개인정보의 항목
         • 성명, 이메일 주소, 연락처 등
@@ -382,20 +328,124 @@ export default {
 
 10. 개인정보 수집 및 이용 동의
         • 본인은 위에 기술된 개인정보 수집 및 이용에 동의합니다. 해당 정보는 "인디펜더" 서비스의 이용과 관련된 목적으로만 사용될 것을 약속합니다.`,
+            formCheck: 1,
+            termsAgreed: false, // 이용약관 동의 여부
+            privacyAgreed: false, // 개인정보 수집 및 이용 동의 여부
+            passwordVaild: true,
+            emailVaild: true,
+            nickVaild: true,
+            idDupCheck: true,
+            idDuplicateCheck: false,
+            numberCheck: false,
+            idDupBtn: 0,
+
+            id: "",
+            password: "",
+            passwordCk: "",
+            nickname: "",
+            email: "",
+            number: "",
+            passwordCheck: true,
         }
     },
     methods: {
-        
+        formatPhoneNumber() {
+            // 입력된 전화번호에서 하이픈(-) 제거 및 숫자만 추출
+            let formattedNumber = this.number.replace(/-/g, '').replace(/\D/g, '');
+
+            // 숫자 입력 제한 (최대 10자리)
+            formattedNumber = formattedNumber.slice(0, 11);
+
+            // 하이픈(-)을 포함한 형식으로 다시 입력
+            if (formattedNumber.length > 3 && formattedNumber.length <= 7) {
+                formattedNumber = formattedNumber.replace(/(\d{3})(\d+)/, '$1-$2');
+            } else if (formattedNumber.length > 7) {
+                formattedNumber = formattedNumber.replace(/(\d{3})(\d{4})(\d+)/, '$1-$2-$3');
+            }
+
+            // 포맷된 전화번호를 반영
+            this.number = formattedNumber;
+
+            this.numberCheck = formattedNumber.length === 13;
+        },
+        cancel() {
+            this.$router.go(-1);
+        },
+        next() {
+            if (this.termsAgreed && this.privacyAgreed) {
+                this.formCheck = 2;
+            } else {
+                alert('필수 약관에 동의해야 합니다.');
+            }
+        },
+        passwordValid() {
+            if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,100}$/.test(this.password)) {
+                this.passwordVaild = true
+            } else {
+                this.passwordVaild = false
+            }
+        },
+        nicknameValid() {
+            if (this.nickname.length > 12) {
+                this.nickVaild = false;
+            } else {
+                this.nickVaild = true;
+            }
+        },
+        emailValid() {
+            if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(this.email)) {
+                this.emailVaild = true
+            } else {
+                this.emailVaild = false
+            }
+        },
+        check() {
+            if (this.password === this.passwordCk) {
+                this.passwordCheck = true
+            } else {
+                this.passwordCheck = false
+            }
+        },
+        idDuplicate() {
+            this.$axios.post("/members/username", { username: this.id })
+                .then(res => {
+                    this.idDupCheck = res.data.isDuplicatedNot
+                    this.idDupBtn = this.idDupBtn + 1
+
+                    if (this.idDupCheck === true)
+                        this.idDuplicateCheck = true
+                    else
+                        this.idDuplicateCheck = false
+
+                    console.log(this.idDupBtn)
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
+        nicknameDuplicate() {
+
+        },
+        craete() {
+            this.$axios.post("/members/new", { username: this.id, password: this.password, nickname: this.nickname, email: this.email, number: this.number })
+                .then(res => {
+                    alert("회원가입이 완료되었습니다.")
+                    this.$router.go(-1);
+                    console.log(res)
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
     },
     mounted() {
-
-    },    
+        this.formCheck = 2
+    },
 }   
 </script>
 
 <style>
 .no-resize ::-webkit-resizer {
-  display: none;
-  resize: none;
-}
-</style>
+    display: none;
+    resize: none;
+}</style>
