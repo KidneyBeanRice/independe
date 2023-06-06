@@ -3,10 +3,12 @@
   <v-app-bar height="80" :elevation="1">
     <v-container>
       <v-row align="center">
-        <v-col cols="auto">
-          <router-link to="/"><v-img :width="220" src="../img/logo.png"></v-img></router-link>
+        <v-col cols="2">
+          <router-link to="/">
+            <v-img src="../img/logo.png" :style="{ 'max-height': '100px' }"></v-img>
+          </router-link>
         </v-col>
-        <v-col cols="auto">
+        <v-col cols="5">
           <v-tabs color="#5E913B" v-model="active_tab">
             <router-link to="/" style="text-decoration: none; color:black;">
               <v-tab @click="$store.state.myGlobalVariable = 0">
@@ -87,23 +89,115 @@
             </router-link>
           </v-tabs>
         </v-col>
-        <v-col cols="3" class="ml-11">
+        <v-col cols="3">
           <v-card-text>
-            <v-text-field :loading="error" density="compact" variant="outlined" label="통합검색"
-              append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="onClick"></v-text-field>
+            <v-text-field v-model="searchText" :loading="error" density="compact" variant="outlined" label="통합검색"
+              append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="totalSearch"
+              @keydown.enter="totalSearch"></v-text-field>
           </v-card-text>
         </v-col>
-        <v-col cols="1">
+        <v-col cols="1" v-if="!getToken">
           <router-link to="/login">
-            <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
+            <v-btn variant="flat" color="#5E913B" class="font-weight-bold" style="width:100%; height:40px">
               <div class="text-white">로그인</div>
             </v-btn>
           </router-link>
         </v-col>
-        <v-col cols="1">
-          <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
-            <div class="text-white">회원가입</div>
-          </v-btn>
+        <v-col cols="1" v-if="!getToken">
+          <router-link to="/signup">
+            <v-btn variant="flat" color="#5E913B" class="font-weight-bold" style="width:100%; height:40px">
+              <div class="text-white">회원가입</div>
+            </v-btn>
+          </router-link>
+        </v-col>
+        <v-col cols="2" v-if="getToken">
+
+          <v-menu :close-on-content-click="false">
+            <template v-slot:activator="{ props }">
+              <v-row align="center" justify="end">
+                <v-btn v-bind="props" class="font-weight-bold mr-3" variant="tonal" color="green-lighten-1">
+                  <v-img :height="25" :width="25" src="../img/user.png" style="color:#2E471D"></v-img>
+                  <span style="color: #5E913B;" class="font-weight-bold">{{ userNickName }}</span>
+                </v-btn>
+              </v-row>
+            </template>
+            <v-card :height="showLocationAuthentication ? 400 : 275" :width="250">
+              <v-list>
+                <v-list-item style="text-align: center;">
+                  <v-row class="mt-1" style="cursor: pointer;">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/infomation.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title style="font-size:18px" class="font-weight-bold">내 정보</v-list-item-title>
+                    </v-col>
+                  </v-row>
+                  <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
+                  <v-row style="cursor: pointer;">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/chatting.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
+                    </v-col>
+                  </v-row>
+                  <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
+                  <v-row @click="showLocationAuthentication = !showLocationAuthentication" style="cursor: pointer;"
+                    class="mb-3">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/location.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title style="font-size:18px" class="font-weight-bold">위치인증</v-list-item-title>
+                    </v-col>
+                  </v-row>
+
+                  <v-row v-if="showLocationAuthentication">
+                    <v-col cols="12">
+                      <v-sheet>
+                        <div style="text-align:center; color: gray; font-size:14px" class="font-weight-bold mb-1">현재위치불러오기
+                        </div>
+                        <v-row>
+                          <v-col cols="auto">
+                            <v-switch class="ml-3" color="success" v-model="boolAuthentication"
+                              @change="toggleLocationAuthentication"></v-switch>
+                          </v-col>
+                          <v-col cols="auto" align="end" justify="end">
+                            <div v-if="$store.state.locationAuthentication">
+                              <div class="mt-4 font-weight-bold">현재위치 : <span style="color: #5E913B">{{
+                                $store.state.currentLocation }}</span></div>
+                            </div>
+                            <div v-else>
+                              <div class="mt-4 font-weight-bold">현재위치 : <span style="color: #5E913B">인증필요</span></div>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-sheet>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider :thickness="1" class="border-opacity-25 mb-5"></v-divider>
+                  <v-row style="cursor: pointer;">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/logout.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title @click="handleLogout" style="font-size:18px"
+                        class="font-weight-bold">로그아웃</v-list-item-title>
+                    </v-col>
+                  </v-row>
+                </v-list-item>
+              </v-list>
+            </v-card>
+          </v-menu>
         </v-col>
       </v-row>
     </v-container>
@@ -346,6 +440,12 @@ export default {
 
       currentPage: 0,
       totalPage: [],
+
+      showLocationAuthentication: false,
+      userNickName: '',
+      boolAuthentication: false,
+
+      error: false, // 로딩 상태를 나타내는 데이터 속성
     }
   },
   methods: {
@@ -401,6 +501,60 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+    },
+    toggleLocationAuthentication() {
+      this.$store.commit('toggleLocationAuthentication');
+
+      if (this.$store.state.locationAuthentication === true)
+        this.$axios.post("/members/username", { region: this.$store.state.currentLocation });
+    },
+    totalSearch() {
+      if (this.searchText !== '') {
+        const query = this.searchText ? `?searchText=${encodeURIComponent(this.searchText)}` : '';
+        window.location.href = '/search' + query;
+      }
+    },
+    handleLogout() {
+      this.$store.dispatch('logout');
+    },
+    addKakaoMapScript() {
+      const script = document.createElement("script");
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.initMap);
+      script.src =
+        "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=4e77d9b3460eb3b942634fb28e5e1c40&libraries=services";
+      document.head.appendChild(script);
+    },
+    getAddr() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          let geocoder = new kakao.maps.services.Geocoder();
+          let coord = new kakao.maps.LatLng(lat, lng);
+          let callback = (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              console.log(result[0].road_address.region_1depth_name);
+              this.$store.state.currentLocation = result[0].road_address.region_1depth_name
+            }
+          };
+          geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+        });
+      } else {
+        console.log("Geolocation is not supported by this browser.");
+      }
+    },
+    loginToken() {
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const decodedPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      const claims = JSON.parse(decodedPayload);
+      this.userNickName = claims.nickname;
     }
   },
   mounted() {
@@ -408,6 +562,16 @@ export default {
     this.searchText = urlParams.get('searchText');
 
     this.Board()
+
+    if (this.$store.state.locationAuthentication === true) {
+      this.getAddr();
+      this.boolAuthentication = true
+    }
+    else
+      this.boolAuthentication = false
+
+    if (this.getToken)
+      this.loginToken()
   },
   computed: {
     displayPageNumbers() {
