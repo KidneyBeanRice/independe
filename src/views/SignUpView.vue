@@ -484,7 +484,7 @@ export default {
         }
     },
     mounted() {
-        this.formCheck = 2
+        this.formCheck = 1
     },
 }   
 </script>

@@ -7,6 +7,8 @@ export default createStore({
     independentCheck: 0,
     categoryCheck: 0,
     token: null,
+    locationAuthentication: false,
+    currentLocation: ""
   },
   getters: {
     getToken(state) {
@@ -23,11 +25,24 @@ export default createStore({
     updateCategoryCheck(state, newValue) {
       state.categoryCheck = newValue;
     },
+    setLocation(state, newValue) {
+      state.location = newValue;
+    },
     setToken(state, token) {
       state.token = token; // 토큰 값을 상태에 저장하는 뮤테이션
     },
     removeToken(state) {
-      state.token = null;
+      const confirmed = confirm("로그아웃 하시겠습니까?");
+      if (confirmed) {
+        state.token = null;
+        state.currentLocation = "";
+      }
+    },
+    toggleLocationAuthentication(state) {
+      state.locationAuthentication = !state.locationAuthentication;
+    },
+    setCurrentLocation(state, newValue) {
+      state.currentLocation = newValue;
     },
   },
   actions: {
@@ -40,13 +55,25 @@ export default createStore({
     updateCategoryCheck({ commit }, newValue) {
       commit('updateCategoryCheck', newValue);
     },
+    updateLocation({ commit }, newValue) {
+      commit('setLocation', newValue);
+    },
     saveToken({ commit }, token) {
       commit('setToken', token); // 토큰 값을 저장하는 액션
     },
     logout({ commit }) {
       commit('removeToken');
     },
+    toggleLocationAuthentication({ commit }) {
+      commit('toggleLocationAuthentication');
+    },
+    setCurrentLocation({ commit }, location) {
+      commit('setCurrentLocation', location);
+    },
   },
   modules: {},
-  plugins: [createPersistedState()]
+  plugins: [    createPersistedState({
+    key: 'my-app', // 데이터를 식별하기 위한 키 값
+    paths: ['locationAuthentication', 'token', 'currentLocation'] // 지속시키고자 하는 상태의 경로를 배열로 지정
+  })],
 });
