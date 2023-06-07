@@ -183,10 +183,10 @@
               </v-col>
             </v-row>
             <v-textarea class="no-resize" rows="20" variant="outlined" v-model="content" placeholder="- 게시판 카테고리에 맞지 않는 글은 숨김 처리 될수도 있음을 알려드립니다.
-- 다른 유저로 부터 일정 수 이상의 신고를 받으면 글은 숨김 처리 될수도 있음을 알려드립니다.
-- 욕설이나 시비, 분쟁과 관련된 글과 불쾌감을 주는 글은 규칙 위반입니다.
-- 범죄, 불법 행위의 글과 음란물과 관련한 글은 규칙 위반입니다.
-- 매너있는 게시판 이용 부탁드립니다.">
+  - 다른 유저로 부터 일정 수 이상의 신고를 받으면 글은 숨김 처리 될수도 있음을 알려드립니다.
+  - 욕설이나 시비, 분쟁과 관련된 글과 불쾌감을 주는 글은 규칙 위반입니다.
+  - 범죄, 불법 행위의 글과 음란물과 관련한 글은 규칙 위반입니다.
+  - 매너있는 게시판 이용 부탁드립니다.">
             </v-textarea>
 
             <div>
@@ -200,14 +200,14 @@
                   <v-btn style="height:55px; width: 100px;" class="mr-5" @click="cancle">
                     <div style="font-size:16px">취소</div>
                   </v-btn>
-                  <v-btn @click="write" style="height:55px; width: 100px;" variant="flat" color="#5E913B"
-                    class="font-weight-bold">
+                  <v-btn @click="writeCheck === 1 ? update() : write()" style="height:55px; width: 100px;" variant="flat"
+                    color="#5E913B" class="font-weight-bold">
                     <div class="text-white" style="font-size:16px">글 등록</div>
                   </v-btn>
                 </v-col>
               </v-row>
 
-              <v-sheet v-if="imageCheck !== 0" border width="900" style="border-color:#B0B0B0; border-radius: 5px;">                
+              <v-sheet v-if="imageCheck !== 0" border width="900" style="border-color:#B0B0B0; border-radius: 5px;">
                 <v-row>
                   <v-col v-for="(url, index) in imageUrl" :key="index" cols="auto" align="center">
                     <v-col justify="center">
@@ -222,7 +222,7 @@
               </v-sheet>
             </div>
           </v-sheet>
-        </v-row>        
+        </v-row>
       </v-container>
     </v-main>
   </v-app>
@@ -276,8 +276,8 @@ export default {
 
       boards: ['region', 'independent'],
       regions: ['ALL', 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
-      regionsPost: ['FREE', 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],      
-      independents: ['CLEAN', 'WASH', 'PLAY', 'MEET', 'MARKET'],
+      regionsPost: ['FREE', 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
+      independents: ['CLEAN', 'WASH', 'COOK', 'HEALTH', 'ETC'],
 
       boardName: ['자유게시판', '서울 이야기', '부산 이야기', '울산 이야기', '경남 이야기', '청소 정보', '세탁 정보', '요리 정보', '건강 정보', '기타 정보'],
       category: ['잡담', '식당', '오락', '만남', '거래'],
@@ -293,7 +293,10 @@ export default {
 
       imageUrl: [],
       imageFiles: [],
-      limit: 10
+      limit: 10,
+
+      writeCheck: 0,
+      updatePostId: 0,
     }
   },
   methods: {
@@ -308,7 +311,7 @@ export default {
     },
     previewImage() {
       const files = this.$refs.fileInput.files
-      
+
       for (let i = 0; i < files.length; i++) {
         const file = files[i]
         if (file && (file.type.startsWith('image/') || file.type.startsWith('video/'))) {
@@ -326,26 +329,67 @@ export default {
     },
     write() {
       const formData = new FormData()
-      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
       formData.append('title', this.title)
-      formData.append('content', this.content)      
+      formData.append('content', this.content)
 
       if (this.boardCheck === 0) {
         formData.append('regionType', this.regions[this.typeCheck])
         if (this.typeCheck === 0)
           formData.append('regionPostType', this.regionsPost[0])
-        else 
+        else
           formData.append('regionPostType', this.regionsPost[this.categoryCheck + 1])
       }
       else if (this.boardCheck === 1)
         formData.append('independentPostType', this.independents[this.typeCheck])
-      
-      for (let i = 0; i < this.imageFiles.length; i++) 
+
+      for (let i = 0; i < this.imageFiles.length; i++)
         formData.append('files', this.imageFiles[i])
-              
+
+      if (this.boardCheck === 0) {
+        const url = `/posts/region/${this.updatePostId}`;
+        this.$axios.put(url, formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
+          .then(res => {
+            console.log(res.data);
+            this.$router.go(-1)
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+      else if (this.boardCheck === 1) {
+        const url = `/posts/independent/${this.updatePostId}`;
+        this.$axios.put(url, formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
+          .then(res => {
+            console.log(res.data);
+            this.$router.go(-1)
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    },
+    update() {
+      const formData = new FormData()
+
+      formData.append('title', this.title)
+      formData.append('content', this.content)
+
+      if (this.boardCheck === 0) {
+        formData.append('regionType', this.regions[this.typeCheck])
+        if (this.typeCheck === 0)
+          formData.append('regionPostType', this.regionsPost[0])
+        else
+          formData.append('regionPostType', this.regionsPost[this.categoryCheck + 1])
+      }
+      else if (this.boardCheck === 1)
+        formData.append('independentPostType', this.independents[this.typeCheck])
+
+      for (let i = 0; i < this.imageFiles.length; i++)
+        formData.append('files', this.imageFiles[i])
+
       if (this.boardCheck === 0)
-        this.$axios.post("/posts/region/new", formData, { headers: {'Content-Type': 'multipart/form-data', Authorization: token}})
+        this.$axios.put("/posts/region/new", formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
           .then(res => {
             console.log(res.data);
             this.$router.go(-1)
@@ -354,19 +398,19 @@ export default {
             console.log(error);
           });
       else if (this.boardCheck === 1)
-        this.$axios.post("/posts/independent/new", formData, { headers: {'Content-Type': 'multipart/form-data', Authorization: token}})
+        this.$axios.put("/posts/independent/new", formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
           .then(res => {
             console.log(res.data);
             this.$router.go(-1)
           })
           .catch(error => {
             console.log(error);
-          });          
+          });
     },
     deleteImage(index) {
       this.imageUrl.splice(index, 1)
-      this.imageFiles.splice(index, 1)  
-      this.imageCheck -= 1      
+      this.imageFiles.splice(index, 1)
+      this.imageCheck -= 1
     },
     cancle() {
       this.$router.go(-1)
@@ -377,6 +421,22 @@ export default {
       this.active_tab = 1
     else if (this.boardCheck === 1)
       this.active_tab = 2
+
+    const data = this.$route.query.data;
+    if (data && typeof data === 'string') {
+      this.writeCheck = 1
+      const parsedData = JSON.parse(data);
+
+      // 데이터를 필드에 바인딩
+      this.title = parsedData.title;
+      this.content = parsedData.content;
+      this.updatePostId = parsedData.postId;
+      // ... (다른 필드에도 바인딩)
+    }
+    else {
+      this.writeCheck = 0
+      console.log('글쓰기');
+    }
   },
   computed: {
     ...mapGetters(['getToken']),

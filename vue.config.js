@@ -8,7 +8,7 @@ module.exports = defineConfig({
 		}
   },
   devServer: {
-    proxy: 'http://192.168.25.47:8080/api'
+    proxy: 'http://192.168.25.60:8080/api'
     //proxy: 'http://172.17.17.87:8080/api'    
   }
 })
