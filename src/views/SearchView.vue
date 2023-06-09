@@ -566,6 +566,7 @@ export default {
     if (this.$store.state.locationAuthentication === true) {
       this.getAddr();
       this.boolAuthentication = true
+      this.$axios.post("/members/region", { region: this.$store.state.currentLocation });
     }
     else
       this.boolAuthentication = false

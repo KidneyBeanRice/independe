@@ -7,6 +7,7 @@ import PostView from '../views/PostView.vue';
 import LoginView from '../views/LoginView.vue';
 import SignUpView from '../views/SignUpView.vue';
 import SearchView from '../views/SearchView.vue';
+import RedriectView from '../views/RedirectView.vue';
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: '/search',
     name: 'SearchView',
     component: SearchView
+  },
+  {
+    path: '/oauth/signup',
+    name: 'RedirectView',
+    component: RedriectView
   }
 ];
 
