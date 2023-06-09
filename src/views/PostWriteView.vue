@@ -387,9 +387,9 @@ export default {
 
       for (let i = 0; i < this.imageFiles.length; i++)
         formData.append('files', this.imageFiles[i])
-
+        const url = `/posts/${this.updatePostId}`;
       if (this.boardCheck === 0)
-        this.$axios.put("/posts/region/new", formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
+        this.$axios.put(url, formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
           .then(res => {
             console.log(res.data);
             this.$router.go(-1)
@@ -398,7 +398,7 @@ export default {
             console.log(error);
           });
       else if (this.boardCheck === 1)
-        this.$axios.put("/posts/independent/new", formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
+        this.$axios.put(url, formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
           .then(res => {
             console.log(res.data);
             this.$router.go(-1)

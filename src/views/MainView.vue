@@ -707,7 +707,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'MainView',
@@ -740,6 +740,7 @@ export default {
     ...mapGetters(['getToken']),
   },
   methods: {
+    ...mapActions(['saveToken']),
     read() {
       this.$axios.get('/posts/main'/*'https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/posts/main'*/, {
         headers: {
@@ -821,9 +822,20 @@ export default {
     {
       this.getAddr();
       this.boolAuthentication = true
+      this.$axios.post("/members/region", { region: this.$store.state.currentLocation });
     }
     else
     this.boolAuthentication = false
+
+    var token = this.$route.query.token
+
+    console.log("token : " +  token)
+
+    if (token) {
+      token = "Bearer " + token
+      console.log(token);
+      this.saveToken(token); // 토큰 값을 Vuex 스토어에 저장
+    }
 
     if (this.getToken)
       this.loginToken()
