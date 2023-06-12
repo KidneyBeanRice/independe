@@ -229,7 +229,7 @@
                   </li>
                </ul>
                 <span class="msg">{{ chat.message }}</span>
-                <span class="message-createdDate">{{ chat.createdDate }}</span>
+                <span class="message-createdDate">{{ $filter.formatYear(chat.createdDate) }}-{{ $filter.formatDate(chat.createdDate) }} {{ $filter.formatTime(chat.createdDate) }}</span>
               </div>
               </div>
             </li>
