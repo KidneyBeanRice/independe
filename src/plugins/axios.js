@@ -13,7 +13,7 @@ let config = {
   // timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
-Vue.config.globalProperties.$userId = '';
+
 const _axios = axios.create(config);
 
 _axios.interceptors.request.use(
@@ -26,7 +26,7 @@ _axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
+Vue.config.globalProperties.$userId = '';
 // Add a response interceptor
 _axios.interceptors.response.use(
   function(response) {

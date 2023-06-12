@@ -142,7 +142,7 @@
                     </v-col>
                     <v-col cols="2"></v-col>
                     <v-col cols="auto">
-                      <router-link :to="'/chatRooms'" style="text-decoration: none;">
+                      <router-link :to="`/chatRooms`" style="text-decoration: none; color:black;">
                         <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
                       </router-link>
                     </v-col>
@@ -396,18 +396,15 @@ export default {
       writeCheck: 0,
       updatePostId: 0,
 
+      
       showLocationAuthentication: false,
       userNickName: '',
       boolAuthentication: false,
-
-      commentWritePossible: false,
-      boardType: '',
+      searchCondition: 0,
+      searchKeyword: '',
 
       searchText: '', // 검색어를 저장하는 데이터 속성
       error: false, // 로딩 상태를 나타내는 데이터 속성
-
-      comment: "",
-      recomment: ""
     }
   },
   methods: {
@@ -498,7 +495,7 @@ export default {
 
       for (let i = 0; i < this.imageFiles.length; i++)
         formData.append('files', this.imageFiles[i])
-      const url = `/posts/${this.updatePostId}`;
+        const url = `/posts/${this.updatePostId}`;
       if (this.boardCheck === 0)
         this.$axios.put(url, formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
           .then(res => {
@@ -529,12 +526,12 @@ export default {
     toggleLocationAuthentication() {
       this.$store.commit('toggleLocationAuthentication');
 
-      if (this.$store.state.locationAuthentication === true)                 
+      if (this.$store.state.locationAuthentication === true) 
         this.$axios.post("/members/region", { region: this.$store.state.currentLocation }, {
         headers: {
           Authorization: this.$store.state.token, // 헤더에 토큰 추가
         },
-      });     
+      });        
     },
     totalSearch() {
       if (this.searchText !== '') {
@@ -591,27 +588,23 @@ export default {
     else if (this.boardCheck === 1)
       this.active_tab = 2
 
-    const data = this.$route.query.data;
-    const postId = this.$route.query.postId;
+      const data = this.$route.query.data;
+const postId = this.$route.query.postId;
+if (data && typeof data === 'string' && postId) {
+  this.writeCheck = 1;
+  const parsedData = JSON.parse(data);
+  this.title = parsedData.title;
+  this.content = parsedData.content;
+  this.updatePostId = postId;
+  // ... (다른 필드에도 바인딩)
+} else {
+  this.writeCheck = 0;
+  console.log('글쓰기');
+}
 
-    console.log(data)
-    console.log(postId)
-
-    if (data && typeof data === 'string' && postId) {
-      this.writeCheck = 1;
-      const parsedData = JSON.parse(data);
-      this.title = parsedData.title;
-      this.content = parsedData.content;
-      this.updatePostId = postId;
-      // ... (다른 필드에도 바인딩)
-    } else {
-      this.writeCheck = 0;
-      console.log('글쓰기');
-    }
-
-    if (this.$store.state.locationAuthentication === true) {
+if (this.$store.state.locationAuthentication === true) {
       this.getAddr();
-      this.boolAuthentication = true      
+      this.boolAuthentication = true
     }
     else
       this.boolAuthentication = false
