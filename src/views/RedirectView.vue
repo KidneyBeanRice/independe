@@ -68,75 +68,6 @@
                             <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
                         </v-col>
                     </v-row>
-
-                    <v-row class="mt-5">
-                        <v-col cols="3"></v-col>
-                        <v-col cols="1">
-                            <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">아이디</div>
-                        </v-col>
-                        <v-col cols="4">
-                            <v-text-field v-model="id" placeholder="ID" class="no-resize"
-                                variant="underlined"></v-text-field>
-                        </v-col>
-                        <v-col cols="2">
-                            <v-btn variant="flat" color="#898E93" class="mt-3 font-weight-bold" @click="idDuplicate">
-                                <div class="text-white">중복확인</div>
-                            </v-btn>
-                        </v-col>
-                        <v-col cols="2"></v-col>
-                    </v-row>
-
-                    <v-row class="mt-1">
-                        <v-col cols="3"></v-col>
-                        <v-col cols="auto">
-                            <div style="font-size:12px; color:darkred" v-if="!idDuplicateCheck && idDupBtn > 0">! 사용 불가능한 아이디 입니다.</div>
-                            <div style="font-size:12px; color:darkgreen" v-else-if="idDuplicateCheck && idDupBtn > 0">사용 가능한 아이디 입니다.</div>
-                        </v-col>
-                    </v-row>
-                    
-                    <v-row class="mt-10">
-                        <v-col cols="3"></v-col>
-                        <v-col cols="1">
-                            <div class="font-weight-bold mt-1" style="color:gray; font-size:20px">비밀번호</div>
-                        </v-col>
-                        <v-col cols="4" class="py-0">
-                            <v-text-field v-model="password" type="password" placeholder="PASSWORD" class="no-resize"
-                                variant="underlined" @blur="passwordValid"></v-text-field>
-                        </v-col>
-                        <v-col cols="2"></v-col>
-                    </v-row>
-
-                    <v-row class="mt-1">
-                        <v-col cols="3"></v-col>
-                        <v-col cols="auto">
-                            <div style="font-size:12px; color:darkred" v-if="!passwordVaild">! 비밀번호의 형식이 올바르지 않습니다.</div>
-                        </v-col>
-                    </v-row>
-
-                    <v-row class="mt-1">
-                        <v-col cols="3"></v-col>
-                        <v-col cols="auto">
-                            <div style="font-size:12px; color:darkblue">* 비밀번호는 8글자 이상, 영문 대 소문자, 숫자와 특수기호를 포함해야 합니다.</div>
-                        </v-col>
-                    </v-row>
-                    
-                    <v-row class="mt-10">
-                        <v-col cols="3"></v-col>
-                        <v-col cols="1">
-                            <div class="font-weight-bold mt-5" style="color:gray; font-size:20px">비밀번호 확인</div>
-                        </v-col>
-                        <v-col cols="4">
-                            <v-text-field v-model="passwordCk" type="password" placeholder="PASSWORD CHECK"
-                                class="no-resize" variant="underlined" @blur="check"></v-text-field>
-                        </v-col>
-                        <v-col cols="2"></v-col>
-                    </v-row>
-                    <v-row class="mt-1">
-                        <v-col cols="3"></v-col>
-                        <v-col cols="auto">
-                            <div style="font-size:12px; color:darkred" v-if="!passwordCheck">! 비밀번호와 일치하지 않습니다.</div>
-                        </v-col>
-                    </v-row>
                     
                     <v-row class="mt-10">
                         <v-col cols="3"></v-col>
@@ -267,6 +198,8 @@
 </template>
   
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
     name: 'SignUptView',
     data() {
@@ -345,28 +278,35 @@ export default {
             formCheck: 1,
             termsAgreed: false, // 이용약관 동의 여부
             privacyAgreed: false, // 개인정보 수집 및 이용 동의 여부
-            passwordVaild: true,
             emailVaild: true,
             nickVaild: true,
-            idDupCheck: true,
-            idDuplicateCheck: false,
             nicknameDupCheck: true,
             nicknameDuplicateCheck: false,
             numberCheck: false,
-            idDupBtn: 0,
             nicknameDupBtn: 0,
             numberCount: 0,
 
-            id: "",
-            password: "",
-            passwordCk: "",
             nickname: "",
             email: "",
             number: "",
-            passwordCheck: true,
+        }
+    },
+    computed: {
+    ...mapGetters(['getToken']),
+    },
+    created() {
+        const token = "Bearer " + this.$route.query.token
+        console.log('token',token)
+
+        if (token) {
+        this.saveToken(token); // 토큰 값을 Vuex 스토어에 저장
+        } else {
+        window.alert('로그인에 실패하였습니다.')
+        this.$router.push({path:'/login'})
         }
     },
     methods: {
+        ...mapActions(['saveToken']),
         formatPhoneNumber() {
             // 입력된 전화번호에서 하이픈(-) 제거 및 숫자만 추출
             let formattedNumber = this.number.replace(/-/g, '').replace(/\D/g, '');
@@ -396,13 +336,6 @@ export default {
                 alert('필수 약관에 동의해야 합니다.');
             }
         },
-        passwordValid() {
-            if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,100}$/.test(this.password)) {
-                this.passwordVaild = true
-            } else {
-                this.passwordVaild = false
-            }
-        },
         nicknameValid() {
             if (this.nickname.length > 12) {
                 this.nickVaild = false;
@@ -416,31 +349,6 @@ export default {
             } else {
                 this.emailVaild = false
             }
-        },
-        check() {
-            if (this.password === this.passwordCk) {
-                this.passwordCheck = true
-            } else {
-                this.passwordCheck = false
-            }
-        },
-        idDuplicate() {
-            this.$axios.post("/members/username", { username: this.id })
-                .then(res => {
-                    this.idDupCheck = res.data.idDuplicatedNot
-                    this.idDupBtn = this.idDupBtn + 1
-
-                    if (this.idDupCheck === true)
-                        this.idDuplicateCheck = true
-                    else
-                        this.idDuplicateCheck = false
-
-                    console.log(this.idDupBtn)
-                    console.log(res.data.idDuplicatedNot)
-                })
-                .catch(error => {
-                    console.log(error);
-                });
         },
         nicknameDuplicate() {
             this.$axios.post("/members/nickname", { nickname: this.nickname })
@@ -461,9 +369,10 @@ export default {
                 });
         },
         craete() {
-            if (this.idDuplicateCheck && this.idDupBtn > 0 && this.passwordVaild && this.password !== '' && this.passwordCheck && this.passwordCk !== '' && this.nickname !== '' && this.nicknameDuplicateCheck && this.nicknameDupBtn > 0 && this.nickVaild && this.emailVaild && this.email !== '' && this.number !== '' && this.number.length === 13)
+            const Oauthtoken = this.getToken;
+            if (this.nickname !== '' && this.nicknameDuplicateCheck && this.nicknameDupBtn > 0 && this.nickVaild && this.emailVaild && this.email !== '' && this.number !== '' && this.number.length === 13)
             {
-                this.$axios.post("/members/new", { username: this.id, password: this.password, nickname: this.nickname, email: this.email, number: this.number })
+                this.$axios.put("/members", { nickname: this.nickname, email: this.email, number: this.number }, { headers: {Authorization: Oauthtoken}})
                 .then(res => {
                     alert("회원가입이 완료되었습니다.")
                     this.$router.go(-1);
@@ -473,7 +382,7 @@ export default {
                     console.log(error);
                 });
             }
-            else if(this.idDupBtn === 0 || this.nicknameDupBtn === 0)
+            else if(this.nicknameDupBtn === 0)
             {
                 alert("중복확인을 해주세요.")
             }
@@ -481,11 +390,18 @@ export default {
             {
                 alert("정보가 올바르지 않습니다. 다시 한 번 확인해 주세요.")
             }
+            
+            this.$store.dispatch('logout');
+            // const token = this.$route.query.token
+            // if (token) {
+            //     this.$store.state.token = this.$route.query.token
+            //     console.log('this.$store.state.token')
+            // }
         }
     },
     mounted() {
         this.formCheck = 1
-    },
+    }
 }   
 </script>
 

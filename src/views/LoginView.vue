@@ -40,7 +40,7 @@
             </v-row>
             <v-row class="mb-5">
               <v-col>
-                <v-text-field v-model="password" placeholder="password" variant="outlined"></v-text-field>
+                <v-text-field v-model="password" type="password" placeholder="password" variant="outlined"></v-text-field>
               </v-col>
             </v-row>
 
@@ -61,19 +61,17 @@
           </v-row>
           <v-row justify="center" class="mb-5">
             <v-col cols="1">
-              <a href="http://spring:8080/oauth2/authorization/naver">                
+              <a href="http://spring:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8081/oauth/signup">                
                 <v-img :height="75" src="../img/naver.png"></v-img>
               </a>
             </v-col>
             <v-col cols="1">
-              <a href="">
+              <a href="http://spring:8080/oauth2/authorization/kakao">
                 <v-img :height="75" src="../img/kakaoTalk.png"></v-img>
               </a>
             </v-col>
           </v-row>
         </v-container>
-
-
 
         <v-row>
           <v-col cols="3"></v-col>
@@ -102,7 +100,7 @@
           <v-col cols="3"></v-col>
         </v-row>
 
-        <!-- <a href="http://192.168.0.18:8080/oauth2/authorization/naver">asdads</a> -->
+        <!-- <a href="http://192.168.0.18:8080/oauth2/authorization/naver?redirect_uri=http://localhost:3001/oauth/redirect">asdads</a> -->
 
       </v-container>
     </v-main>
