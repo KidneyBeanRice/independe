@@ -108,6 +108,7 @@
             <v-btn variant="flat" color="#5E913B" class="font-weight-bold" style="width:100%; height:40px">
               <div class="text-white">회원가입</div>
             </v-btn>
+          </router-link>
           </v-col>
         </v-row>
       </v-container>
@@ -116,6 +117,7 @@
     <v-app>
       <v-main>
         <v-container>
+        <v-sheet>
           <v-row>
             <v-col cols="1">게시판</v-col>
             <v-col cols="6">제목</v-col>
