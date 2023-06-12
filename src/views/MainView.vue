@@ -121,8 +121,83 @@
                 </v-btn>
               </v-row>
             </template>
-            <v-card :height="300" :width="300">
-              <v-switch label="위치 정보" color="info" hide-details></v-switch>
+            <v-card :height="showLocationAuthentication ? 400 : 275" :width="250">
+              <v-list>
+                <v-list-item style="text-align: center;">
+                  <v-row class="mt-1" style="cursor: pointer;">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/infomation.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title style="font-size:18px" class="font-weight-bold">내 정보</v-list-item-title>
+                    </v-col>
+                  </v-row>
+                  <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
+                  <v-row style="cursor: pointer;">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/chatting.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <router-link :to="`/chatRooms`" style="text-decoration: none; color:black;">
+                        <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
+                      </router-link>
+                    </v-col>
+                  </v-row>
+                  <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
+                  <v-row @click="showLocationAuthentication = !showLocationAuthentication" style="cursor: pointer;"
+                    class="mb-3">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/location.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title style="font-size:18px" class="font-weight-bold">위치인증</v-list-item-title>
+                    </v-col>
+                  </v-row>
+
+                  <v-row v-if="showLocationAuthentication">
+                    <v-col cols="12">
+                      <v-sheet>
+                        <div style="text-align:center; color: gray; font-size:14px" class="font-weight-bold mb-1">현재위치불러오기
+                        </div>
+                        <v-row>
+                          <v-col cols="auto">
+                            <v-switch class="ml-3" color="success" v-model="boolAuthentication"
+                              @change="toggleLocationAuthentication"></v-switch>
+                          </v-col>
+                          <v-col cols="auto" align="end" justify="end">
+                            <div v-if="$store.state.locationAuthentication">
+                              <div class="mt-4 font-weight-bold">현재위치 : <span style="color: #5E913B">{{
+                                $store.state.currentLocation }}</span></div>
+                            </div>
+                            <div v-else>
+                              <div class="mt-4 font-weight-bold">현재위치 : <span style="color: #5E913B">인증필요</span></div>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-sheet>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider :thickness="1" class="border-opacity-25 mb-5"></v-divider>
+                  <v-row style="cursor: pointer;">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/logout.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title @click="handleLogout" style="font-size:18px"
+                        class="font-weight-bold">로그아웃</v-list-item-title>
+                    </v-col>
+                  </v-row>
+                </v-list-item>
+              </v-list>
             </v-card>
           </v-menu>
         </v-col>
@@ -686,7 +761,22 @@ export default {
           console.log(res.data)
         })
         .catch(err => console.error(err));
-        console.log(token)
+    },
+    toggleLocationAuthentication() {
+      this.$store.commit('toggleLocationAuthentication');
+
+      if (this.$store.state.locationAuthentication === true) 
+        this.$axios.post("/members/region", { region: this.$store.state.currentLocation }, {
+        headers: {
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
+        },
+      });        
+    },
+    totalSearch() {
+      if (this.searchText !== '') {
+        const query = this.searchText ? `?searchText=${encodeURIComponent(this.searchText)}` : '';
+        window.location.href = '/search' + query;
+      }
     },
     handleLogout() {
       this.$store.dispatch('logout');
@@ -719,10 +809,41 @@ export default {
         console.log("Geolocation is not supported by this browser.");
       }
     },
+    loginToken() {
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const decodedPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      const claims = JSON.parse(decodedPayload);
+      this.userNickName = claims.nickname;
+    }
   },
   mounted() {
     this.read();
-    this.getAddr();    
+
+    if (this.$store.state.locationAuthentication === true)
+    {
+      this.getAddr();
+      this.boolAuthentication = true
+    }
+    else
+    this.boolAuthentication = false
+
+    var token = this.$route.query.token
+
+    console.log("token : " +  token)
+
+    if (token) {
+      token = "Bearer " + token
+      console.log(token);
+      this.saveToken(token); // 토큰 값을 Vuex 스토어에 저장
+    }
+
+    if (this.getToken)
+      this.loginToken()
   },
 };
 </script>
