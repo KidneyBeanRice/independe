@@ -3,10 +3,12 @@
   <v-app-bar height="80" :elevation="1">
     <v-container>
       <v-row align="center">
-        <v-col cols="auto">
-          <router-link to="/"><v-img :width="220" src="../img/logo.png"></v-img></router-link>
+        <v-col cols="2">
+          <router-link to="/">
+            <v-img src="../img/logo.png" :style="{ 'max-height': '100px' }"></v-img>
+          </router-link>
         </v-col>
-        <v-col cols="auto">
+        <v-col cols="5">
           <v-tabs color="#5E913B" v-model="active_tab">
             <router-link to="/" style="text-decoration: none; color:black;">
               <v-tab @click="$store.state.myGlobalVariable = 0">
@@ -87,21 +89,117 @@
             </router-link>
           </v-tabs>
         </v-col>
-        <v-col cols="3" class="ml-11">
+        <v-col cols="3">
           <v-card-text>
-            <v-text-field :loading="error" density="compact" variant="outlined" label="통합검색"
-              append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="onClick"></v-text-field>
+            <v-text-field v-model="searchText" :loading="error" density="compact" variant="outlined" label="통합검색"
+              append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="totalSearch"
+              @keydown.enter="totalSearch"></v-text-field>
           </v-card-text>
         </v-col>
-        <v-col cols="1">
-          <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
-            <div class="text-white">로그인</div>
-          </v-btn>
+        <v-col cols="1" v-if="!getToken">
+          <router-link to="/login">
+            <v-btn variant="flat" color="#5E913B" class="font-weight-bold" style="width:100%; height:40px">
+              <div class="text-white">로그인</div>
+            </v-btn>
+          </router-link>
         </v-col>
-        <v-col cols="1">
-          <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
-            <div class="text-white">회원가입</div>
-          </v-btn>
+        <v-col cols="1" v-if="!getToken">
+          <router-link to="/signup">
+            <v-btn variant="flat" color="#5E913B" class="font-weight-bold" style="width:100%; height:40px">
+              <div class="text-white">회원가입</div>
+            </v-btn>
+          </router-link>
+        </v-col>
+        <v-col cols="2" v-if="getToken">
+
+          <v-menu :close-on-content-click="false">
+            <template v-slot:activator="{ props }">
+              <v-row align="center" justify="end">
+                <v-btn v-bind="props" class="font-weight-bold mr-3" variant="tonal" color="green-lighten-1">
+                  <v-img :height="25" :width="25" src="../img/user.png" style="color:#2E471D"></v-img>
+                  <span style="color: #5E913B;" class="font-weight-bold">{{ userNickName }}</span>
+                </v-btn>
+              </v-row>
+            </template>
+            <v-card :height="showLocationAuthentication ? 400 : 275" :width="250">
+              <v-list>
+                <v-list-item style="text-align: center;">
+                  <v-row class="mt-1" style="cursor: pointer;">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/infomation.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title style="font-size:18px" class="font-weight-bold">내 정보</v-list-item-title>
+                    </v-col>
+                  </v-row>
+                  <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
+                  <v-row style="cursor: pointer;">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/chatting.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <router-link :to="'/chatRooms'" style="text-decoration: none;">
+                        <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
+                      </router-link>
+                    </v-col>
+                  </v-row>
+                  <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
+                  <v-row @click="showLocationAuthentication = !showLocationAuthentication" style="cursor: pointer;"
+                    class="mb-3">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/location.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title style="font-size:18px" class="font-weight-bold">위치인증</v-list-item-title>
+                    </v-col>
+                  </v-row>
+
+                  <v-row v-if="showLocationAuthentication">
+                    <v-col cols="12">
+                      <v-sheet>
+                        <div style="text-align:center; color: gray; font-size:14px" class="font-weight-bold mb-1">현재위치불러오기
+                        </div>
+                        <v-row>
+                          <v-col cols="auto">
+                            <v-switch class="ml-3" color="success" v-model="boolAuthentication"
+                              @change="toggleLocationAuthentication"></v-switch>
+                          </v-col>
+                          <v-col cols="auto" align="end" justify="end">
+                            <div v-if="$store.state.locationAuthentication">
+                              <div class="mt-4 font-weight-bold">현재위치 : <span style="color: #5E913B">{{
+                                $store.state.currentLocation }}</span></div>
+                            </div>
+                            <div v-else>
+                              <div class="mt-4 font-weight-bold">현재위치 : <span style="color: #5E913B">인증필요</span></div>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-sheet>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider :thickness="1" class="border-opacity-25 mb-5"></v-divider>
+                  <v-row style="cursor: pointer;">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/logout.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title @click="handleLogout" style="font-size:18px"
+                        class="font-weight-bold">로그아웃</v-list-item-title>
+                    </v-col>
+                  </v-row>
+                </v-list-item>
+              </v-list>
+            </v-card>
+          </v-menu>
         </v-col>
       </v-row>
     </v-container>
@@ -183,10 +281,10 @@
               </v-col>
             </v-row>
             <v-textarea class="no-resize" rows="20" variant="outlined" v-model="content" placeholder="- 게시판 카테고리에 맞지 않는 글은 숨김 처리 될수도 있음을 알려드립니다.
-- 다른 유저로 부터 일정 수 이상의 신고를 받으면 글은 숨김 처리 될수도 있음을 알려드립니다.
-- 욕설이나 시비, 분쟁과 관련된 글과 불쾌감을 주는 글은 규칙 위반입니다.
-- 범죄, 불법 행위의 글과 음란물과 관련한 글은 규칙 위반입니다.
-- 매너있는 게시판 이용 부탁드립니다.">
+  - 다른 유저로 부터 일정 수 이상의 신고를 받으면 글은 숨김 처리 될수도 있음을 알려드립니다.
+  - 욕설이나 시비, 분쟁과 관련된 글과 불쾌감을 주는 글은 규칙 위반입니다.
+  - 범죄, 불법 행위의 글과 음란물과 관련한 글은 규칙 위반입니다.
+  - 매너있는 게시판 이용 부탁드립니다.">
             </v-textarea>
 
             <div>
@@ -200,14 +298,14 @@
                   <v-btn style="height:55px; width: 100px;" class="mr-5" @click="cancle">
                     <div style="font-size:16px">취소</div>
                   </v-btn>
-                  <v-btn @click="write" style="height:55px; width: 100px;" variant="flat" color="#5E913B"
-                    class="font-weight-bold">
+                  <v-btn @click="writeCheck === 1 ? update() : write()" style="height:55px; width: 100px;" variant="flat"
+                    color="#5E913B" class="font-weight-bold">
                     <div class="text-white" style="font-size:16px">글 등록</div>
                   </v-btn>
                 </v-col>
               </v-row>
 
-              <v-sheet v-if="imageCheck !== 0" border width="900" style="border-color:#B0B0B0; border-radius: 5px;">                
+              <v-sheet v-if="imageCheck !== 0" border width="900" style="border-color:#B0B0B0; border-radius: 5px;">
                 <v-row>
                   <v-col v-for="(url, index) in imageUrl" :key="index" cols="auto" align="center">
                     <v-col justify="center">
@@ -222,7 +320,7 @@
               </v-sheet>
             </div>
           </v-sheet>
-        </v-row>        
+        </v-row>
       </v-container>
     </v-main>
   </v-app>
@@ -276,8 +374,8 @@ export default {
 
       boards: ['region', 'independent'],
       regions: ['ALL', 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
-      regionsPost: ['FREE', 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],      
-      independents: ['CLEAN', 'WASH', 'PLAY', 'MEET', 'MARKET'],
+      regionsPost: ['FREE', 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
+      independents: ['CLEAN', 'WASH', 'COOK', 'HEALTH', 'ETC'],
 
       boardName: ['자유게시판', '서울 이야기', '부산 이야기', '울산 이야기', '경남 이야기', '청소 정보', '세탁 정보', '요리 정보', '건강 정보', '기타 정보'],
       category: ['잡담', '식당', '오락', '만남', '거래'],
@@ -293,7 +391,23 @@ export default {
 
       imageUrl: [],
       imageFiles: [],
-      limit: 10
+      limit: 10,
+
+      writeCheck: 0,
+      updatePostId: 0,
+
+      showLocationAuthentication: false,
+      userNickName: '',
+      boolAuthentication: false,
+
+      commentWritePossible: false,
+      boardType: '',
+
+      searchText: '', // 검색어를 저장하는 데이터 속성
+      error: false, // 로딩 상태를 나타내는 데이터 속성
+
+      comment: "",
+      recomment: ""
     }
   },
   methods: {
@@ -308,7 +422,7 @@ export default {
     },
     previewImage() {
       const files = this.$refs.fileInput.files
-      
+
       for (let i = 0; i < files.length; i++) {
         const file = files[i]
         if (file && (file.type.startsWith('image/') || file.type.startsWith('video/'))) {
@@ -326,26 +440,67 @@ export default {
     },
     write() {
       const formData = new FormData()
-      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
       formData.append('title', this.title)
-      formData.append('content', this.content)      
+      formData.append('content', this.content)
 
       if (this.boardCheck === 0) {
         formData.append('regionType', this.regions[this.typeCheck])
         if (this.typeCheck === 0)
           formData.append('regionPostType', this.regionsPost[0])
-        else 
+        else
           formData.append('regionPostType', this.regionsPost[this.categoryCheck + 1])
       }
       else if (this.boardCheck === 1)
         formData.append('independentPostType', this.independents[this.typeCheck])
-      
-      for (let i = 0; i < this.imageFiles.length; i++) 
+
+      for (let i = 0; i < this.imageFiles.length; i++)
         formData.append('files', this.imageFiles[i])
-              
+
+      if (this.boardCheck === 0) {
+        const url = `/posts/region/new`;
+        this.$axios.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
+          .then(res => {
+            console.log(res.data);
+            this.$router.go(-1)
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+      else if (this.boardCheck === 1) {
+        const url = `/posts/independent/new`;
+        this.$axios.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
+          .then(res => {
+            console.log(res.data);
+            this.$router.go(-1)
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    },
+    update() {
+      const formData = new FormData()
+
+      formData.append('title', this.title)
+      formData.append('content', this.content)
+
+      if (this.boardCheck === 0) {
+        formData.append('regionType', this.regions[this.typeCheck])
+        if (this.typeCheck === 0)
+          formData.append('regionPostType', this.regionsPost[0])
+        else
+          formData.append('regionPostType', this.regionsPost[this.categoryCheck + 1])
+      }
+      else if (this.boardCheck === 1)
+        formData.append('independentPostType', this.independents[this.typeCheck])
+
+      for (let i = 0; i < this.imageFiles.length; i++)
+        formData.append('files', this.imageFiles[i])
+      const url = `/posts/${this.updatePostId}`;
       if (this.boardCheck === 0)
-        this.$axios.post("/posts/region/new", formData, { headers: {'Content-Type': 'multipart/form-data', Authorization: token}})
+        this.$axios.put(url, formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
           .then(res => {
             console.log(res.data);
             this.$router.go(-1)
@@ -354,22 +509,80 @@ export default {
             console.log(error);
           });
       else if (this.boardCheck === 1)
-        this.$axios.post("/posts/independent/new", formData, { headers: {'Content-Type': 'multipart/form-data', Authorization: token}})
+        this.$axios.put(url, formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
           .then(res => {
             console.log(res.data);
             this.$router.go(-1)
           })
           .catch(error => {
             console.log(error);
-          });          
+          });
     },
     deleteImage(index) {
       this.imageUrl.splice(index, 1)
-      this.imageFiles.splice(index, 1)  
-      this.imageCheck -= 1      
+      this.imageFiles.splice(index, 1)
+      this.imageCheck -= 1
     },
     cancle() {
       this.$router.go(-1)
+    },
+    toggleLocationAuthentication() {
+      this.$store.commit('toggleLocationAuthentication');
+
+      if (this.$store.state.locationAuthentication === true)                 
+        this.$axios.post("/members/region", { region: this.$store.state.currentLocation }, {
+        headers: {
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
+        },
+      });     
+    },
+    totalSearch() {
+      if (this.searchText !== '') {
+        const query = this.searchText ? `?searchText=${encodeURIComponent(this.searchText)}` : '';
+        window.location.href = '/search' + query;
+      }
+    },
+    handleLogout() {
+      this.$store.dispatch('logout');
+    },
+    addKakaoMapScript() {
+      const script = document.createElement("script");
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.initMap);
+      script.src =
+        "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=4e77d9b3460eb3b942634fb28e5e1c40&libraries=services";
+      document.head.appendChild(script);
+    },
+    getAddr() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          let geocoder = new kakao.maps.services.Geocoder();
+          let coord = new kakao.maps.LatLng(lat, lng);
+          let callback = (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              console.log(result[0].road_address.region_1depth_name);
+              this.$store.state.currentLocation = result[0].road_address.region_1depth_name
+            }
+          };
+          geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+        });
+      } else {
+        console.log("Geolocation is not supported by this browser.");
+      }
+    },
+    loginToken() {
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const decodedPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      const claims = JSON.parse(decodedPayload);
+      this.userNickName = claims.nickname;
     }
   },
   mounted() {
@@ -377,6 +590,34 @@ export default {
       this.active_tab = 1
     else if (this.boardCheck === 1)
       this.active_tab = 2
+
+    const data = this.$route.query.data;
+    const postId = this.$route.query.postId;
+
+    console.log(data)
+    console.log(postId)
+
+    if (data && typeof data === 'string' && postId) {
+      this.writeCheck = 1;
+      const parsedData = JSON.parse(data);
+      this.title = parsedData.title;
+      this.content = parsedData.content;
+      this.updatePostId = postId;
+      // ... (다른 필드에도 바인딩)
+    } else {
+      this.writeCheck = 0;
+      console.log('글쓰기');
+    }
+
+    if (this.$store.state.locationAuthentication === true) {
+      this.getAddr();
+      this.boolAuthentication = true      
+    }
+    else
+      this.boolAuthentication = false
+
+    if (this.getToken)
+      this.loginToken()
   },
   computed: {
     ...mapGetters(['getToken']),

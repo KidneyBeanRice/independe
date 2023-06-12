@@ -3,10 +3,12 @@
   <v-app-bar height="80" :elevation="1">
     <v-container>
       <v-row align="center">
-        <v-col cols="auto">
-          <router-link to="/"><v-img :width="220" src="../img/logo.png"></v-img></router-link>
+        <v-col cols="2">
+          <router-link to="/">
+            <v-img src="../img/logo.png" :style="{ 'max-height': '100px' }"></v-img>
+          </router-link>
         </v-col>
-        <v-col cols="auto">
+        <v-col cols="5">
           <v-tabs color="#5E913B" v-model="active_tab">
             <router-link to="/" style="text-decoration: none; color:black;">
               <v-tab @click="$store.state.myGlobalVariable = 0">
@@ -87,21 +89,117 @@
             </router-link>
           </v-tabs>
         </v-col>
-        <v-col cols="3" class="ml-11">
+        <v-col cols="3">
           <v-card-text>
-            <v-text-field :loading="error" density="compact" variant="outlined" label="통합검색"
-              append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="onClick"></v-text-field>
+            <v-text-field v-model="searchText" :loading="error" density="compact" variant="outlined" label="통합검색"
+              append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="totalSearch"
+              @keydown.enter="totalSearch"></v-text-field>
           </v-card-text>
         </v-col>
-        <v-col cols="1">
-          <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
-            <div class="text-white">로그인</div>
-          </v-btn>
+        <v-col cols="1" v-if="!getToken">
+          <router-link to="/login">
+            <v-btn variant="flat" color="#5E913B" class="font-weight-bold" style="width:100%; height:40px">
+              <div class="text-white">로그인</div>
+            </v-btn>
+          </router-link>
         </v-col>
-        <v-col cols="1">
-          <v-btn variant="flat" color="#5E913B" class="font-weight-bold">
-            <div class="text-white">회원가입</div>
-          </v-btn>
+        <v-col cols="1" v-if="!getToken">
+          <router-link to="/signup">
+            <v-btn variant="flat" color="#5E913B" class="font-weight-bold" style="width:100%; height:40px">
+              <div class="text-white">회원가입</div>
+            </v-btn>
+          </router-link>
+        </v-col>
+        <v-col cols="2" v-if="getToken">
+
+          <v-menu :close-on-content-click="false">
+            <template v-slot:activator="{ props }">
+              <v-row align="center" justify="end">
+                <v-btn v-bind="props" class="font-weight-bold mr-3" variant="tonal" color="green-lighten-1">
+                  <v-img :height="25" :width="25" src="../img/user.png" style="color:#2E471D"></v-img>
+                  <span style="color: #5E913B;" class="font-weight-bold">{{ userNickName }}</span>
+                </v-btn>
+              </v-row>
+            </template>
+            <v-card :height="showLocationAuthentication ? 400 : 275" :width="250">
+              <v-list>
+                <v-list-item style="text-align: center;">
+                  <v-row class="mt-1" style="cursor: pointer;">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/infomation.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title style="font-size:18px" class="font-weight-bold">내 정보</v-list-item-title>
+                    </v-col>
+                  </v-row>
+                  <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
+                  <v-row style="cursor: pointer;">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/chatting.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <router-link :to="'/chatRooms'" style="text-decoration: none;">
+                        <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
+                      </router-link>
+                    </v-col>
+                  </v-row>
+                  <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
+                  <v-row @click="showLocationAuthentication = !showLocationAuthentication" style="cursor: pointer;"
+                    class="mb-3">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/location.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title style="font-size:18px" class="font-weight-bold">위치인증</v-list-item-title>
+                    </v-col>
+                  </v-row>
+
+                  <v-row v-if="showLocationAuthentication">
+                    <v-col cols="12">
+                      <v-sheet>
+                        <div style="text-align:center; color: gray; font-size:14px" class="font-weight-bold mb-1">현재위치불러오기
+                        </div>
+                        <v-row>
+                          <v-col cols="auto">
+                            <v-switch class="ml-3" color="success" v-model="boolAuthentication"
+                              @change="toggleLocationAuthentication"></v-switch>
+                          </v-col>
+                          <v-col cols="auto" align="end" justify="end">
+                            <div v-if="$store.state.locationAuthentication">
+                              <div class="mt-4 font-weight-bold">현재위치 : <span style="color: #5E913B">{{
+                                $store.state.currentLocation }}</span></div>
+                            </div>
+                            <div v-else>
+                              <div class="mt-4 font-weight-bold">현재위치 : <span style="color: #5E913B">인증필요</span></div>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </v-sheet>
+                    </v-col>
+                  </v-row>
+
+                  <v-divider :thickness="1" class="border-opacity-25 mb-5"></v-divider>
+                  <v-row style="cursor: pointer;">
+                    <v-col cols=1></v-col>
+                    <v-col cols="auto">
+                      <v-img :height="25" :width="25" src="../img/logout.png" class=""></v-img>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                    <v-col cols="auto">
+                      <v-list-item-title @click="handleLogout" style="font-size:18px"
+                        class="font-weight-bold">로그아웃</v-list-item-title>
+                    </v-col>
+                  </v-row>
+                </v-list-item>
+              </v-list>
+            </v-card>
+          </v-menu>
         </v-col>
       </v-row>
     </v-container>
@@ -163,8 +261,14 @@
           </v-col>
           <v-col cols="auto" align="end">
             <v-row align="end">
-              <v-img @click="copyUrl" class="ml-5" width="23" height="23" src="../img/link_copy.png"
-                :style="{ cursor: 'pointer' }"></v-img>
+              <v-snackbar :timeout="1000">
+                <template v-slot:activator="{ props }">
+                  <v-img v-bind="props" @click="copyUrl" class="ml-5" width="23" height="23" src="../img/link_copy.png"
+                    :style="{ cursor: 'pointer' }"></v-img>
+                </template>
+                <div align="center">클립보드에 복사되었습니다.</div>
+              </v-snackbar>
+
               <v-img class="ml-5" width="23" height="23" src="../img/scrap_default.png"
                 :style="{ cursor: 'pointer' }"></v-img>
             </v-row>
@@ -211,7 +315,8 @@
         <v-row class="mt-15" align="center">
           <v-col cols="auto" class="ml-3">
             <v-row>
-              <v-img src="../img/post_recommend_default.png" width="30" height="30"></v-img>
+              <v-img @click="postRecommend" src="../img/post_recommend_default.png" width="30" height="30"
+                :style="{ cursor: 'pointer' }"></v-img>
               <div class="ml-2 mt-1" style="font-size:18px;">{{ Board.recommendCount }}</div>
             </v-row>
           </v-col>
@@ -222,7 +327,8 @@
             </v-row>
           </v-col>
           <v-col cols="auto" class="ml-auto">
-            <v-img src="../img/post_report_default.png" width="35" height="35"></v-img>
+            <v-img @click="report()" src="../img/post_report_default.png" width="35" height="35"
+              :style="{ cursor: 'pointer' }"></v-img>
           </v-col>
         </v-row>
 
@@ -234,17 +340,37 @@
           </v-col>
         </v-row>
 
-        <v-row>
+        <v-row v-if="boolAuthentication === true">
           <v-col cols="11">
             <v-textarea rows="2" class="no-resize" v-model="comment" variant="outlined"
               placeholder="댓글을 작성해 보세요."></v-textarea>
           </v-col>
           <v-col>
-            <v-btn variant="outlined" style="height:80px; width:75px; color:#ADADAD">등록</v-btn>
+            <v-btn variant="outlined" style="height:80px; width:75px; color:#ADADAD" @click="commentPost">등록</v-btn>
+          </v-col>
+        </v-row>
+        <v-row v-else>
+          <v-col cols="11">
+            <v-textarea rows="2" class="no-resize" v-model="comment" variant="outlined"
+              placeholder="댓글을 작성하려면 위치 인증을 진행하세요."></v-textarea>
+          </v-col>
+          <v-col>
+            <v-btn variant="outlined" style="height:80px; width:75px; color:#ADADAD" disabled>등록</v-btn>
           </v-col>
         </v-row>
 
-        <v-row>
+        <v-row v-if="userNickName === Board.nickname">
+          <v-col align="end">
+            <v-btn class="mr-5" variant="outlined" style="color:#ADADAD" @click="postDelete">
+              <div style="color:gray">삭제</div>
+            </v-btn>
+            <v-btn variant="outlined" style="color:#ADADAD" @click="postUpdate">
+              <div style="color:gray">수정</div>
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <!-- <v-row>
           <v-col cols="auto" class="mb-3">
             <v-row>
               <v-img class="ml-3" src="../img/bestCommend.png" width="30" height="30"></v-img>
@@ -252,9 +378,10 @@
             </v-row>
           </v-col>
         </v-row>
+        
         <v-row class="mb-5">
           <v-col>
-            <v-sheet class="text-black" color="#F6FAF4">
+            <v-sheet class="text-black" color="#F6FAF4" v-if="bestComment !== null">
               <v-row>
                 <v-col cols="auto" style="color:gray">
                   <p :key="index" v-for="(bestComment, index) in Board.bestComment">
@@ -273,7 +400,8 @@
                 </v-col>
                 <v-col cols="auto" class="ml-auto mr-2">
                   <v-row>
-                    <v-img class="mt-3 mr-3" src="../img/comment_recommend.png" width="20" height="20"></v-img>
+                    <v-img @click="commentRecommend(comment.commentId)" class="mt-3 mr-3"
+                      src="../img/comment_recommend.png" width="20" height="20" :style="{ cursor: 'pointer' }"></v-img>
                   </v-row>
                 </v-col>
               </v-row>
@@ -285,9 +413,15 @@
                 </v-col>
               </v-row>
             </v-sheet>
+            <v-sheet class="text-black" color="#F6FAF4" v-else>
+              <v-row>
+                <v-col>
+                  <div>베스트 댓글이 없습니다.</div>
+                </v-col>
+              </v-row>
+            </v-sheet>
           </v-col>
-        </v-row>
-
+        </v-row> -->
         <div>
           <div v-for="comment in Board.comments" :key="comment.commentId">
             <div v-if="comment.parentId === null">
@@ -295,7 +429,9 @@
                 style="border-color:lightslategray"></v-divider>
               <v-row>
                 <v-col cols="auto" style="color:gray">
-                  &nbsp;{{ comment.nickname }}
+                  <router-link :to="`/chat/${comment.writerId}`" style="text-decoration: none; color:gray;">
+                    &nbsp;{{ comment.nickname }}
+                  </router-link>
                 </v-col>
                 <v-col style="color:gray" cols="auto">
                   {{ $filter.formatDate(comment.createdDate) }} {{ $filter.formatTime(comment.createdDate) }}
@@ -305,7 +441,8 @@
                 </v-col>
                 <v-col cols="auto" class="ml-auto">
                   <v-row>
-                    <v-img class="mt-3 mr-5" src="../img/comment_recommend.png" width="20" height="20"></v-img>
+                    <v-img @click="commentRecommend(comment.commentId)" class="mt-3 mr-5"
+                      src="../img/comment_recommend.png" width="20" height="20" :style="{ cursor: 'pointer' }"></v-img>
                     <v-img @click="toggleReply(comment.commentId)" class="mt-3 mr-5" src="../img/recomment.png" width="21"
                       height="21" :style="{ cursor: 'pointer' }"></v-img>
                   </v-row>
@@ -324,7 +461,9 @@
                   style="border-color:lightslategray;"></v-divider>
                 <v-row>
                   <v-col cols="auto" style="color:gray">
-                    &emsp;&emsp;ㄴ{{ reply.nickname }}
+                    <router-link :to="`/chat/${reply.writerId}`" style="text-decoration: none; color:gray;">
+                        &emsp;&emsp;ㄴ{{ reply.nickname }}
+                    </router-link>
                   </v-col>
                   <v-col style="color:gray" cols="auto">
                     {{ $filter.formatDate(reply.createdDate) }} {{ $filter.formatTime(reply.createdDate) }}
@@ -334,7 +473,8 @@
                   </v-col>
                   <v-col cols="auto" class="ml-auto">
                     <v-row>
-                      <v-img class="mt-3 mr-5" src="../img/comment_recommend.png" width="20" height="20"></v-img>
+                      <v-img class="mt-3 mr-5" src="../img/comment_recommend.png" width="20" height="20"
+                        @click="commentRecommend(reply.commentId)" :style="{ cursor: 'pointer' }"></v-img>
                     </v-row>
                   </v-col>
                 </v-row>
@@ -358,14 +498,29 @@
             </div>
           </div> -->
             <div v-if="showReply[comment.commentId]">
-              <v-row class="mt-10">
-                <v-col cols="11">
-                  <v-textarea rows="1" class="no-resize" variant="outlined" placeholder="대댓글을 작성해 보세요."></v-textarea>
-                </v-col>
-                <v-col>
-                  <v-btn variant="outlined" style="height:57px; width:75px; color:#ADADAD">등록</v-btn>
-                </v-col>
-              </v-row>
+              <div v-if="boolAuthentication === true">
+                <v-row class="mt-10">
+                  <v-col cols="11">
+                    <v-textarea v-model="recomment" rows="1" class="no-resize" variant="outlined"
+                      placeholder="대댓글을 작성해 보세요."></v-textarea>
+                  </v-col>
+                  <v-col>
+                    <v-btn variant="outlined" style="height:57px; width:75px; color:#ADADAD"
+                      @click="recommentPost(comment)">등록</v-btn>
+                  </v-col>
+                </v-row>
+              </div>
+              <div v-else>
+                <v-row class="mt-10">
+                  <v-col cols="11">
+                    <v-textarea rows="1" class="no-resize" variant="outlined"
+                      placeholder="댓글을 작성하려면 위치 인증을 진행하세요."></v-textarea>
+                  </v-col>
+                  <v-col>
+                    <v-btn variant="outlined" style="height:57px; width:75px; color:#ADADAD" disabled>등록</v-btn>
+                  </v-col>
+                </v-row>
+              </div>
             </div>
           </div>
         </div>
@@ -429,29 +584,36 @@ export default {
       independentsAPI: ["CLEAN", 'WASH', 'COOK', 'HEALTH', 'ETC'],
       regionsAPI: ["ALL", 'SEOUL', 'PUSAN', 'ULSAN', 'KYEONGNAM'],
       regionCategoryAPI: ["FREE", 'TALK', 'RESTAURANT', 'PLAY', 'MEET', 'MARKET'],
+
+      showLocationAuthentication: false,
+      userNickName: '',
+      boolAuthentication: false,
+
+      commentWritePossible: false,
+      boardType: '',
+
+      searchText: '', // 검색어를 저장하는 데이터 속성
+      error: false, // 로딩 상태를 나타내는 데이터 속성
+
+      comment: "",
+      recomment: ""
     }
   },
   methods: {
-    read() {
+    files() {
       const path = this.$route.path;
-      const pathSegments = path.split('/'); 
+      const pathSegments = path.split('/');
       const postId = parseInt(pathSegments[2]);
 
-      const url = `/posts/${postId}`;
-      //const url = 'https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/post'
-      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+      const url = `/files/${postId}`;
 
-      this.$axios.get(url,{
+      this.$axios.get(url, {
         headers: {
-          Authorization: token, // 헤더에 토큰 추가
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
         },
       })
         .then((res) => {
-          this.Board = res.data.data
-          this.bestComment = res.data.data.bestComment
-          console.log(res.data)
-
-          const base64ImageDataArray = res.data.data.files;
+          const base64ImageDataArray = res.data.files;
           const imageUrls = [];
 
           base64ImageDataArray.forEach((base64ImageData) => {
@@ -471,6 +633,134 @@ export default {
         })
         .catch(err => console.error(err))
     },
+    read() {
+      const path = this.$route.path;
+      const pathSegments = path.split('/');
+      const postId = parseInt(pathSegments[2]);
+
+      const url = `/posts/${postId}`;
+      //const url = 'https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/post'
+
+      this.$axios.get(url, {
+        headers: {
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
+        },
+      })
+        .then((res) => {
+          this.Board = res.data.data
+          this.bestComment = res.data.data.bestComment
+          console.log(res.data)
+          console.log(res.data.data.bestComment)
+        })
+        .catch(err => console.error(err))
+    },
+    postDelete() {
+      const path = this.$route.path;
+      const pathSegments = path.split('/');
+      const postId = parseInt(pathSegments[2]);
+
+      this.boardType = `/posts/${postId}`;
+
+      const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+
+      if (confirmDelete) {
+        this.$axios
+          .delete(this.boardType)
+          .then(() => {
+            // 성공적으로 삭제되었을 때 수행할 작업
+            alert("삭제되었습니다.");
+          })
+          .catch((error) => {
+            // 삭제 중 오류가 발생했을 때 수행할 작업
+            console.log(error);
+          });
+      }
+    },
+    postUpdate() {
+      const path = this.$route.path;
+      const pathSegments = path.split('/');
+      const postId = parseInt(pathSegments[2]);
+
+      this.$router.push({ path: '/PostWrite', query: { data: JSON.stringify(this.Board), postId: postId } });
+    },
+    commentPost() {
+      const path = this.$route.path;
+      const pathSegments = path.split('/');
+      const postId = parseInt(pathSegments[2]);
+
+      const url = `/comments/parent/new`;
+
+      this.$axios.post(url, { postId: postId, content: this.comment }, {
+        headers: {
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
+        },
+      })
+        .then(res => {
+          console.log(res)
+          window.location.reload(); // 요청이 성공하면 새로고침
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    postRecommend() {
+      const path = this.$route.path;
+      const pathSegments = path.split('/');
+      const postId = parseInt(pathSegments[2]);
+
+      const url = `/recommendPost/${postId}`;
+
+      this.$axios.post(url, { postId: postId }, {
+        headers: {
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
+        },
+      })
+        .then(res => {
+          console.log(res)
+          window.location.reload(); // 요청이 성공하면 새로고침
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    commentRecommend(commentId) {
+      const url = `/recommendComment/${commentId}`;
+
+      this.$axios.post(url, { commentId: commentId }, {
+        headers: {
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
+        },
+      })
+        .then(res => {
+          console.log(res)
+          window.location.reload(); // 요청이 성공하면 새로고침
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    recommentPost(comment) {
+      const path = this.$route.path;
+      const pathSegments = path.split('/');
+      const postId = parseInt(pathSegments[2]);
+
+      const url = `/comments/child/new`;
+
+      const savedCommentId = comment.commentId;
+
+      this.$axios.post(url, { postId: postId, content: this.recomment, parentId: savedCommentId }, {
+        headers: {
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
+        },
+      })
+        .then(res => {
+          console.log(res)
+          window.location.reload(); // 요청이 성공하면 새로고침
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     copyUrl() {
       const url = window.location.href;
       const tempInput = document.createElement('input');
@@ -487,16 +777,108 @@ export default {
     recommend() {
       this.recommendCheck = !this.recommendCheck;
     },
+    report() {
+      const path = this.$route.path;
+      const pathSegments = path.split('/');
+      const postId = parseInt(pathSegments[2]);
+
+      const confirmReport = window.confirm("정말로 신고하시겠습니까?");
+      if (confirmReport) {
+        const url = `/reportPost/${postId}`;
+
+        this.$axios.post(url, { postId: postId }, {
+          headers: {
+            Authorization: this.$store.state.token, // 헤더에 토큰 추가
+          },
+        })
+          .then(res => {
+            window.alert("신고되었습니다.");
+            console.log(res);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    },
     toggleReply(commentId) {
       if (this.showReply[commentId] === undefined) {
         this.showReply = Object.assign({}, this.showReply, { [commentId]: true });
       } else {
         this.showReply = Object.assign({}, this.showReply, { [commentId]: !this.showReply[commentId] });
       }
-    }
+    },
+    toggleLocationAuthentication() {
+      this.$store.commit('toggleLocationAuthentication');
+
+      if (this.$store.state.locationAuthentication === true)
+        this.$axios.post("/members/region", { region: this.$store.state.currentLocation }, {
+          headers: {
+            Authorization: this.$store.state.token, // 헤더에 토큰 추가
+          },
+        });
+    },
+    totalSearch() {
+      if (this.searchText !== '') {
+        const query = this.searchText ? `?searchText=${encodeURIComponent(this.searchText)}` : '';
+        window.location.href = '/search' + query;
+      }
+    },
+    handleLogout() {
+      this.$store.dispatch('logout');
+    },
+    addKakaoMapScript() {
+      const script = document.createElement("script");
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.initMap);
+      script.src =
+        "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=4e77d9b3460eb3b942634fb28e5e1c40&libraries=services";
+      document.head.appendChild(script);
+    },
+    getAddr() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          let geocoder = new kakao.maps.services.Geocoder();
+          let coord = new kakao.maps.LatLng(lat, lng);
+          let callback = (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              this.$store.state.currentLocation = result[0].road_address.region_1depth_name
+            }
+          };
+          geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+        });
+      } else {
+        console.log("Geolocation is not supported by this browser.");
+      }
+    },
+    loginToken() {
+      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const decodedPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      const claims = JSON.parse(decodedPayload);
+      this.userNickName = claims.nickname;
+    },
   },
   mounted() {
     this.read();
+    this.files();
+
+    if (this.$store.state.locationAuthentication === true) {
+      this.getAddr();
+      this.boolAuthentication = true
+    }
+    else
+      this.boolAuthentication = false
+
+    if (this.getToken)
+      this.loginToken()
+
   },
   computed: {
     ...mapGetters(['getToken']),
