@@ -142,9 +142,7 @@
                     </v-col>
                     <v-col cols="2"></v-col>
                     <v-col cols="auto">
-                      <router-link :to="'/chatRooms'" style="text-decoration: none;">
-                        <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
-                      </router-link>
+                      <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
                     </v-col>
                   </v-row>
                   <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
@@ -1182,12 +1180,8 @@ export default {
     toggleLocationAuthentication() {
       this.$store.commit('toggleLocationAuthentication');
 
-      if (this.$store.state.locationAuthentication === true)                 
-        this.$axios.post("/members/region", { region: this.$store.state.currentLocation }, {
-        headers: {
-          Authorization: this.$store.state.token, // 헤더에 토큰 추가
-        },
-      });     
+      if (this.$store.state.locationAuthentication === true) 
+        this.$axios.post("/members/username", { region: this.$store.state.currentLocation });        
     },
     totalSearch() {
       if (this.searchText !== '') {
@@ -1268,7 +1262,8 @@ export default {
     if (this.$store.state.locationAuthentication === true)
     {
       this.getAddr();
-      this.boolAuthentication = true      
+      this.boolAuthentication = true
+      
     }
     else
     this.boolAuthentication = false
