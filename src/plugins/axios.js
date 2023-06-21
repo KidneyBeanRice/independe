@@ -26,7 +26,7 @@ _axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
+Vue.config.globalProperties.$userId = '';
 // Add a response interceptor
 _axios.interceptors.response.use(
   function(response) {

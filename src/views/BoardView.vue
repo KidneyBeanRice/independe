@@ -142,7 +142,9 @@
                     </v-col>
                     <v-col cols="2"></v-col>
                     <v-col cols="auto">
-                      <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
+                      <router-link :to="`/chatRooms`" style="text-decoration: none; color:black;">
+                        <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
+                      </router-link>
                     </v-col>
                   </v-row>
                   <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
@@ -544,7 +546,7 @@
               </v-col>
               <v-col>
                 <v-row justify="end">
-                  <v-btn variant="flat" color="#5E913B" class="font-weight-bold" to="/PostWrite">
+                  <v-btn v-if="getToken" variant="flat" color="#5E913B" class="font-weight-bold" to="/PostWrite">
                     <div class="text-white">글쓰기</div>
                   </v-btn>
                 </v-row>
@@ -802,7 +804,7 @@ export default {
     },
     boardSearch() {
         // 검색 요청을 보낼 URL 생성
-        const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+        const url = `/api/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
 
         // 검색 요청 보내기
         this.$axios.get(url, {
@@ -843,7 +845,7 @@ export default {
       this.updateBoardCheck(0)
       this.updateCategoryCheck(0)
       this.currentPage = 0;
-      const url = `/posts/region/${this.regionsAPI[0]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+      const url = `/api/posts/region/${this.regionsAPI[0]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
 
       //this.$axios.get('https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/independe', { params: { page: this.currentPage } })
       this.$axios.get(url, { params: { page: this.currentPage } }, {
@@ -877,7 +879,7 @@ export default {
       this.$store.state.boardCheck = 1
       this.updateBoardCheck(1)
       this.currentPage = 0;
-      const url = `/posts/region/${this.regionsAPI[1]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+      const url = `/api/posts/region/${this.regionsAPI[1]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } }, {
         headers: {
@@ -910,7 +912,7 @@ export default {
       this.$store.state.boardCheck = 2
       this.updateBoardCheck(2)
       this.currentPage = 0;
-      const url = `/posts/region/${this.regionsAPI[2]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+      const url = `/api/posts/region/${this.regionsAPI[2]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } }, {
         headers: {
@@ -943,7 +945,7 @@ export default {
       this.$store.state.boardCheck = 3
       this.updateBoardCheck(3)
       this.currentPage = 0;
-      const url = `/posts/region/${this.regionsAPI[3]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+      const url = `/api/posts/region/${this.regionsAPI[3]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } }, {
         headers: {
@@ -976,7 +978,7 @@ export default {
       this.$store.state.boardCheck = 4
       this.updateBoardCheck(4)
       this.currentPage = 0;
-      const url = `/posts/region/${this.regionsAPI[4]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+      const url = `/api/posts/region/${this.regionsAPI[4]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
       this.$axios.get(url, { params: { page: this.currentPage } }, {
         headers: {
           Authorization: this.$store.state.token, // 헤더에 토큰 추가
@@ -1006,7 +1008,7 @@ export default {
       this.$store.state.CategoryCheck = 1
       this.updateCategoryCheck(1)
       this.currentPage = 0;
-      const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[1]}`;
+      const url = `/api/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[1]}`;
       this.$axios.get(url, { params: { page: this.currentPage } }, {
         headers: {
           Authorization: this.$store.state.token, // 헤더에 토큰 추가
@@ -1036,7 +1038,7 @@ export default {
       this.$store.state.CategoryCheck = 2
       this.updateCategoryCheck(2)
       this.currentPage = 0;
-      const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[2]}`;
+      const url = `/api/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[2]}`;
       this.$axios.get(url, { params: { page: this.currentPage } }, {
         headers: {
           Authorization: this.$store.state.token, // 헤더에 토큰 추가
@@ -1066,7 +1068,7 @@ export default {
       this.$store.state.CategoryCheck = 3
       this.updateCategoryCheck(3)
       this.currentPage = 0;
-      const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[3]}`;
+      const url = `/api/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[3]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } }, {
         headers: {
@@ -1097,7 +1099,7 @@ export default {
       this.$store.state.CategoryCheck = 4
       this.updateCategoryCheck(4)
       this.currentPage = 0;
-      const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[4]}`;
+      const url = `/api/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[4]}`;
       this.$axios.get(url, { params: { page: this.currentPage } }, {
         headers: {
           Authorization: this.$store.state.token, // 헤더에 토큰 추가
@@ -1127,7 +1129,7 @@ export default {
       this.$store.state.CategoryCheck = 5
       this.updateCategoryCheck(5)
       this.currentPage = 0;
-      const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[5]}`;
+      const url = `/api/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[5]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } }, {
         headers: {
@@ -1154,7 +1156,7 @@ export default {
         });
     },
     page() {
-      const url = `/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+      const url = `/api/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
       this.$axios.get(url, { params: { page: this.currentPage } }, {
         headers: {
           Authorization: this.$store.state.token, // 헤더에 토큰 추가
@@ -1181,7 +1183,11 @@ export default {
       this.$store.commit('toggleLocationAuthentication');
 
       if (this.$store.state.locationAuthentication === true) 
-        this.$axios.post("/members/username", { region: this.$store.state.currentLocation });        
+        this.$axios.post("/api/members/region", { region: this.$store.state.currentLocation }, {
+        headers: {
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
+        },
+      });        
     },
     totalSearch() {
       if (this.searchText !== '') {
@@ -1263,7 +1269,6 @@ export default {
     {
       this.getAddr();
       this.boolAuthentication = true
-      this.$axios.post("/members/region", { region: this.$store.state.currentLocation });
     }
     else
     this.boolAuthentication = false

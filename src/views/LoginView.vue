@@ -61,12 +61,12 @@
           </v-row>
           <v-row justify="center" class="mb-5">
             <v-col cols="1">
-              <a href="http://spring:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8081/oauth/signup">                
+              <a href="https://www.independe.co.kr/oauth2/authorization/naver?redirect_uri=https://www.independe.co.kr/redirect">                
                 <v-img :height="75" src="../img/naver.png"></v-img>
               </a>
             </v-col>
             <v-col cols="1">
-              <a href="http://spring:8080/oauth2/authorization/kakao">
+              <a href="https://www.independe.co.kr/oauth2/authorization/kakao?redirect_uri=https://www.independe.co.kr/redirect">
                 <v-img :height="75" src="../img/kakaoTalk.png"></v-img>
               </a>
             </v-col>
@@ -168,7 +168,7 @@ export default {
       };
 
       this.$axios
-        .post('/login', credentials)
+        .post('/api/login', credentials)
         .then(response => {
           const token = response.headers.authorization;
           this.saveToken(token); // 토큰 값을 Vuex 스토어에 저장
@@ -177,11 +177,12 @@ export default {
         })
         .catch(error => {
           // 로그인 실패 처리
+          alert('로그인에 실패하였습니다.')
           console.error(error);
         });
     },
     naver() {
-      const url = '/oauth2/authorization/naver';
+      const url = '/api/oauth2/authorization/naver';
       this.$axios
         .get(url)
         .then(response => {
@@ -196,6 +197,7 @@ export default {
           this.$router.go(-1)
         })
         .catch(error => {
+          alert('로그인에 실패하였습니다.')
           console.error(error);
         });
     },

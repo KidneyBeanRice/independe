@@ -142,7 +142,9 @@
                     </v-col>
                     <v-col cols="2"></v-col>
                     <v-col cols="auto">
-                      <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
+                      <router-link :to="`/chatRooms`" style="text-decoration: none; color:black;">
+                        <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
+                      </router-link>
                     </v-col>
                   </v-row>
                   <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
@@ -425,7 +427,7 @@
               </v-col>
               <v-col>
                 <v-row justify="end">
-                  <v-btn variant="flat" color="#5E913B" class="font-weight-bold" to="/PostWrite">
+                  <v-btn v-if="getToken" variant="flat" color="#5E913B" class="font-weight-bold" to="/PostWrite">
                     <div class="text-white">글쓰기</div>
                   </v-btn>
                 </v-row>
@@ -681,7 +683,7 @@ export default {
   methods: {
     boardSearch() {
         // 검색 요청을 보낼 URL 생성
-        const url = `/posts/independent/${this.independentsAPI[this.independentCheck]}`;
+        const url = `/api/posts/independent/${this.independentsAPI[this.independentCheck]}`;
 
         // 검색 요청 보내기
         this.$axios.get(url, {
@@ -722,7 +724,7 @@ export default {
       this.$store.state.independentCheck = 0
       this.updateIndependentCheck(0)
       this.currentPage = 0
-      const url = `/posts/independent/${this.independentsAPI[0]}`;
+      const url = `/api/posts/independent/${this.independentsAPI[0]}`;
       //this.$axios.get('https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/independe', { params: { page: this.currentPage } })
       this.$axios.get(url, { params: { page: this.currentPage } },{
         headers: {
@@ -752,7 +754,7 @@ export default {
       this.$store.state.independentCheck = 1
       this.updateIndependentCheck(1)
       this.currentPage = 0
-      const url = `/posts/independent/${this.independentsAPI[1]}`;
+      const url = `/api/posts/independent/${this.independentsAPI[1]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } },{
         headers: {
@@ -782,7 +784,7 @@ export default {
       this.$store.state.independentCheck = 2
       this.updateIndependentCheck(2)
       this.currentPage = 0
-      const url = `/posts/independent/${this.independentsAPI[2]}`;
+      const url = `/api/posts/independent/${this.independentsAPI[2]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } },{
         headers: {
@@ -812,7 +814,7 @@ export default {
       this.$store.state.independentCheck = 3
       this.updateIndependentCheck(3)
       this.currentPage = 0
-      const url = `/posts/independent/${this.independentsAPI[3]}`;
+      const url = `/api/posts/independent/${this.independentsAPI[3]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } },{
         headers: {
@@ -842,7 +844,7 @@ export default {
       this.$store.state.independentCheck = 4
       this.updateIndependentCheck(4)
       this.currentPage = 0
-      const url = `/posts/independent/${this.independentsAPI[4]}`;
+      const url = `/api/posts/independent/${this.independentsAPI[4]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } },{
         headers: {
@@ -868,7 +870,7 @@ export default {
         });
     },
     page() {
-      const url = `/posts/independent/${this.independentsAPI[this.independentCheck]}`;
+      const url = `/api/posts/independent/${this.independentsAPI[this.independentCheck]}`;
 
       this.$axios.get(url, { params: { page: this.currentPage } },{
         headers: {
@@ -896,7 +898,11 @@ export default {
       this.$store.commit('toggleLocationAuthentication');
 
       if (this.$store.state.locationAuthentication === true) 
-        this.$axios.post("/members/username", { region: this.$store.state.currentLocation });        
+        this.$axios.post("/api/members/region", { region: this.$store.state.currentLocation }, {
+        headers: {
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
+        },
+      });        
     },
     totalSearch() {
       if (this.searchText !== '') {
@@ -966,8 +972,7 @@ export default {
     if (this.$store.state.locationAuthentication === true)
     {
       this.getAddr();
-      this.boolAuthentication = true
-      this.$axios.post("/members/region", { region: this.$store.state.currentLocation });
+      this.boolAuthentication = true      
     }
     else
     this.boolAuthentication = false

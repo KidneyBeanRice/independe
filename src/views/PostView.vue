@@ -142,7 +142,9 @@
                     </v-col>
                     <v-col cols="2"></v-col>
                     <v-col cols="auto">
-                      <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
+                      <router-link :to="`/chatRooms`" style="text-decoration: none; color:black;">
+                        <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
+                      </router-link>
                     </v-col>
                   </v-row>
                   <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
@@ -368,7 +370,7 @@
           </v-col>
         </v-row>
 
-        <v-row>
+        <!-- <v-row>
           <v-col cols="auto" class="mb-3">
             <v-row>
               <v-img class="ml-3" src="../img/bestCommend.png" width="30" height="30"></v-img>
@@ -418,7 +420,7 @@
               </v-row>
             </v-sheet>
           </v-col>
-        </v-row>
+        </v-row> -->
 
         <div>
           <div v-for="comment in Board.comments" :key="comment.commentId">
@@ -427,7 +429,9 @@
                 style="border-color:lightslategray"></v-divider>
               <v-row>
                 <v-col cols="auto" style="color:gray">
-                  &nbsp;{{ comment.nickname }}
+                  <router-link :to="`/chat/${comment.writerId}`" style="text-decoration: none; color:gray;">
+                    &nbsp;{{ comment.nickname }}
+                  </router-link>
                 </v-col>
                 <v-col style="color:gray" cols="auto">
                   {{ $filter.formatDate(comment.createdDate) }} {{ $filter.formatTime(comment.createdDate) }}
@@ -457,7 +461,9 @@
                   style="border-color:lightslategray;"></v-divider>
                 <v-row>
                   <v-col cols="auto" style="color:gray">
-                    &emsp;&emsp;ㄴ{{ reply.nickname }}
+                    <router-link :to="`/chat/${reply.writerId}`" style="text-decoration: none; color:gray;">
+                      &emsp;&emsp;ㄴ{{ reply.nickname }}
+                    </router-link>
                   </v-col>
                   <v-col style="color:gray" cols="auto">
                     {{ $filter.formatDate(reply.createdDate) }} {{ $filter.formatTime(reply.createdDate) }}
@@ -599,7 +605,7 @@ export default {
     const pathSegments = path.split('/');
     const postId = parseInt(pathSegments[2]);
 
-    const url = `/files/${postId}`;
+    const url = `/api/files/${postId}`;
 
     this.$axios.get(url, {  
       headers: {
@@ -633,7 +639,7 @@ export default {
     const pathSegments = path.split('/');
     const postId = parseInt(pathSegments[2]);
 
-    const url = `/posts/${postId}`;
+    const url = `/api/posts/${postId}`;
     //const url = 'https://ba9fe6f7-8331-4cd6-bd3e-1323d53d8567.mock.pstmn.io/post'
 
     this.$axios.get(url, {
@@ -653,7 +659,7 @@ export default {
       const pathSegments = path.split('/');
       const postId = parseInt(pathSegments[2]);
 
-      this.boardType = `/posts/${postId}`;
+      this.boardType = `/api/posts/${postId}`;
 
       const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
 
@@ -666,19 +672,23 @@ export default {
           })
           .catch((error) => {
             // 삭제 중 오류가 발생했을 때 수행할 작업
+            alert('삭제 실패하였습니다.')
             console.log(error);
           });
       }
     },
     postUpdate() {
-      this.$router.push({ path: '/PostWrite', query: { data: JSON.stringify(this.Board)}});
+      const path = this.$route.path;
+      const pathSegments = path.split('/');
+      const postId = parseInt(pathSegments[2]);
+  this.$router.push({ path: '/PostWrite', query: { data: JSON.stringify(this.Board), postId: postId }});
     },
     commentPost() {
       const path = this.$route.path;
       const pathSegments = path.split('/');
       const postId = parseInt(pathSegments[2]);
 
-      const url = `/comments/parent/new`;
+      const url = `/api/comments/parent/new`;
 
       this.$axios.post(url, { postId: postId, content: this.comment }, {
         headers: {
@@ -690,6 +700,7 @@ export default {
           window.location.reload(); // 요청이 성공하면 새로고침
         })
         .catch(error => {
+          alert('작성에 실패하였습니다.')
           console.log(error);
         });
     },
@@ -698,7 +709,7 @@ export default {
       const pathSegments = path.split('/');
       const postId = parseInt(pathSegments[2]);
 
-      const url = `/recommendPost/${postId}`;
+      const url = `/api/recommendPost/${postId}`;
 
       this.$axios.post(url, { postId: postId }, {
         headers: {
@@ -710,11 +721,12 @@ export default {
           window.location.reload(); // 요청이 성공하면 새로고침
         })
         .catch(error => {
+          alert('추천에 실패하였습니다.')
           console.log(error);
         });
     },
     commentRecommend(commentId) {
-      const url = `/recommendComment/${commentId}`;
+      const url = `/api/recommendComment/${commentId}`;
 
       this.$axios.post(url, { commentId: commentId }, {
         headers: {
@@ -726,6 +738,7 @@ export default {
           window.location.reload(); // 요청이 성공하면 새로고침
         })
         .catch(error => {
+          alert('추천에 실패하였습니다.')
           console.log(error);
         });
     },
@@ -734,7 +747,7 @@ export default {
       const pathSegments = path.split('/');
       const postId = parseInt(pathSegments[2]);
 
-      const url = `/comments/child/new`;
+      const url = `/api/comments/child/new`;
 
       const savedCommentId = comment.commentId;
 
@@ -748,6 +761,7 @@ export default {
           window.location.reload(); // 요청이 성공하면 새로고침
         })
         .catch(error => {
+          alert('작성에 실패하였습니다.')
           console.log(error);
         });
     },
@@ -774,7 +788,7 @@ export default {
 
       const confirmReport = window.confirm("정말로 신고하시겠습니까?");
       if (confirmReport) {
-        const url = `/reportPost/${postId}`;
+        const url = `/api/reportPost/${postId}`;
 
         this.$axios.post(url, { postId: postId }, {
           headers: {
@@ -786,6 +800,7 @@ export default {
             console.log(res);
           })
           .catch(error => {
+            alert('신고에 실패하였습니다.')
             console.log(error);
           });
       }
@@ -801,7 +816,11 @@ export default {
       this.$store.commit('toggleLocationAuthentication');
 
       if (this.$store.state.locationAuthentication === true)
-        this.$axios.post("/members/username", { region: this.$store.state.currentLocation });
+        this.$axios.post("/api/members/region", { region: this.$store.state.currentLocation }, {
+        headers: {
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
+        },
+      });
     },
     totalSearch() {
       if (this.searchText !== '') {
@@ -853,12 +872,11 @@ export default {
   },
   mounted() {
     this.read();
-    //this.files();
+    this.files();
     
     if (this.$store.state.locationAuthentication === true) {
       this.getAddr();
       this.boolAuthentication = true
-      this.$axios.post("/members/region", { region: this.$store.state.currentLocation });
     }
     else
       this.boolAuthentication = false
