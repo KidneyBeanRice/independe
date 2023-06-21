@@ -466,6 +466,7 @@ export default {
           });
       }
       else if (this.boardCheck === 1) {
+
         const url = `/api/posts/independent/new`;
         this.$axios.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: this.$store.state.token } })
           .then(res => {

@@ -1214,8 +1214,12 @@ export default {
 
           let geocoder = new kakao.maps.services.Geocoder();
           let coord = new kakao.maps.LatLng(lat, lng);
-          let callback = (result, status) => {
-            if (status === kakao.maps.services.Status.OK) {
+ <<<<<<< HEAD
+        this.$axios.post("/api/members/region", { region: this.$store.state.currentLocation }, {
+=======
+        this.$axios.post("/members/region", { region: this.$store.state.currentLocation }, {
+>>>>>>> ad7b8d2b6755f2d8a2196a175cdc03e5db0d04b6
+s.OK) {
               console.log(result[0].road_address.region_1depth_name);
               this.$store.state.currentLocation = result[0].road_address.region_1depth_name
             }

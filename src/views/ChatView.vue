@@ -384,7 +384,9 @@
       },
       fetchChatRooms() {
   
+
         axios.get('/api/chat/rooms', {
+
           headers: {
             Authorization: this.getToken,
           },
@@ -397,7 +399,9 @@
           });
       },
       findChatRoomId() {
+
         axios.get('/api/chat/room', {
+
           params: {
             receiverId: this.memberId,
           },
@@ -439,6 +443,7 @@
       },
       initStompClient() {
         const socket = new SockJS('ws')
+
         this.stompClient = Stomp.over(socket)
         const header = {
           Authorization: this.getToken

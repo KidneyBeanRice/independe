@@ -508,6 +508,7 @@ export default {
       this.$store.commit('toggleLocationAuthentication');
 
       if (this.$store.state.locationAuthentication === true)
+
         this.$axios.post("/api/members/region", { region: this.$store.state.currentLocation }, {
         headers: {
           Authorization: this.$store.state.token, // 헤더에 토큰 추가
