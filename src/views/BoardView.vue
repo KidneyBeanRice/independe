@@ -515,19 +515,23 @@
                     </template>
                     <v-list>
                       <v-list-item style="text-align: center;">
-                        <v-list-item-title style="cursor: pointer;" @click="searchCondition = 0" class="my-2">제목 + 내용</v-list-item-title>
+                        <v-list-item-title style="cursor: pointer;" @click="searchCondition = 0" class="my-2">제목 +
+                          내용</v-list-item-title>
                         <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                        <v-list-item-title style="cursor: pointer;" @click="searchCondition = 1" class="my-2">제목</v-list-item-title>
+                        <v-list-item-title style="cursor: pointer;" @click="searchCondition = 1"
+                          class="my-2">제목</v-list-item-title>
                         <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                        <v-list-item-title style="cursor: pointer;" @click="searchCondition = 2" class="my-2">내용</v-list-item-title>
+                        <v-list-item-title style="cursor: pointer;" @click="searchCondition = 2"
+                          class="my-2">내용</v-list-item-title>
                         <v-divider :thickness="1" class="border-opacity-25 mb-2"></v-divider>
-                        <v-list-item-title style="cursor: pointer;" @click="searchCondition = 3" class="my-2">작성자</v-list-item-title>
+                        <v-list-item-title style="cursor: pointer;" @click="searchCondition = 3"
+                          class="my-2">작성자</v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-menu>
                   <v-card-text>
-                    <v-text-field :loading="error" density="compact" variant="outlined"
-                      single-line hide-details v-model="searchKeyword">
+                    <v-text-field :loading="error" density="compact" variant="outlined" single-line hide-details
+                      v-model="searchKeyword">
                     </v-text-field>
                   </v-card-text>
                   <router-link :to="{
@@ -539,8 +543,8 @@
                     }
                   }" style="text-decoration: none; color:#5E913B;">
 
-                      <v-img @click="boardSearch" width="23" height="23" src="../img/boardSearch.png"
-                :style="{ cursor: 'pointer' }"></v-img>             
+                    <v-img @click="boardSearch" width="23" height="23" src="../img/boardSearch.png"
+                      :style="{ cursor: 'pointer' }"></v-img>
                   </router-link>
                 </v-row>
               </v-col>
@@ -803,39 +807,39 @@ export default {
       this.$store.dispatch('updateCategoryCheck', newValue);
     },
     boardSearch() {
-        // 검색 요청을 보낼 URL 생성
-        const url = `/api/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
+      // 검색 요청을 보낼 URL 생성
+      const url = `/api/posts/region/${this.regionsAPI[this.regionCheck]}/${this.regionCategoryAPI[this.regionCategoryCheck]}`;
 
-        // 검색 요청 보내기
-        this.$axios.get(url, {
-          params: {
-            condition: this.searchAPI[this.searchCondition],
-            keyword: this.searchKeyword,
-            page: this.currentPage
-          }
-        }, {
-          headers: {
-            Authorization: this.$store.state.token, // 헤더에 토큰 추가
-          },
+      // 검색 요청 보내기
+      this.$axios.get(url, {
+        params: {
+          condition: this.searchAPI[this.searchCondition],
+          keyword: this.searchKeyword,
+          page: this.currentPage
+        }
+      }, {
+        headers: {
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
+        },
+      })
+        .then(res => {
+          // 검색 결과 처리
+          this.Board = res.data.data;
+          this.totalPage = res.data.count;
+
+          // 페이지 처리 코드...
+          if (this.totalPage < 10)
+            this.totalPage = 1
+          else if (this.totalPage % 10 === 0)
+            this.totalPage = parseInt(this.totalPage / 10)
+          else
+            this.totalPage = parseInt(this.totalPage / 10) + 1
+
+          console.log(res.data);
         })
-          .then(res => {
-            // 검색 결과 처리
-            this.Board = res.data.data;
-            this.totalPage = res.data.count;
-
-            // 페이지 처리 코드...
-            if (this.totalPage < 10)
-              this.totalPage = 1
-            else if (this.totalPage % 10 === 0)
-              this.totalPage = parseInt(this.totalPage / 10)
-            else
-              this.totalPage = parseInt(this.totalPage / 10) + 1
-
-            console.log(res.data);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     region_all() {
       this.areaCheck = 0
@@ -1182,12 +1186,12 @@ export default {
     toggleLocationAuthentication() {
       this.$store.commit('toggleLocationAuthentication');
 
-      if (this.$store.state.locationAuthentication === true) 
+      if (this.$store.state.locationAuthentication === true)
         this.$axios.post("/api/members/region", { region: this.$store.state.currentLocation }, {
-        headers: {
-          Authorization: this.$store.state.token, // 헤더에 토큰 추가
-        },
-      });        
+          headers: {
+            Authorization: this.$store.state.token, // 헤더에 토큰 추가
+          },
+        });
     },
     totalSearch() {
       if (this.searchText !== '') {
@@ -1207,78 +1211,73 @@ export default {
       document.head.appendChild(script);
     },
     getAddr() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(position => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
 
-          let geocoder = new kakao.maps.services.Geocoder();
-          let coord = new kakao.maps.LatLng(lat, lng);
- <<<<<<< HEAD
-        this.$axios.post("/api/members/region", { region: this.$store.state.currentLocation }, {
-=======
-        this.$axios.post("/members/region", { region: this.$store.state.currentLocation }, {
->>>>>>> ad7b8d2b6755f2d8a2196a175cdc03e5db0d04b6
-s.OK) {
-              console.log(result[0].road_address.region_1depth_name);
-              this.$store.state.currentLocation = result[0].road_address.region_1depth_name
-            }
-          };
-          geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
-        });
-      } else {
-        console.log("Geolocation is not supported by this browser.");
-      }
-    },
-    loginToken() {
-      const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
+      let geocoder = new kakao.maps.services.Geocoder();
+      let coord = new kakao.maps.LatLng(lat, lng);
 
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const decodedPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-      const claims = JSON.parse(decodedPayload);
-      this.userNickName = claims.nickname;
-    }
-  },
-  mounted() {
-    this.$store.state.independentCheck = 5
+      geocoder.coord2Address(coord.getLng(), coord.getLat(), (result, status) => {
+        if (status === kakao.maps.services.Status.OK) {
+          console.log(result[0].road_address.region_1depth_name);
+          this.$store.state.currentLocation = result[0].road_address.region_1depth_name;
+        }
+      });
+    });
+  } else {
+    console.log("Geolocation is not supported by this browser.");
+  }
+},
+loginToken() {
+  const token = this.getToken; // Vuex 스토어에서 토큰 값을 가져옴
 
-    if (this.$store.state.boardCheck === 0)
-      this.region_all()
-    else if (this.$store.state.boardCheck === 1)
-      this.region_seoul()
-    else if (this.$store.state.boardCheck === 2)
-      this.region_busan()
-    else if (this.$store.state.boardCheck === 3)
-      this.region_ulsan()
-    else if (this.$store.state.boardCheck === 4)
-      this.region_kyeongnam()
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const decodedPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+  const claims = JSON.parse(decodedPayload);
+  this.userNickName = claims.nickname;
+},
+mounted() {
+  this.$store.state.independentCheck = 5;
 
-    if (this.$store.state.categoryCheck === 1)
-      this.regionCategory_talk()
-    else if (this.$store.state.categoryCheck === 2)
-      this.regionCategory_restaurant()
-    else if (this.$store.state.categoryCheck === 3)
-      this.regionCategory_play()
-    else if (this.$store.state.categoryCheck === 4)
-      this.regionCategory_meet()
-    else if (this.$store.state.categoryCheck === 5)
-      this.regionCategory_market()
+  if (this.$store.state.boardCheck === 0)
+    this.region_all();
+  else if (this.$store.state.boardCheck === 1)
+    this.region_seoul();
+  else if (this.$store.state.boardCheck === 2)
+    this.region_busan();
+  else if (this.$store.state.boardCheck === 3)
+    this.region_ulsan();
+  else if (this.$store.state.boardCheck === 4)
+    this.region_kyeongnam();
 
-    this.date()
+  if (this.$store.state.categoryCheck === 1)
+    this.regionCategory_talk();
+  else if (this.$store.state.categoryCheck === 2)
+    this.regionCategory_restaurant();
+  else if (this.$store.state.categoryCheck === 3)
+    this.regionCategory_play();
+  else if (this.$store.state.categoryCheck === 4)
+    this.regionCategory_meet();
+  else if (this.$store.state.categoryCheck === 5)
+    this.regionCategory_market();
 
-    if (this.$store.state.locationAuthentication === true)
-    {
-      this.getAddr();
-      this.boolAuthentication = true
-    }
-    else
-    this.boolAuthentication = false
+  this.date();
 
-    if (this.getToken)
-      this.loginToken()
-  },
+  if (this.$store.state.locationAuthentication === true) {
+    this.getAddr();
+    this.boolAuthentication = true;
+  } else {
+    this.boolAuthentication = false;
+  }
+
+  if (this.getToken)
+    this.loginToken();
+},
 } 
+}
 </script>
