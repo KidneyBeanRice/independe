@@ -425,7 +425,7 @@ export default {
             }
         },
         idDuplicate() {
-            this.$axios.post("/members/username", { username: this.id })
+            this.$axios.post("/api/members/username", { username: this.id })
                 .then(res => {
                     this.idDupCheck = res.data.idDuplicatedNot
                     this.idDupBtn = this.idDupBtn + 1
@@ -443,7 +443,7 @@ export default {
                 });
         },
         nicknameDuplicate() {
-            this.$axios.post("/members/nickname", { nickname: this.nickname })
+            this.$axios.post("/api/members/nickname", { nickname: this.nickname })
                 .then(res => {
                     this.nicknameDupCheck = res.data.idDuplicatedNot
                     this.nicknameDupBtn = this.nicknameDupBtn + 1
@@ -463,7 +463,7 @@ export default {
         craete() {
             if (this.idDuplicateCheck && this.idDupBtn > 0 && this.passwordVaild && this.password !== '' && this.passwordCheck && this.passwordCk !== '' && this.nickname !== '' && this.nicknameDuplicateCheck && this.nicknameDupBtn > 0 && this.nickVaild && this.emailVaild && this.email !== '' && this.number !== '' && this.number.length === 13)
             {
-                this.$axios.post("/members/new", { username: this.id, password: this.password, nickname: this.nickname, email: this.email, number: this.number })
+                this.$axios.post("/api/members/new", { username: this.id, password: this.password, nickname: this.nickname, email: this.email, number: this.number })
                 .then(res => {
                     alert("회원가입이 완료되었습니다.")
                     this.$router.go(-1);

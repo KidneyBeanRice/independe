@@ -142,7 +142,9 @@
                     </v-col>
                     <v-col cols="2"></v-col>
                     <v-col cols="auto">
-                      <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
+                      <router-link :to="`/chatRooms`" style="text-decoration: none; color:black;">
+                        <v-list-item-title style="font-size:18px" class="font-weight-bold">채팅</v-list-item-title>
+                      </router-link>
                     </v-col>
                   </v-row>
                   <v-divider :thickness="1" class="border-opacity-25 my-5"></v-divider>
@@ -742,7 +744,7 @@ export default {
   methods: {
     ...mapActions(['saveToken']),
     read() {
-      this.$axios.get('/posts/main'/*'https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/posts/main'*/, {
+      this.$axios.get('/api/posts/main'/*'https://9f51b12f-d360-49fc-a90e-b61d8463e86b.mock.pstmn.io/posts/main'*/, {
         headers: {
           Authorization: this.$store.state.token, // 헤더에 토큰 추가
         },
@@ -764,7 +766,11 @@ export default {
       this.$store.commit('toggleLocationAuthentication');
 
       if (this.$store.state.locationAuthentication === true) 
-        this.$axios.post("/members/username", { region: this.$store.state.currentLocation });        
+        this.$axios.post("/api/members/region", { region: this.$store.state.currentLocation }, {
+        headers: {
+          Authorization: this.$store.state.token, // 헤더에 토큰 추가
+        },
+      });        
     },
     totalSearch() {
       if (this.searchText !== '') {
@@ -822,7 +828,6 @@ export default {
     {
       this.getAddr();
       this.boolAuthentication = true
-      this.$axios.post("/members/region", { region: this.$store.state.currentLocation });
     }
     else
     this.boolAuthentication = false

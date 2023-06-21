@@ -351,7 +351,7 @@ export default {
             }
         },
         nicknameDuplicate() {
-            this.$axios.post("/members/nickname", { nickname: this.nickname })
+            this.$axios.post("/api/members/nickname", { nickname: this.nickname })
                 .then(res => {
                     this.nicknameDupCheck = res.data.idDuplicatedNot
                     this.nicknameDupBtn = this.nicknameDupBtn + 1
@@ -372,7 +372,7 @@ export default {
             const Oauthtoken = this.getToken;
             if (this.nickname !== '' && this.nicknameDuplicateCheck && this.nicknameDupBtn > 0 && this.nickVaild && this.emailVaild && this.email !== '' && this.number !== '' && this.number.length === 13)
             {
-                this.$axios.put("/members", { nickname: this.nickname, email: this.email, number: this.number }, { headers: {Authorization: Oauthtoken}})
+                this.$axios.put("/api/members", { nickname: this.nickname, email: this.email, number: this.number }, { headers: {Authorization: Oauthtoken}})
                 .then(res => {
                     alert("회원가입이 완료되었습니다.")
                     this.$router.go(-1);

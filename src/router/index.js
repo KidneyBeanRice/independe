@@ -8,6 +8,8 @@ import LoginView from '../views/LoginView.vue';
 import SignUpView from '../views/SignUpView.vue';
 import SearchView from '../views/SearchView.vue';
 import RedriectView from '../views/RedirectView.vue';
+import ChatView from '../views/ChatView.vue';
+import ChatRoomsView from '../views/ChatRoomsView.vue';
 
 const routes = [
   {
@@ -54,7 +56,17 @@ const routes = [
     path: '/oauth/signup',
     name: 'RedirectView',
     component: RedriectView
-  }
+  },
+  {
+    path: '/chat/:memberId',
+    name: 'ChatView',
+    component: ChatView
+},
+{
+  path: '/chatRooms/',
+  name: 'ChatRoomsView',
+  component: ChatRoomsView
+}
 ];
 
 const router = createRouter({
