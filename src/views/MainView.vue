@@ -765,13 +765,14 @@ export default {
     toggleLocationAuthentication() {
       this.$store.commit('toggleLocationAuthentication');
 
-      if (this.$store.state.locationAuthentication === true) 
-
+      if (this.$store.state.locationAuthentication === true)
+      {this.getAddr();
         this.$axios.post("/api/members/region", { region: this.$store.state.currentLocation }, {
         headers: {
           Authorization: this.$store.state.token, // 헤더에 토큰 추가
         },
       });        
+    }
     },
     totalSearch() {
       if (this.searchText !== '') {
@@ -800,8 +801,8 @@ export default {
           let coord = new kakao.maps.LatLng(lat, lng);
           let callback = (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
-              console.log(result[0].road_address.region_1depth_name);
-              this.$store.state.currentLocation = result[0].road_address.region_1depth_name
+              console.log("region : " + result[0].address.region_1depth_name);
+              this.$store.state.currentLocation = result[0].address.region_1depth_name
             }
           };
           geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
@@ -827,7 +828,6 @@ export default {
 
     if (this.$store.state.locationAuthentication === true)
     {
-      this.getAddr();
       this.boolAuthentication = true
     }
     else
