@@ -1240,7 +1240,8 @@ loginToken() {
   }).join(''));
   const claims = JSON.parse(decodedPayload);
   this.userNickName = claims.nickname;
-},
+}
+  },
 mounted() {
   this.$store.state.independentCheck = 5;
 
@@ -1278,6 +1279,5 @@ mounted() {
   if (this.getToken)
     this.loginToken();
 },
-} 
 }
 </script>

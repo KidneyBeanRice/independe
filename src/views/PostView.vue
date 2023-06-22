@@ -340,7 +340,7 @@
           </v-col>
         </v-row>
 
-        <v-row v-if="boolAuthentication === true">
+        <v-row>
           <v-col cols="11">
             <v-textarea rows="2" class="no-resize" v-model="comment" variant="outlined"
               placeholder="댓글을 작성해 보세요."></v-textarea>
@@ -349,17 +349,8 @@
             <v-btn variant="outlined" style="height:80px; width:75px; color:#ADADAD" @click="commentPost">등록</v-btn>
           </v-col>
         </v-row>
-        <v-row v-else>
-          <v-col cols="11">
-            <v-textarea rows="2" class="no-resize" v-model="comment" variant="outlined"
-              placeholder="댓글을 작성하려면 위치 인증을 진행하세요."></v-textarea>
-          </v-col>
-          <v-col>
-            <v-btn variant="outlined" style="height:80px; width:75px; color:#ADADAD" disabled>등록</v-btn>
-          </v-col>
-        </v-row>
 
-        <v-row v-if="userNickName === Board.nickname">
+        <v-row v-if="userNickName === Board.nickname" class="mb-5">
           <v-col align="end">
             <v-btn class="mr-5" variant="outlined" style="color:#ADADAD" @click="postDelete">
               <div style="color:gray">삭제</div>
@@ -498,7 +489,7 @@
             </div>
           </div> -->
             <div v-if="showReply[comment.commentId]">
-              <div v-if="boolAuthentication === true">
+              <div>
                 <v-row class="mt-10">
                   <v-col cols="11">
                     <v-textarea v-model="recomment" rows="1" class="no-resize" variant="outlined"
@@ -510,17 +501,7 @@
                   </v-col>
                 </v-row>
               </div>
-              <div v-else>
-                <v-row class="mt-10">
-                  <v-col cols="11">
-                    <v-textarea rows="1" class="no-resize" variant="outlined"
-                      placeholder="댓글을 작성하려면 위치 인증을 진행하세요."></v-textarea>
-                  </v-col>
-                  <v-col>
-                    <v-btn variant="outlined" style="height:57px; width:75px; color:#ADADAD" disabled>등록</v-btn>
-                  </v-col>
-                </v-row>
-              </div>
+      
             </div>
           </div>
         </div>
