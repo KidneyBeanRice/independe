@@ -205,16 +205,32 @@
   </v-app-bar>
 
     <div>
-      <h1>Chat Rooms</h1>
-      <ul>
-        <li v-for="room in chatRooms" :key="room.chatRoomId">
-          <router-view :key="$route.fullPath"/>
-          <router-link :to="'/chat/' + room.receiverId">{{ room.receiverNickname }} 과 채팅하기 </router-link>
-        </li>
-      </ul>
-      
+        <h1>Chat Rooms</h1>
+        <ul>
+          <li v-for="room in chatRooms" :key="room.chatRoomId">
+            <router-link :to="'/chat/' + room.receiverId" class = chatrooms-link>{{ room.receiverNickname }} </router-link>
+            <span class="temp-lastmessage"> {{room.lastMessage}} </span>
+          </li>
+        </ul>
     </div>
   </template>
+  
+  <style scoped>
+    .chatrooms-link {
+      display: inline-block;
+      text-decoration: none;
+      font-size: 50px;
+      color: black;
+      padding-bottom: 20px;
+    }
+    .chatrooms-link:hover {
+      font-weight: bold;
+    }
+    .temp-lastmessage {
+      padding-right: 2px;
+      font-size: 25px;
+    }
+  </style>
   
   <script>
   import axios from 'axios';

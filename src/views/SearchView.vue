@@ -453,7 +453,7 @@ export default {
   methods: {
     Board() {
       // 검색 요청을 보낼 URL 생성
-      const url = `/posts/search`;
+      const url = `/api/posts/search`;
 
       // 검색 요청 보내기
       this.$axios.get(url, {

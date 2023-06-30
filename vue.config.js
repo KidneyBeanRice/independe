@@ -12,8 +12,8 @@ module.exports = defineConfig({
     port: 8081,
     proxy: {
       '^/api': {
-        target: 'https://www.independe.co.kr',
-        // target: 'http://localhost:8080',
+        // target: 'https://www.independe.co.kr',
+        target: 'http://localhost:8080',
         changeOrigin: true
       }
     }
