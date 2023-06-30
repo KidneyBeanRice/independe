@@ -53,7 +53,7 @@ const routes = [
     component: SearchView
   },
   {
-    path: '/oauth/signup',
+    path: '/redirect',
     name: 'RedirectView',
     component: RedriectView
   },
